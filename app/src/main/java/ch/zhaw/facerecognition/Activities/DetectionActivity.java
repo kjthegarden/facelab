@@ -40,7 +40,6 @@ public class DetectionActivity extends Activity implements CameraBridgeViewBase.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_detection);
 
-
         mDetectionView = (CustomCameraView) findViewById(R.id.DetectionView);
         // Use camera which is selected in settings
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);

@@ -102,7 +102,6 @@ public class TrainingActivity extends Activity {
                                         String[] tokens = file.getParent().split("/");
                                         final String name = tokens[tokens.length - 1];
 
-
                                         MatName m = new MatName("processedImage", processedImage);
                                         fileHelper.saveMatToImage(m, FileHelper.DATA_PATH);
 

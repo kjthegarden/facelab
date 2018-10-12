@@ -75,7 +75,6 @@ public class RecognitionActivity extends Activity implements CameraBridgeViewBas
         } else {
             Log.i(TAG,"Photos directory already existing");
         }
-
         mRecognitionView = (CustomCameraView) findViewById(R.id.RecognitionView);
         // Use camera which is selected in settings
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
