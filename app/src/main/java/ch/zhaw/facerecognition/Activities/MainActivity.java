@@ -26,7 +26,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
-
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
 import ch.zhaw.facerecognition.R;
 
@@ -85,6 +84,14 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(v.getContext(), DetectionActivity.class));
+            }
+        });
+
+        Button callFromGalleryView = (Button)findViewById(R.id.button_from_gallery);
+        callFromGalleryView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), FromGallery.class));
             }
         });
 

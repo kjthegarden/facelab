@@ -17,6 +17,8 @@
     package="ch.zhaw.facerecognition">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -75,6 +77,8 @@
             android:name=".Activities.DetectionActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+        <activity
+            android:name=".Activities.FromGallery" ></activity>
     </application>
 
 </manifest>

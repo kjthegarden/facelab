@@ -74,6 +74,14 @@
             style="@android:style/Widget.Holo.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="From Gallery"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/button_from_gallery" />
+
+        <Button
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Recognition Training"
             android:id="@+id/button_recognition_training"
             android:layout_marginBottom="10dp" />
