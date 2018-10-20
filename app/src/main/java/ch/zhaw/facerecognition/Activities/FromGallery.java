@@ -1,12 +1,18 @@
 package ch.zhaw.facerecognition.Activities;
 
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +20,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -29,21 +37,43 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.zhaw.facerecognition.R;
 import ch.zhaw.facerecognitionlibrary.Helpers.CustomCameraView;
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
+import ch.zhaw.facerecognitionlibrary.Helpers.MatName;
 import ch.zhaw.facerecognitionlibrary.Helpers.MatOperation;
+import ch.zhaw.facerecognitionlibrary.Helpers.PreferencesHelper;
 import ch.zhaw.facerecognitionlibrary.PreProcessor.PreProcessorFactory;
+import ch.zhaw.facerecognitionlibrary.Recognition.Recognition;
+import ch.zhaw.facerecognitionlibrary.Recognition.RecognitionFactory;
 
 public class FromGallery extends AppCompatActivity{
     private static int PICK_IMAGE_REQUEST = 1;
     ImageView imgView;
+    Thread thread;
+    private PreProcessorFactory ppF;
+    private Recognition rec;
+    private ProgressBar progressBar;
+    private static final String TAG = "From gallery";
+    private FileHelper fh;
+
+    static {
+        if (!OpenCVLoader.initDebug()) {
+            // Handle initialization error
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +81,18 @@ public class FromGallery extends AppCompatActivity{
         setContentView(R.layout.activity_from_gallery);
 
         Button btn_gallery = (Button)findViewById(R.id.gallery);
+
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+
+        fh = new FileHelper();
+        File folder = new File(fh.getFolderPath());
+        if(folder.mkdir() || folder.isDirectory()){
+            Log.i(TAG,"New directory for photos created");
+        } else {
+            Log.i(TAG,"Photos directory already existing");
+        }
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
         btn_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,13 +114,65 @@ public class FromGallery extends AppCompatActivity{
                 //data에서 절대경로로 이미지를 가져옴
                 Uri uri = data.getData();
 
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
+                /*Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
                 //이미지가 한계이상(?) 크면 불러 오지 못하므로 사이즈를 줄여 준다.
                 int nh = (int) (bitmap.getHeight() * (1024.0 / bitmap.getWidth()));
-                Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 1024, nh, true);
+                //Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 1024, nh, true);
+*/
+                String filePath = "";
+                String wholeID = DocumentsContract.getDocumentId(uri);
+
+                // Split at colon, use second item in the array
+                String id = wholeID.split(":")[1];
+
+                String[] column = { MediaStore.Images.Media.DATA };
+
+                // where id is equal to
+                String sel = MediaStore.Images.Media._ID + "=?";
+
+                Cursor cursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        column, sel, new String[]{ id }, null);
+
+                int columnIndex = cursor.getColumnIndex(column[0]);
+
+                if (cursor.moveToFirst()) {
+                    filePath = cursor.getString(columnIndex);
+                }
+                cursor.close();
+                System.out.println(filePath);
+
+                //String tmp = "/storage/emulated/0/Pictures/facerecognition/training/jy/jy_17.png";
+                Mat mat = Imgcodecs.imread(filePath);
+                Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
+
+                Mat processedImage = new Mat();
+                mat.copyTo(processedImage);
+                List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
+                Rect[] faces = ppF.getFacesForRecognition();
+
+                faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
+                for(int i = 0; i<faces.length; i++){
+                    MatOperation.drawRectangleAndLabelOnPreview(mat, faces[i], rec.recognize(images.get(i), ""), true);
+                    System.out.println(rec.recognize(images.get(i), ""));
+                }
+
+                Bitmap bmp = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.RGB_565);
+                Utils.matToBitmap(mat, bmp);
 
                 imgView = (ImageView) findViewById(R.id.imageView);
-                imgView.setImageBitmap(scaled);
+                imgView.setImageBitmap(bmp);
+
+               /* mat.copyTo(img);
+                List<Mat> images = ppF.getProcessedImage(img, PreProcessorFactory.PreprocessingMode.RECOGNITION);
+                Rect[] faces = ppF.getFacesForRecognition();
+
+                faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
+                for(int i = 0; i<faces.length; i++){
+                    MatOperation.drawRectangleAndLabelOnPreview(mat, faces[i], "", true);
+                }
+*/
+
+
 
             } else {
                 Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_LONG).show();
@@ -90,91 +184,40 @@ public class FromGallery extends AppCompatActivity{
         }
 
     }
-    /*
-    private boolean front_camera;
-    private boolean night_portrait;
-    private int exposure_compensation;
-    private CustomCameraView mDetectionView;
-    private PreProcessorFactory ppF;
-
-    static {
-        if (!OpenCVLoader.initDebug()) {
-            // Handle initialization error
-        }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.activity_from_gallery);
-
-        mDetectionView = (CustomCameraView) findViewById(R.id.FromGalleryView);
-        // Use camera which is selected in settings
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        front_camera = sharedPref.getBoolean("key_front_camera", true);
-        night_portrait = sharedPref.getBoolean("key_night_portrait", false);
-        exposure_compensation = Integer.valueOf(sharedPref.getString("key_exposure_compensation", "20"));
-
-        if (front_camera){
-            mDetectionView.setCameraIndex(CameraBridgeViewBase.CAMERA_ID_FRONT);
-        } else {
-            mDetectionView.setCameraIndex(CameraBridgeViewBase.CAMERA_ID_BACK);
-        }
-        mDetectionView.setVisibility(SurfaceView.VISIBLE);
-        mDetectionView.setCvCameraViewListener(this);
-
-        int maxCameraViewWidth = Integer.parseInt(sharedPref.getString("key_maximum_camera_view_width", "640"));
-        int maxCameraViewHeight = Integer.parseInt(sharedPref.getString("key_maximum_camera_view_height", "480"));
-        mDetectionView.setMaxFrameSize(maxCameraViewWidth, maxCameraViewHeight);
-    }
-
-    @Override
-    public void onCameraViewStarted(int width, int height) {
-        if (night_portrait) {
-            mDetectionView.setNightPortrait();
-        }
-
-        if (exposure_compensation != 50 && 0 <= exposure_compensation && exposure_compensation <= 100)
-            mDetectionView.setExposure(exposure_compensation);
-    }
-
-    @Override
-    public void onCameraViewStopped() {
-
-    }
-
-    @Override
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-        Mat imgRgba = inputFrame.rgba();
-        Mat img = new Mat();
-        imgRgba.copyTo(img);
-        List<Mat> images = ppF.getCroppedImage(img);
-        Rect[] faces = ppF.getFacesForRecognition();
-
-        // Selfie / Mirror mode
-        if(front_camera){
-            Core.flip(imgRgba,imgRgba,1);
-        }
-        if(images == null || images.size() == 0 || faces == null || faces.length == 0 || ! (images.size() == faces.length)){
-            // skip
-            return imgRgba;
-        } else {
-            faces = MatOperation.rotateFaces(imgRgba, faces, ppF.getAngleForRecognition());
-            for(int i = 0; i<faces.length; i++){
-                MatOperation.drawRectangleAndLabelOnPreview(imgRgba, faces[i], "", front_camera);
-            }
-            return imgRgba;
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         ppF = new PreProcessorFactory(getApplicationContext());
-        mDetectionView.enableView();
-    }
-    */
+        final android.os.Handler handler = new android.os.Handler(Looper.getMainLooper());
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
+                });
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String algorithm = sharedPref.getString("key_classification_method", getResources().getString(R.string.eigenfaces));
+                rec = RecognitionFactory.getRecognitionAlgorithm(getApplicationContext(), Recognition.RECOGNITION, algorithm);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
 
+        t.start();
+
+        // Wait until Eigenfaces loading thread has finished
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
