@@ -72,6 +72,9 @@
             android:name=".Activities.AddPersonPreviewActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+        <activity android:name=".Activities.MakeFolderActivity" />
+        <activity android:name=".Activities.OpenGalleryActivity" />
+        <activity android:name=".Activities.PictureActivity" />
         <activity android:name=".Activities.DetectionTestActivity"></activity>
         <activity
             android:name=".Activities.DetectionActivity"

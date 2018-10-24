@@ -3,7 +3,7 @@ apply plugin: 'net.saliman.cobertura'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId "ch.zhaw.facerecognition"
@@ -41,10 +41,17 @@ buildscript {
     }
 }
 
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:support-v4:23.3.0'
     compile 'ch.zhaw:facerecognitionlibrary:1.5.3'
+    compile 'com.github.darsh2:MultipleImageSelect:v0.0.4'
 }

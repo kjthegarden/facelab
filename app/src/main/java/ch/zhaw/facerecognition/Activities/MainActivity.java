@@ -60,6 +60,15 @@ public class MainActivity extends Activity {
             }
         });
 
+        Button callMakeFolder = (Button)findViewById(R.id.button_makeFolder);
+        callMakeFolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), MakeFolderActivity.class));
+            }
+        });
+
+
         Button callAddPerson = (Button)findViewById(R.id.button_addPerson);
         callAddPerson.setOnClickListener(new View.OnClickListener() {
             @Override

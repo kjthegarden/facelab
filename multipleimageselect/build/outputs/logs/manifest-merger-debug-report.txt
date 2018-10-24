@@ -1,0 +1,73 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:2:1-30:12
+INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:2:1-30:12
+INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:2:1-30:12
+INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:2:1-30:12
+INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:2:1-30:12
+INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:2:1-30:12
+INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:2:1-30:12
+	package
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:3:5-44
+		INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:2:1-30:12
+		INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:2:1-30:12
+		INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:5:5-80
+	android:name
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:5:22-78
+application
+ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:7:5-28:19
+	android:label
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:9:9-41
+	android:allowBackup
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:8:9-35
+activity#com.darsh.multipleimageselect.activities.AlbumSelectActivity
+ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:10:9-18:20
+	android:label
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:12:13-45
+	android:configChanges
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:14:13-59
+	android:theme
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:13:13-60
+	android:name
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:11:13-59
+intent-filter#category:name:android.intent.category.DEFAULT
+ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:15:13-17:29
+category#android.intent.category.DEFAULT
+ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:16:17-75
+	android:name
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:16:27-73
+activity#com.darsh.multipleimageselect.activities.ImageSelectActivity
+ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:19:9-27:20
+	android:label
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:21:13-45
+	android:configChanges
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:23:13-59
+	android:theme
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:22:13-60
+	android:name
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml:20:13-59
+uses-sdk
+INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+		ADDED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\yunsun\Desktop\face\facelab\multipleimageselect\src\main\AndroidManifest.xml
