@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
         int [] person3 = new int [] {R.drawable.jooyun_1, R.drawable.jooyun_2, R.drawable.jooyun_3, R.drawable.jooyun_4, R.drawable.jooyun_5,
                                      R.drawable.jooyun_6, R.drawable.jooyun_7, R.drawable.jooyun_8, R.drawable.jooyun_9};
 
-        al.add(new Person(R.drawable.jungwon, person1, "Jungwon Kim"));
-        al.add(new Person(R.drawable.yunsun, person2, "Yunsun Lee"));
-        al.add(new Person(R.drawable.jooyun, person3, "Jooyun Lee"));
+        al.add(new Person(R.drawable.jungwon, person1, "김정원"));
+        al.add(new Person(R.drawable.yunsun, person2, "이윤선"));
+        al.add(new Person(R.drawable.jooyun, person3, "이주연"));
 
 
         // adapter

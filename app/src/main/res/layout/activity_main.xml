@@ -16,4 +16,27 @@
         android:layout_height="wrap_content" >
     </ListView>
 
+    <Button
+        android:id="@+id/button_1"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Add Person"/>
+
+    <Button
+        android:id="@+id/button_2"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Settings"/>
+
+    <Button
+        android:id="@+id/button_3"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="About"/>
+
+
 </LinearLayout>
