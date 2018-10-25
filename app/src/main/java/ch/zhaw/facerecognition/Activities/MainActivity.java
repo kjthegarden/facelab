@@ -68,41 +68,7 @@ public class MainActivity extends Activity {
             }
         });
 
-
-        Button callAddPerson = (Button)findViewById(R.id.button_addPerson);
-        callAddPerson.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), AddPersonActivity.class));
-            }
-        });
-
         FileHelper fh = new FileHelper();
-
-        Button callDetectionTest = (Button)findViewById(R.id.button_detection_test);
-        if(fh.getDetectionTestList().length == 0) callDetectionTest.setEnabled(false);
-        callDetectionTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), DetectionTestActivity.class));
-            }
-        });
-
-        Button callDetectionView = (Button)findViewById(R.id.button_detection_view);
-        callDetectionView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), DetectionActivity.class));
-            }
-        });
-
-        Button callFromGalleryView = (Button)findViewById(R.id.button_from_gallery);
-        callFromGalleryView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), FromGallery.class));
-            }
-        });
 
         Button callRecognition = (Button)findViewById(R.id.button_recognition_view);
         if(!((new File(fh.DATA_PATH)).exists())) callRecognition.setEnabled(false);
@@ -123,14 +89,14 @@ public class MainActivity extends Activity {
             }
         });
 
-        Button callTest = (Button)findViewById(R.id.button_recognition_test);
-        if(fh.getTestList().length == 0 || !((new File(fh.DATA_PATH)).exists())) callTest.setEnabled(false);
-        callTest.setOnClickListener(new View.OnClickListener() {
+        Button callFromGalleryView = (Button)findViewById(R.id.button_from_gallery);
+        callFromGalleryView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), TestActivity.class));
+                startActivity(new Intent(v.getContext(), FromGallery.class));
             }
         });
+
 
         Button callAbout = (Button)findViewById(R.id.button_about);
         callAbout.setOnClickListener(new View.OnClickListener() {
