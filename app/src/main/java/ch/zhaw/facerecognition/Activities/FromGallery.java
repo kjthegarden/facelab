@@ -114,11 +114,6 @@ public class FromGallery extends AppCompatActivity{
                 //data에서 절대경로로 이미지를 가져옴
                 Uri uri = data.getData();
 
-                /*Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
-                //이미지가 한계이상(?) 크면 불러 오지 못하므로 사이즈를 줄여 준다.
-                int nh = (int) (bitmap.getHeight() * (1024.0 / bitmap.getWidth()));
-                //Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 1024, nh, true);
-*/
                 String filePath = "";
                 String wholeID = DocumentsContract.getDocumentId(uri);
 
@@ -162,17 +157,6 @@ public class FromGallery extends AppCompatActivity{
                 imgView = (ImageView) findViewById(R.id.imageView);
                 imgView.setImageBitmap(bmp);
 
-               /* mat.copyTo(img);
-                List<Mat> images = ppF.getProcessedImage(img, PreProcessorFactory.PreprocessingMode.RECOGNITION);
-                Rect[] faces = ppF.getFacesForRecognition();
-
-                faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
-                for(int i = 0; i<faces.length; i++){
-                    MatOperation.drawRectangleAndLabelOnPreview(mat, faces[i], "", true);
-                }
-*/
-
-
 
             } else {
                 Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_LONG).show();
@@ -184,6 +168,7 @@ public class FromGallery extends AppCompatActivity{
         }
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -199,7 +184,9 @@ public class FromGallery extends AppCompatActivity{
                 });
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String algorithm = sharedPref.getString("key_classification_method", getResources().getString(R.string.eigenfaces));
+                System.out.println("algorithm : "+ algorithm);
                 rec = RecognitionFactory.getRecognitionAlgorithm(getApplicationContext(), Recognition.RECOGNITION, algorithm);
+                System.out.println("algorithm : "+ algorithm);
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
