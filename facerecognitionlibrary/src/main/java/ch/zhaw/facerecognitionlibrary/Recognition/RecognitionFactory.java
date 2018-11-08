@@ -18,7 +18,7 @@ package ch.zhaw.facerecognitionlibrary.Recognition;
 import android.content.Context;
 import android.content.res.Resources;
 
-import ch.zhaw.facerecognitionlibrary.R;
+//import ch.zhaw.facerecognitionlibrary.R;
 
 public class RecognitionFactory {
     public static Recognition getRecognitionAlgorithm(Context context, int method, String algorithm) {

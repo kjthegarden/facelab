@@ -10,7 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import ch.zhaw.facerecognitionlibrary.R;
+
+//import ch.zhaw.facerecognitionlibrary.R;
 
 /**
  * Created by sladomic on 05.11.16.

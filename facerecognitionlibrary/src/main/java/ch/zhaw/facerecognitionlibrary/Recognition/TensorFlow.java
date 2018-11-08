@@ -117,6 +117,11 @@ public class TensorFlow implements Recognition {
     }
 
     @Override
+    public void loadTrainingList(){
+
+    }
+
+    @Override
     public void saveTestData() {
         rec.saveTestData();
     }

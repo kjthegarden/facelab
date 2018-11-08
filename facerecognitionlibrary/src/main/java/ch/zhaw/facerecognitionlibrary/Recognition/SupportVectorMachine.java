@@ -29,6 +29,7 @@ import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
 import ch.zhaw.facerecognitionlibrary.Helpers.OneToOneMap;
 import ch.zhaw.facerecognitionlibrary.Helpers.PreferencesHelper;
@@ -82,9 +83,15 @@ public class SupportVectorMachine implements Recognition {
         System.loadLibrary("jnilibsvm");
     }
 
+
     // connect the native functions
     private native void jniSvmTrain(String cmd);
     private native void jniSvmPredict(String cmd);
+
+
+    public void loadStringList(){
+        trainingList = fh.loadStringList(trainingFile);
+    }
 
     @Override
     public boolean train() {
@@ -99,6 +106,12 @@ public class SupportVectorMachine implements Recognition {
 
         saveToFile();
         return true;
+    }
+
+    @Override
+    public void loadTrainingList(){
+        System.out.println("edit library");
+        this.trainingList = fh.loadStringList(trainingFile);
     }
 
     public boolean trainProbability(String svmTrainOptions) {

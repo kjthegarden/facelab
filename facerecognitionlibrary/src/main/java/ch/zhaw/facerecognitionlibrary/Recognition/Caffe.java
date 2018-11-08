@@ -91,6 +91,11 @@ public class Caffe implements Recognition {
     }
 
     @Override
+    public void loadTrainingList(){
+
+    }
+
+    @Override
     public void saveTestData() {
         rec.saveTestData();
     }

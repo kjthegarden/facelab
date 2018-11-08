@@ -37,7 +37,8 @@ import ch.zhaw.facerecognitionlibrary.PreProcessor.StandardPostprocessing.Resize
 import ch.zhaw.facerecognitionlibrary.PreProcessor.StandardPreprocessing.Crop;
 import ch.zhaw.facerecognitionlibrary.PreProcessor.StandardPreprocessing.EyeAlignment;
 import ch.zhaw.facerecognitionlibrary.PreProcessor.StandardPreprocessing.GrayScale;
-import ch.zhaw.facerecognitionlibrary.R;
+//import ch.zhaw.facerecognitionlibrary.R;
+//import snu.facelab.R;
 
 public class PreProcessorFactory {
     private Context context;

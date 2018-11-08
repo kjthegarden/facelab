@@ -28,6 +28,9 @@ public interface Recognition {
     void saveTestData();
     void saveToFile();
     void loadFromFile();
+    //
+    void loadTrainingList();
+    //
     void addImage(Mat img, String label, boolean featuresAlreadyExtracted);
     Mat getFeatureVector(Mat img);
 }

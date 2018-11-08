@@ -133,6 +133,11 @@ public class Eigenfaces implements Recognition {
     }
 
     @Override
+    public void loadTrainingList(){
+
+    }
+
+    @Override
     public void saveTestData() {
         FileHelper fh = new FileHelper();
         fh.saveIntegerList(labelListTest, fh.createLabelFile(fh.EIGENFACES_PATH, "test"));

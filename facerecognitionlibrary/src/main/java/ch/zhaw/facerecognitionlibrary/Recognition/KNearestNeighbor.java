@@ -102,6 +102,11 @@ public class KNearestNeighbor implements Recognition{
     }
 
     @Override
+    public void loadTrainingList(){
+
+    }
+
+    @Override
     public void saveTestData() {
         MatName mTestList = new MatName("TestList", testList);
         List<MatName> listMat = new ArrayList<>();
