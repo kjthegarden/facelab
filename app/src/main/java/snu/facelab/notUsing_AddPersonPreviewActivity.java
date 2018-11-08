@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
 
-public class AddPersonPreviewActivity extends AppCompatActivity {
+public class notUsing_AddPersonPreviewActivity extends AppCompatActivity {
     private FileHelper fh;
     private String folder;
     private String subfolder;
@@ -27,7 +27,7 @@ public class AddPersonPreviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_person_preview);
+        setContentView(R.layout.not_using_activity_add_person_preview);
 
         Intent newIntent = new Intent(this, AlbumSelectActivity.class);
         startActivityForResult(newIntent, Constants.REQUEST_CODE);
@@ -42,7 +42,7 @@ public class AddPersonPreviewActivity extends AppCompatActivity {
             ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
             Log.d("STATE", images.get(0).path.toString());
 
-            Intent launchResult = new Intent(this, AddPersonActivity.class);
+            Intent launchResult = new Intent(this, notUsing_AddPersonActivity.class);
             launchResult.putExtra(IMAGES, images);
             startActivity(launchResult);
 
