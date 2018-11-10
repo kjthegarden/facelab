@@ -78,13 +78,15 @@ public class TensorFlow implements Recognition {
         } else {
             inferenceInterface = new TensorFlowInferenceInterface(context.getAssets(), modelFile);
         }
-
+        rec = new SupportVectorMachine(context, method);
+/*
         if(classificationMethod){
             rec = new SupportVectorMachine(context, method);
         }
         else {
             rec = new KNearestNeighbor(context, method);
         }
+        */
     }
 
     public TensorFlow(Context context, int inputSize, int outputSize, String inputLayer, String outputLayer, String modelFile){
