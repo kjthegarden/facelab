@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Copyright 2016 Michael Sladoje and Mike Schälchli. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
+=======
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 package snu.facelab;
 
 import android.app.Activity;
@@ -37,7 +40,10 @@ import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
 import ch.zhaw.facerecognitionlibrary.Helpers.MatName;
 import ch.zhaw.facerecognitionlibrary.Helpers.PreferencesHelper;
 import ch.zhaw.facerecognitionlibrary.PreProcessor.PreProcessorFactory;
+<<<<<<< HEAD
 //import ch.zhaw.facerecognitionlibrary.R;
+=======
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 import ch.zhaw.facerecognitionlibrary.Recognition.Recognition;
 import ch.zhaw.facerecognitionlibrary.Recognition.RecognitionFactory;
 
@@ -85,7 +91,11 @@ public class TrainingActivity extends Activity {
                     final File[] persons = fileHelper.getTrainingList();
                     if (persons.length > 0) {
                         Recognition rec = RecognitionFactory.getRecognitionAlgorithm(getApplicationContext(), Recognition.TRAINING, algorithm);
+<<<<<<< HEAD
                         rec.loadTrainingList();
+=======
+                        // rec.loadTrainingList();
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
                         for (File person : persons) {
                             if (person.isDirectory()) {
                                 // The last token is the name --> Folder name = Person name
@@ -171,4 +181,8 @@ public class TrainingActivity extends Activity {
         super.onStop();
         thread.interrupt();
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1

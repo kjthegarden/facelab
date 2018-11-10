@@ -14,7 +14,24 @@
  limitations under the License.
 -->
 <resources>
+<<<<<<< HEAD
     <string name="app_name">Face Recognition</string>
     <string name="training">Training</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
+=======
+    <string name="app_name">facelab</string>
+    <string name="title_activity_person_photo">PersonPhoto</string>
+    <string name="profile">PROFILE</string>
+    <string name="feed">FEED</string>
+    <string name="activity">ACTIVITY</string>
+    <string name="settings">SETTINGS</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">FACELAB</string>
+    <string name="nav_header_subtitle">Team M</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_person_photo_detail">PersonPhotoDetailActivity</string>
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 </resources>

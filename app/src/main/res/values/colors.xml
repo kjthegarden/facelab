@@ -15,9 +15,18 @@
  limitations under the License.
 -->
 <resources>
+<<<<<<< HEAD
     <color name="colorPrimary">#40413f</color>
     <color name="colorPrimaryDark">#161615</color>
     <color name="colorAccent">#ffa640</color>
 
     <color name="black_overlay">#000000</color>
+=======
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="guillotine_background">#444153</color>
+    <color name="guillotine_background_dark">#383547</color>
+    <color name="selected_item_color">#30d1d5</color>
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 </resources>
