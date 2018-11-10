@@ -1,7 +1,11 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Original file: /Users/Ljuyeon/FaceLab/facelab/openCVLibrary343/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
+=======
+ * Original file: C:\\Users\\yunsun\\Desktop\\face\\facelab\\openCVLibrary343\\src\\main\\aidl\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 =======
  * Original file: C:\\Users\\yunsun\\Desktop\\face\\facelab\\openCVLibrary343\\src\\main\\aidl\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
 >>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <!--
  Copyright 2016 Michael Sladoje and Mike Schälchli. All Rights Reserved.
 
@@ -76,6 +77,8 @@
     </LinearLayout>
 </RelativeLayout>
 =======
+=======
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -101,4 +104,7 @@
         app:menu="@menu/activity_main_drawer" />
 
 </android.support.v4.widget.DrawerLayout>
+<<<<<<< HEAD
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
+=======
 >>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1

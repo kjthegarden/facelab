@@ -34,7 +34,10 @@ import ch.zhaw.facerecognitionlibrary.Helpers.MatName;
 import ch.zhaw.facerecognitionlibrary.Helpers.MatOperation;
 import ch.zhaw.facerecognitionlibrary.PreProcessor.PreProcessorFactory;
 <<<<<<< HEAD
+<<<<<<< HEAD
 //import ch.zhaw.facerecognitionlibrary.R;
+=======
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 =======
 >>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 
@@ -135,7 +138,11 @@ public class OpenGalleryActivity extends AppCompatActivity {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 =======
 }
 >>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1

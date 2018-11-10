@@ -18,6 +18,7 @@ package snu.facelab;
 import android.app.Activity;
 import android.content.Intent;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -33,6 +34,8 @@ import snu.facelab.R;
 
 public class MainActivity extends Activity {
 =======
+=======
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -57,6 +60,9 @@ public class MainActivity extends AppCompatActivity
     ArrayList<Person> al = new ArrayList<Person>();
     public static final String PERSON = "Person";
     private GridView gridView;
+<<<<<<< HEAD
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
+=======
 >>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 
     @Override
@@ -65,6 +71,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         Intent intent = getIntent();
         String training = intent.getStringExtra("training");
@@ -143,6 +150,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
 =======
+=======
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
         Intent intent = new Intent(this, LoadingActivity.class);
         startActivity(intent);
 
@@ -267,6 +276,9 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+<<<<<<< HEAD
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
+=======
 >>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
     }
 }

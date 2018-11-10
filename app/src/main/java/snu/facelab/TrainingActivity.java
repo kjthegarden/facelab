@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* Copyright 2016 Michael Sladoje and Mike Schälchli. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
+=======
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 =======
 >>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 package snu.facelab;
@@ -41,7 +44,10 @@ import ch.zhaw.facerecognitionlibrary.Helpers.MatName;
 import ch.zhaw.facerecognitionlibrary.Helpers.PreferencesHelper;
 import ch.zhaw.facerecognitionlibrary.PreProcessor.PreProcessorFactory;
 <<<<<<< HEAD
+<<<<<<< HEAD
 //import ch.zhaw.facerecognitionlibrary.R;
+=======
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 =======
 >>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 import ch.zhaw.facerecognitionlibrary.Recognition.Recognition;
@@ -92,7 +98,11 @@ public class TrainingActivity extends Activity {
                     if (persons.length > 0) {
                         Recognition rec = RecognitionFactory.getRecognitionAlgorithm(getApplicationContext(), Recognition.TRAINING, algorithm);
 <<<<<<< HEAD
+<<<<<<< HEAD
                         rec.loadTrainingList();
+=======
+                        // rec.loadTrainingList();
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 =======
                         // rec.loadTrainingList();
 >>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
@@ -182,7 +192,11 @@ public class TrainingActivity extends Activity {
         thread.interrupt();
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
 =======
 }
 >>>>>>> a321a17fd5ec93864c4f5a1b7f3dd86d61e257d1
