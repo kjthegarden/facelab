@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity
                 Person person = (Person) GridView.getItemAtPosition(position);
                 Log.d("JO", "selected item => "+person.name);
 
-                Intent i = new Intent(MainActivity.this, PersonPhotoActivity.class);
+                // Intent i = new Intent(MainActivity.this, PersonPhotoActivity.class);
+                Intent i = new Intent(MainActivity.this, PersonPhotoActivity2.class);
                 i.putExtra(PERSON, person);
                 startActivity(i);
             }
