@@ -1,5 +1,6 @@
 package snu.facelab;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class AddPersonActivity extends AppCompatActivity {
                     intent.putExtra("Folder", "Training");
                     startActivity(intent);
                 }
+
             }
         });
     }
