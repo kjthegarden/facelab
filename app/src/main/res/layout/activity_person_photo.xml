@@ -4,14 +4,14 @@
     android:orientation="vertical"
     >
 
-
-    <ListView
-        android:id="@+id/listView2"
+    <GridView
+        android:id="@+id/gridView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        >
-    </ListView>
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:columnWidth="80sp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth">
+    </GridView>
 
 </LinearLayout>

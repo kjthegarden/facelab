@@ -1,12 +1,19 @@
 package snu.facelab;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.io.File;
 import java.util.ArrayList;
 
 import snu.facelab.Photo;
@@ -17,6 +24,7 @@ class PhotoAdapter extends BaseAdapter {
     int layout;              // 한행을 그려줄 layout
     ArrayList<Photo> al;     // 다량의 데이터
     LayoutInflater inf; // 화면을 그려줄 때 필요
+    private Bitmap image;
 
     public PhotoAdapter(Context context, int layout, ArrayList<Photo> al) {
         this.context = context;
@@ -46,7 +54,12 @@ class PhotoAdapter extends BaseAdapter {
 
         Photo m = al.get(position);
 
-        iv.setImageResource(m.getImg());
+        Uri imageUri = Uri.fromFile(new File(m.getImg()));
+        Glide.with(context)
+                .load(imageUri)
+                .apply(new RequestOptions()
+                        .centerCrop())
+                .into(iv);
         return convertView;
     }
 }
