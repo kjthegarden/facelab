@@ -94,47 +94,45 @@ public class AddPhotoActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             final ArrayList<Image> image_list = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
-            int size = image_list.size();
-            System.out.println("add photo activity result image_list size :" + size);
+            System.out.println("add photo activity result image_list size :" + image_list.size());
 
             db = new DatabaseHelper(getApplicationContext());
+            Picture pic[] = new Picture[image_list.size()];
+            long pic_ids[] = new long[image_list.size()];
 
-            Picture pic[] = new Picture[size];
-            long pic_ids[] = new long[size];
-
-            for (int i = 0; i < image_list.size(); i++) {
+            int i = 0;
+            //for (int i = 0; i < image_list.size(); i++) {
 
                 // Creating pictures
                 pic[i] = new Picture(image_list.get(i).path);
                 // Inserting pictures in db
                 pic_ids[i] = db.createPicture(pic[i]);
 
-                Mat mat = Imgcodecs.imread(image_list.get(i).path);
-                Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
-                Mat imgCopy = new Mat();
-                mat.copyTo(imgCopy);
+                /*Intent intent = new Intent(getApplicationContext(), RecognitionActivity.class);
+                intent.putExtra("Path", image_list.get(i).path);
+                startActivity(intent);*/
 
-                final List<Mat> images = ppF.getProcessedImage(imgCopy, PreProcessorFactory.PreprocessingMode.RECOGNITION);
+                            Mat mat = Imgcodecs.imread(image_list.get(i).path);
+                            Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
+                            Mat imgCopy = new Mat();
+                            mat.copyTo(imgCopy);
 
-                if(images!=null){
-                    Rect[] faces = ppF.getFacesForRecognition();
+                            final List<Mat> images = ppF.getProcessedImage(imgCopy, PreProcessorFactory.PreprocessingMode.RECOGNITION);
+                            Rect[] faces = ppF.getFacesForRecognition();
 
-                    faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
+                            faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
 
-                    for (int j = 0; j < faces.length; j++) {
-                        String rec_name = rec.recognize(images.get(j), "");
-                        System.out.println(j + " : " + rec_name);
+                            for (int j = 0; j < faces.length; j++) {
+                                //MatOperation.drawRectangleAndLabelOnPreview(mat, faces[j], rec.recognize(images.get(j), ""), true);
+                                String rec_name = rec.recognize(images.get(j), "");
+                                System.out.println(j + " : " + rec_name);
+                                // Creating name
+                                Name name1 = new Name(rec_name);
+                                // Inserting name with pictures in db
+                                long name_id = db.createName(name1, pic_ids);
 
-                        if(rec_name!=null){
-                            // Get name_id with name
-                            Name name = db.getNameWithString(rec_name);
-                            long name_id=name.getId();
-                            // Inserting name_id & picture_id pair
-                            long name_picture_id = db.createNamePicture(name_id, pic_ids[i]);
-                        }
-                    }
-                }
-            }
+                            }
+                        //}
         }
     }
 
