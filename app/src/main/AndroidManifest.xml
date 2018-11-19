@@ -27,7 +27,8 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-        </activity>        <activity android:name=".AddPersonActivity" />
+        </activity>
+        <activity android:name=".AddPersonActivity" />
         <activity android:name=".OpenGalleryActivity" />
         <activity android:name=".TrainingActivity" />
         <activity android:name=".AddPhotoActivity"/>
