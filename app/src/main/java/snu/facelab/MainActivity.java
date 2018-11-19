@@ -1,6 +1,8 @@
 package snu.facelab;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +21,11 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import snu.facelab.helper.DatabaseHelper;
+import snu.facelab.model.Name;
+import snu.facelab.model.Picture;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,6 +33,8 @@ public class MainActivity extends AppCompatActivity
     ArrayList<Person> al = new ArrayList<Person>();
     public static final String PERSON = "Person";
     private GridView gridView;
+    DatabaseHelper db;
+    private String personImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,21 +66,22 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        // ListView
+        // GridView
         //    1. 다량의 데이터
         //    2. Adapter (데이터와 view의 연결 관계를 정의)
-        //    3. AdapterView (ListView)
+        //    3. AdapterView (GridView)
 
-        int [] person1 = new int [] {R.drawable.jungwon_1, R.drawable.jungwon_2, R.drawable.jungwon_3, R.drawable.jungwon_4, R.drawable.jungwon_5,
-                R.drawable.jungwon_6, R.drawable.jungwon_7, R.drawable.jungwon_8, R.drawable.jungwon_9};
-        int [] person2 = new int [] {R.drawable.yunsun_1, R.drawable.yunsun_2, R.drawable.yunsun_3, R.drawable.yunsun_4, R.drawable.yunsun_5,
-                R.drawable.yunsun_6, R.drawable.yunsun_7, R.drawable.yunsun_8, R.drawable.yunsun_9};
-        int [] person3 = new int [] {R.drawable.jooyun_1, R.drawable.jooyun_2, R.drawable.jooyun_3, R.drawable.jooyun_4, R.drawable.jooyun_5,
-                R.drawable.jooyun_6, R.drawable.jooyun_7, R.drawable.jooyun_8, R.drawable.jooyun_9};
+        // DBHelper 객체 생성
+        db = new DatabaseHelper(getApplicationContext());
+        List<Name> names = db.getAllNames();
 
-        al.add(new Person(R.drawable.jungwon, person1, "김정원"));
-        al.add(new Person(R.drawable.yunsun, person2, "이윤선"));
-        al.add(new Person(R.drawable.jooyun, person3, "이주연"));
+        int personCount = names.size();
+        for (int i = 0; i < personCount; i++) {
+            String personName = names.get(i).getName();
+            List<Picture> pictures = db.getAllPicturesByName(personName);
+            personImage = pictures.get(0).getPath();
+            al.add(new Person(personImage, personName));
+        }
 
 
         // adapter
@@ -80,11 +90,11 @@ public class MainActivity extends AppCompatActivity
                 R.layout.person_thumbnail,             // 한행을 그려줄 layout
                 al);                     // 다량의 데이터
 
-        GridView lv = (GridView)findViewById(R.id.gridView);
-        lv.setAdapter(adapter);
+        GridView Gv = findViewById(R.id.gridView);
+        Gv.setAdapter(adapter);
 
         // 이벤트 처리
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 GridView GridView = (GridView) adapterView;

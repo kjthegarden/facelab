@@ -1,4 +1,4 @@
-package snu.facelab;
+    package snu.facelab;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

@@ -33,12 +33,12 @@ public class PersonPhotoActivity extends AppCompatActivity {
         Person person = (Person) getIntent().getExtras().getSerializable(PERSON);
         setTitle(person.name);
 
-        int imgCount = person.getImgs().length;
+        //int imgCount = person.getImgs().length;
 
-        for(int i = 0; i < imgCount; i++)
-        {
-            al.add(new Photo(person.imgs[i], ""));
-        }
+//        //for(int i = 0; i < imgCount; i++)
+//        {
+//           // al.add(new Photo(person.imgs[i], ""));
+//        }
 
         Log.d("test", al.toString());
 
