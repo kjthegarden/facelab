@@ -55,6 +55,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
         }
 
 
+
         Log.d("test", al.toString());
 
         // adapter
