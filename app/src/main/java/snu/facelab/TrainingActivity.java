@@ -75,7 +75,7 @@ public class TrainingActivity extends Activity {
                                 // The last token is the name --> Folder name = Person name
                                 String[] tokens = person.getAbsolutePath().split("/");
                                 final String foldername = tokens[tokens.length - 1];
-                                //System.out.println(foldername + " " + name + " " + foldername.equals(name));
+                                System.out.println(foldername + " " + name + " " + foldername.equals(name));
                                 if (foldername.equals(name)) {
                                     File[] files = person.listFiles();
                                     int counter = 1;
