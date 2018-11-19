@@ -32,9 +32,6 @@
         <activity android:name=".OpenGalleryActivity" />
         <activity android:name=".TrainingActivity" />
         <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" />
-        <activity
             android:name=".PersonPhotoDetailActivity"
             android:label="@string/title_activity_person_photo_detail"
             android:theme="@style/AppTheme"></activity>

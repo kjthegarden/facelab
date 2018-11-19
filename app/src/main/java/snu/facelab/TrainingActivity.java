@@ -62,8 +62,8 @@ public class TrainingActivity extends Activity {
                 if(!Thread.currentThread().isInterrupted()){
                     PreProcessorFactory ppF = new PreProcessorFactory(getApplicationContext());
                     PreferencesHelper preferencesHelper = new PreferencesHelper(getApplicationContext());
-                    //String algorithm = preferencesHelper.getClassificationMethod();
-                    String algorithm = "TensorFlow with SVM or KNN";
+                    String algorithm = preferencesHelper.getClassificationMethod();
+
                     FileHelper fileHelper = new FileHelper();
                     fileHelper.createDataFolderIfNotExsiting();
                     final File[] persons = fileHelper.getTrainingList();
@@ -96,11 +96,13 @@ public class TrainingActivity extends Activity {
                                                 continue;
                                             }
 
+                                            //String[] tokens = file.getParent().split("/");
+                                            //final String name = tokens[tokens.length - 1];
+
                                             MatName m = new MatName("processedImage", processedImage);
                                             fileHelper.saveMatToImage(m, FileHelper.DATA_PATH);
 
-
-                                            rec.addImage(processedImage, foldername, false);
+                                            rec.addImage(processedImage, name, false);
 
                                             //fileHelper.saveCroppedImage(imgRgb, ppF, file, name, counter);
 

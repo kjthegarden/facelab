@@ -68,8 +68,6 @@ public class SupportVectorMachine implements Recognition {
         if(method == RECOGNITION){
             loadFromFile();
         }
-        trainingList = fh.loadStringList(trainingFile);
-        //System.out.println(trainingList.size());
     }
 
     public SupportVectorMachine(File trainingFile, File predictionFile){
@@ -197,7 +195,6 @@ public class SupportVectorMachine implements Recognition {
         // Ignore featuresAlreadyExtracted because either SVM get the features from TensorFlow or Caffe, or it takes the image reshaping method (image itself)
         if(method == TRAINING){
             trainingList.add(imageToSvmString(img, label));
-            System.out.println("add training list" + label);
         } else {
             testList.add(imageToSvmString(img, label));
         }

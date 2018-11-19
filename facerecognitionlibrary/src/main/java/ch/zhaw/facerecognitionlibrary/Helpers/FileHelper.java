@@ -283,10 +283,8 @@ public class FileHelper {
     public void saveStringList(List<String> list, File file){
         try {
             FileWriter fw = new FileWriter(file, false);
-            System.out.println("train()" + list.size());
             for (String line : list){
                 fw.append(line + "\n");
-                System.out.println(line);
             }
             fw.close();
         } catch (IOException e) {
