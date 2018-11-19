@@ -1,60 +1,108 @@
 package snu.facelab;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.io.File;
+import com.darsh.multipleimageselect.helpers.Constants;
+import com.darsh.multipleimageselect.models.Image;
+
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
+import ch.zhaw.facerecognitionlibrary.Helpers.MatName;
+import ch.zhaw.facerecognitionlibrary.Helpers.PreferencesHelper;
+import ch.zhaw.facerecognitionlibrary.PreProcessor.PreProcessorFactory;
+import ch.zhaw.facerecognitionlibrary.Recognition.Recognition;
+import ch.zhaw.facerecognitionlibrary.Recognition.RecognitionFactory;
 
 public class AddPersonActivity extends AppCompatActivity {
+    private FileHelper fh;
+    private String folder;
+    private String subfolder;
+    private String name;
+    private TextView textView;
+    private ImageView imgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_person);
 
-        Button btn_Start = (Button)findViewById(R.id.btn_Start);
-        btn_Start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText txt_Name = (EditText)findViewById(R.id.txt_Name);
-                String name = txt_Name.getText().toString();
-                Intent intent = new Intent(v.getContext(), notUsing_AddPersonPreviewActivity.class);
-                intent.putExtra("Name", name);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        OpenCVLoader.initDebug();
 
+        Intent intent = getIntent();
+        ArrayList<Image> image_list = intent.getParcelableArrayListExtra(AddPersonPreviewActivity.IMAGES);
+        Bitmap image1 = BitmapFactory.decodeFile(image_list.get(0).path);
+        imgView = (ImageView) findViewById(R.id.imageView);
+        imgView.setImageBitmap(image1);
 
-                if(isNameAlreadyUsed(new FileHelper().getTrainingList(), name)){
-                    Toast.makeText(getApplicationContext(), "This name is already used. Please choose another one.", Toast.LENGTH_SHORT).show();
-                } else {
-                    intent.putExtra("Folder", "Training");
-                    startActivity(intent);
-                }
-            }
-        });
-    }
+        PreProcessorFactory ppF = new PreProcessorFactory(getApplicationContext());
+        PreferencesHelper preferencesHelper = new PreferencesHelper(getApplicationContext());
+        String algorithm = preferencesHelper.getClassificationMethod();
+        FileHelper fileHelper = new FileHelper();
+        Recognition rec = RecognitionFactory.getRecognitionAlgorithm(getApplicationContext(), Recognition.TRAINING, algorithm);
 
-    private boolean isNameAlreadyUsed(File[] list, String name){
-        boolean used = false;
-        if(list != null && list.length > 0){
-            for(File person : list){
-                // The last token is the name --> Folder name = Person name
-                String[] tokens = person.getAbsolutePath().split("/");
-                final String foldername = tokens[tokens.length-1];
-                if(foldername.equals(name)){
-                    used = true;
-                    break;
-                }
-            }
+        Mat imgRgb = Imgcodecs.imread(image_list.get(0).path);
+        Imgproc.cvtColor(imgRgb, imgRgb, Imgproc.COLOR_BGRA2RGBA);
+        Mat processedImage = new Mat();
+        imgRgb.copyTo(processedImage);
+        List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
+        if (images == null || images.size() > 1) {
+            // More than 1 face detected --> cannot use this file for training
+            //continue;
+        } else {
+            processedImage = images.get(0);
         }
-        return used;
+        if (processedImage.empty()) {
+            //continue;
+        }
+
+        MatName m = new MatName("processedImage", processedImage);
+        fileHelper.saveMatToImage(m, FileHelper.DATA_PATH);
+        String name = "temp";
+        rec.addImage(processedImage, name, false);
+
     }
 
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            //The array list has the image paths of the selected images
+            ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+            Log.d("STATE", images.get(0).path.toString());
+
+            Intent launchResult = new Intent(this, AddPersonActivity.class);
+            launchResult.putExtra("images", images);
+
+
+//            Bitmap image1 = BitmapFactory.decodeFile(images.get(0).path);
+//            imgView = (ImageView) findViewById(R.id.imageView);
+//            imgView.setImageBitmap(image1);
+        }
+
+        //File imgFile = new File(images.get(0).path)
+
+//        Intent intent = getIntent();
+//        folder = intent.getStringExtra("Folder");
+//        if(folder.equals("Test")){
+//            subfolder = intent.getStringExtra("Subfolder");
+//        }
+//        name = intent.getStringExtra("Name");
+//
+//        fh = new FileHelper();
+    }
 }
