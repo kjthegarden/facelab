@@ -1,6 +1,8 @@
 package snu.facelab;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ class PersonAdapter extends BaseAdapter {
     int layout;              // 한행을 그려줄 layout
     ArrayList<Person> al;     // 다량의 데이터
     LayoutInflater inf; // 화면을 그려줄 때 필요
+    private Bitmap image;
+
     public PersonAdapter(Context context, int layout, ArrayList<Person> al) {
         this.context = context;
         this.layout = layout;
@@ -44,7 +48,8 @@ class PersonAdapter extends BaseAdapter {
 
         Person m = al.get(position);
 
-        iv.setImageResource(m.mainImg);
+        image = BitmapFactory.decodeFile(m.getMainImg());
+        iv.setImageBitmap(image);
         tvName.setText(m.name);
         return convertView;
     }
