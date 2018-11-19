@@ -28,12 +28,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".PersonPhotoActivity2" />
         <activity android:name=".AddPersonActivity" />
+        <activity android:name=".PersonPhotoActivity2" />
         <activity android:name=".OpenGalleryActivity" />
         <activity android:name=".TrainingActivity" />
-        <activity android:name=".AddPhotoActivity"/>
-        <activity android:name=".RecognitionActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
@@ -41,7 +39,7 @@
             android:name=".PersonPhotoDetailActivity"
             android:label="@string/title_activity_person_photo_detail"
             android:theme="@style/AppTheme"></activity>
-
+        <activity android:name=".AddPhotoActivity"/>
     </application>
 
 </manifest>
