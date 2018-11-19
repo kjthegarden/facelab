@@ -1,11 +1,20 @@
 package snu.facelab;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.SurfaceView;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -13,6 +22,7 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
@@ -23,9 +33,6 @@ import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
 import ch.zhaw.facerecognitionlibrary.Helpers.MatName;
 import ch.zhaw.facerecognitionlibrary.Helpers.MatOperation;
 import ch.zhaw.facerecognitionlibrary.PreProcessor.PreProcessorFactory;
-import snu.facelab.helper.DatabaseHelper;
-import snu.facelab.model.Name;
-import snu.facelab.model.Picture;
 
 public class OpenGalleryActivity extends AppCompatActivity {
     private PreProcessorFactory ppF;
@@ -37,8 +44,6 @@ public class OpenGalleryActivity extends AppCompatActivity {
     //private Bitmap[] image=new Bitmap[10];
     public static final String IMAGES = "images";
 
-    // DatabaseHelper 객체
-    DatabaseHelper db;
 
     static {
         if (!OpenCVLoader.initDebug()) {
@@ -72,19 +77,7 @@ public class OpenGalleryActivity extends AppCompatActivity {
         if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             ArrayList<Image> image_list = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
 
-            // DBHelper 객체 생성
-            db = new DatabaseHelper(getApplicationContext());
-
-            // Array for pictures
-            Picture pic[] = new Picture[10];
-            long pic_ids[] = new long[10];
-
             for (int i = 0; i < 10; i++) {
-                // Creating pictures
-                pic[i] = new Picture(image_list.get(i).path);
-                // Inserting pictures in db
-                pic_ids[i] = db.createPicture(pic[i]);
-
                 Mat mat = Imgcodecs.imread(image_list.get(i).path);
                 Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
                 Mat imgCopy = new Mat();
@@ -118,11 +111,6 @@ public class OpenGalleryActivity extends AppCompatActivity {
                     }
                 }
             }
-
-            // Creating name
-            Name name1 = new Name(name);
-            // Inserting name with pictures in db
-            long name_id = db.createName(name1, pic_ids);
 
             Intent intent = new Intent(getApplicationContext(), TrainingActivity.class);
             intent.putExtra("Name", name);

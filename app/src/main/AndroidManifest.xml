@@ -29,7 +29,6 @@
                 android:value=".MainActivity" />
         </activity>
         <activity android:name=".AddPersonActivity" />
-        <activity android:name=".PersonPhotoActivity2" />
         <activity android:name=".OpenGalleryActivity" />
         <activity android:name=".TrainingActivity" />
         <activity
