@@ -108,11 +108,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * get single name
      */
-    public Name getName(long name_id) {
+    public Name getNameWithId(long name_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_NAME + " WHERE "
                 + KEY_ID + " = " + name_id;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+            c.moveToFirst();
+
+        Name name = new Name();
+        name.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        name.setName((c.getString(c.getColumnIndex(KEY_NAME))));
+
+        return name;
+    }
+
+    /**
+     * get single name
+     */
+    public Name getNameWithString(String rec_name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " WHERE "
+                + KEY_NAME + " = '" + rec_name+ "'";
 
         Log.e(LOG, selectQuery);
 
