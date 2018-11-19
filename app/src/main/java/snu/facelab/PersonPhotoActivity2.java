@@ -16,8 +16,8 @@ import static snu.facelab.MainActivity.PERSON;
 
 public class PersonPhotoActivity2 extends AppCompatActivity {
 
-    private ImageView[] imgView=new ImageView[10];
-    private Bitmap[] image=new Bitmap[10];
+    private ImageView[] imgView=new ImageView[16];
+    private Bitmap[] image=new Bitmap[16];
 
     // DatabaseHelper 객체
     DatabaseHelper db;
@@ -39,8 +39,9 @@ public class PersonPhotoActivity2 extends AppCompatActivity {
         pictures = db.getAllPicturesByName(person.name);
 
         int imgCount = pictures.size();
+        System.out.println("image count: " + imgCount);
 
-        for(int i=0; i<10; i++){
+        for(int i=0; i<16; i++){
             image[i] = BitmapFactory.decodeFile(pictures.get(i).getPath());
 
             switch (i){
@@ -74,8 +75,25 @@ public class PersonPhotoActivity2 extends AppCompatActivity {
                 case 9:
                     imgView[i] = (ImageView) findViewById(R.id.imageView9);
                     break;
+                case 10:
+                    imgView[i] = (ImageView) findViewById(R.id.imageView10);
+                    break;
+                case 11:
+                    imgView[i] = (ImageView) findViewById(R.id.imageView11);
+                    break;
+                case 12:
+                    imgView[i] = (ImageView) findViewById(R.id.imageView12);
+                    break;
+                case 13:
+                    imgView[i] = (ImageView) findViewById(R.id.imageView13);
+                    break;
+                case 14:
+                    imgView[i] = (ImageView) findViewById(R.id.imageView14);
+                    break;
+                case 15:
+                    imgView[i] = (ImageView) findViewById(R.id.imageView15);
+                    break;
             }
-
             imgView[i].setImageBitmap(image[i]);
         }
 
