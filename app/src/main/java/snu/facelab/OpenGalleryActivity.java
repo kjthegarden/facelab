@@ -1,9 +1,12 @@
 package snu.facelab;
 
 import android.content.Intent;
+import android.media.ExifInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
@@ -12,7 +15,10 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
@@ -76,22 +82,34 @@ public class OpenGalleryActivity extends AppCompatActivity {
             db = new DatabaseHelper(getApplicationContext());
 
             // Array for pictures
-            Picture pic[] = new Picture[10];
             long pic_ids[] = new long[10];
 
             for (int i = 0; i < 10; i++) {
-                // Creating pictures
-                pic[i] = new Picture(image_list.get(i).path);
-                // Inserting pictures in db
-                pic_ids[i] = db.createPicture(pic[i]);
+                // last modified time
+                File file = new File(image_list.get(i).path);
+                long last_modified = file.lastModified();
+
+                // convert to Date format
+                Date date_time = new Date(last_modified);
+                System.out.println(date_time);
+
+                // convert to SimpleDateFormat
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String simple_date = formatter.format(date_time);
+                System.out.println(simple_date);
+
+                // convert to yyyymmdd format
+                int date= Integer.parseInt(simple_date.replace("-", ""));
+
+                // creating and inserting pictures
+                Picture pic = new Picture(image_list.get(i).path, date, last_modified);
+                pic_ids[i] = db.createPicture(pic);
 
                 Mat mat = Imgcodecs.imread(image_list.get(i).path);
                 Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
                 Mat imgCopy = new Mat();
                 mat.copyTo(imgCopy);
                 List<Mat> images = ppF.getCroppedImage(imgCopy);
-
-                //image[i] = BitmapFactory.decodeFile(image_list.get(i).path);
 
                 // Check that only 1 face is found. Skip if any or more than 1 are found.
                 if (images != null && images.size() == 1) {
@@ -119,9 +137,10 @@ public class OpenGalleryActivity extends AppCompatActivity {
                 }
             }
 
-            // Creating name
+            // creating name
             Name name1 = new Name(name);
-            // Inserting name with pictures in db
+
+            // inserting name with pictures in db
             long name_id = db.createName(name1, pic_ids);
 
             Intent intent = new Intent(getApplicationContext(), TrainingActivity.class);

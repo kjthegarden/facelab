@@ -3,11 +3,8 @@ package snu.facelab.helper;
 import snu.facelab.model.Name;
 import snu.facelab.model.Picture;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -22,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = DatabaseHelper.class.getName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
 
     // Database Name
     private static final String DATABASE_NAME = "picturesManager";
@@ -40,6 +37,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // PICTURES Table - column names
     private static final String KEY_PATH = "path";
+    private static final String KEY_DATE = "date";
+    private static final String KEY_DATE_TIME = "date_time";
 
     // NAME_PICTURES Table - column names
     private static final String KEY_NAME_ID = "name_id";
@@ -52,12 +51,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Picture table create statement
     private static final String CREATE_TABLE_PICTURE = "CREATE TABLE " + TABLE_PICTURE
-            + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PATH + " TEXT" + ")";
+            + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PATH + " TEXT," + KEY_DATE + " INTEGER," + KEY_DATE_TIME+" INTEGER"+ ")";
 
     // Name_Picture table create statement
-    private static final String CREATE_TABLE_NAME_PICTURE = "CREATE TABLE "
-            + TABLE_NAME_PICTURE + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_NAME_ID + " INTEGER," + KEY_PICTURE_ID + " INTEGER"+ ")";
+    private static final String CREATE_TABLE_NAME_PICTURE = "CREATE TABLE " + TABLE_NAME_PICTURE
+            + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME_ID + " INTEGER," + KEY_PICTURE_ID + " INTEGER"+ ")";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -111,8 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Name getNameWithId(long name_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " WHERE "
-                + KEY_ID + " = " + name_id;
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " WHERE " + KEY_ID + " = " + name_id;
 
         Log.e(LOG, selectQuery);
 
@@ -134,8 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Name getNameWithString(String rec_name) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " WHERE "
-                + KEY_NAME + " = '" + rec_name+ "'";
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " WHERE " + KEY_NAME + " = '" + rec_name+ "'";
 
         Log.e(LOG, selectQuery);
 
@@ -226,6 +222,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_PATH, picture.getPath());
+        values.put(KEY_DATE, picture.getDate());
+        values.put(KEY_DATE_TIME, picture.getDateTime());
 
         // insert row
         long picture_id = db.insert(TABLE_PICTURE, null, values);
@@ -251,9 +249,71 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Picture p = new Picture();
                 p.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                 p.setPath(c.getString(c.getColumnIndex(KEY_PATH)));
+                p.setDate(c.getInt((c.getColumnIndex(KEY_DATE))));
+                p.setDateTime(c.getLong(c.getColumnIndex(KEY_DATE_TIME)));
 
                 // adding to pictures list
                 pictures.add(p);
+            } while (c.moveToNext());
+        }
+        return pictures;
+    }
+
+    /**
+     * getting all dates under single name
+     * */
+    public List<Integer> getAllDatesByName(String name) {
+        List<Integer> dates = new ArrayList<Integer>();
+
+        String selectQuery = "SELECT  DISTINCT" + " pc." + KEY_DATE
+                +" FROM " + TABLE_NAME + " nm, " + TABLE_PICTURE + " pc, " + TABLE_NAME_PICTURE + " np"
+                +" WHERE nm." + KEY_NAME + " = '" + name + "'"
+                + " AND pc." + KEY_ID + " = " + "np." + KEY_PICTURE_ID
+                + " AND nm." + KEY_ID + " = " + "np." + KEY_NAME_ID
+                + " ORDER BY pc." + KEY_DATE_TIME + " DESC";
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                // adding to picture list
+                dates.add(c.getInt((c.getColumnIndex(KEY_DATE))));
+            } while (c.moveToNext());
+        }
+        return dates;
+    }
+
+    /**
+     * getting all picture under single name and single date
+     * */
+    public List<Picture> getAllPicturesByNameAndDate(String name, Integer date) {
+        List<Picture> pictures = new ArrayList<Picture>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " nm, " + TABLE_PICTURE + " pc, " + TABLE_NAME_PICTURE + " np"
+                +" WHERE nm." + KEY_NAME + " = '" + name + "'"
+                + " AND pc." + KEY_ID + " = " + "np." + KEY_PICTURE_ID
+                + " AND nm." + KEY_ID + " = " + "np." + KEY_NAME_ID
+                + " AND pc." + KEY_DATE + " = '" + date + "'"
+                + " ORDER BY pc." + KEY_DATE_TIME + " DESC";
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Picture pic = new Picture();
+                pic.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                pic.setPath((c.getString(c.getColumnIndex(KEY_PATH))));
+
+                // adding to picture list
+                pictures.add(pic);
             } while (c.moveToNext());
         }
         return pictures;
@@ -265,11 +325,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Picture> getAllPicturesByName(String name) {
         List<Picture> pictures = new ArrayList<Picture>();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " nm, "
-                + TABLE_PICTURE + " pc, " + TABLE_NAME_PICTURE + " np WHERE nm."
-                + KEY_NAME + " = '" + name + "'" + " AND pc." + KEY_ID
-                + " = " + "np." + KEY_PICTURE_ID + " AND nm." + KEY_ID + " = "
-                + "np." + KEY_NAME_ID;
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " nm, " + TABLE_PICTURE + " pc, " + TABLE_NAME_PICTURE + " np"
+                +" WHERE nm." + KEY_NAME + " = '" + name + "'"
+                + " AND pc." + KEY_ID + " = " + "np." + KEY_PICTURE_ID
+                + " AND nm." + KEY_ID + " = " + "np." + KEY_NAME_ID
+                + " ORDER BY pc." + KEY_DATE_TIME + " DESC";
 
         Log.e(LOG, selectQuery);
 

@@ -21,7 +21,9 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
@@ -99,15 +101,25 @@ public class AddPhotoActivity extends AppCompatActivity {
 
             db = new DatabaseHelper(getApplicationContext());
 
-            Picture pic[] = new Picture[size];
-            long pic_ids[] = new long[size];
-
             for (int i = 0; i < image_list.size(); i++) {
 
-                // Creating pictures
-                pic[i] = new Picture(image_list.get(i).path);
-                // Inserting pictures in db
-                pic_ids[i] = db.createPicture(pic[i]);
+                // last modified time
+                File file = new File(image_list.get(i).path);
+                long last_modified = file.lastModified();
+
+                // convert to Date format
+                Date date_time = new Date(last_modified);
+
+                // convert to SimpleDateFormat
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String simple_date = formatter.format(date_time);
+
+                // convert to yyyymmdd format
+                int date= Integer.parseInt(simple_date.replace("-", ""));
+
+                // creating and inserting pictures
+                Picture pic = new Picture(image_list.get(i).path, date, last_modified);
+                long pic_id = db.createPicture(pic);
 
                 Mat mat = Imgcodecs.imread(image_list.get(i).path);
                 Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
@@ -128,12 +140,13 @@ public class AddPhotoActivity extends AppCompatActivity {
                         if(rec_name!=null){
                             // Get name_id with name
                             Name name = db.getNameWithString(rec_name);
-                            long name_id=name.getId();
+                            long name_id = name.getId();
                             // Inserting name_id & picture_id pair
-                            long name_picture_id = db.createNamePicture(name_id, pic_ids[i]);
+                            long name_picture_id = db.createNamePicture(name_id, pic_id);
                         }
                     }
                 }
+
             }
         }
     }
