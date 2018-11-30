@@ -1,8 +1,6 @@
 package snu.facelab;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -151,8 +149,8 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
             Intent i = new Intent(MainActivity.this, AddPersonActivity.class);
             startActivity(i);
-        } else if (id == R.id.nav_add_photo) {
-            Intent i = new Intent(MainActivity.this, AddPhotoActivity.class);
+        } else if (id == R.id.nav_auto_add) {
+            Intent i = new Intent(MainActivity.this, AutoAddActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_slideshow) {
 
