@@ -15,18 +15,20 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import snu.facelab.Photo;
 import snu.facelab.R;
+import snu.facelab.model.Picture;
 
 class PhotoAdapter extends BaseAdapter {
     Context context;     // 현재 화면의 제어권자
     int layout;              // 한행을 그려줄 layout
-    ArrayList<Photo> al;     // 다량의 데이터
+    List<Picture> al;     // 다량의 데이터
     LayoutInflater inf; // 화면을 그려줄 때 필요
     private Bitmap image;
 
-    public PhotoAdapter(Context context, int layout, ArrayList<Photo> al) {
+    public PhotoAdapter(Context context, int layout, List<Picture> al) {
         this.context = context;
         this.layout = layout;
         this.al = al;
@@ -52,9 +54,9 @@ class PhotoAdapter extends BaseAdapter {
 
         ImageView iv = (ImageView)convertView.findViewById(R.id.photoView);
 
-        Photo m = al.get(position);
+        Picture m = al.get(position);
 
-        Uri imageUri = Uri.fromFile(new File(m.getImg()));
+        Uri imageUri = Uri.fromFile(new File(m.getPath()));
         Glide.with(context)
                 .load(imageUri)
                 .apply(new RequestOptions()
