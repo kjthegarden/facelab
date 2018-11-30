@@ -31,7 +31,7 @@
         <activity android:name=".AddPersonActivity" />
         <activity android:name=".OpenGalleryActivity" />
         <activity android:name=".TrainingActivity" />
-        <activity android:name=".AddPhotoActivity"/>
+        <activity android:name=".AutoAddActivity"/>
         <activity android:name=".RecognitionActivity" />
         <activity
             android:name=".SettingsActivity"

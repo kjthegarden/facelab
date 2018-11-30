@@ -7,12 +7,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
@@ -31,7 +27,6 @@ import com.darsh.multipleimageselect.helpers.Constants;
 import com.darsh.multipleimageselect.models.Image;
 
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
-import ch.zhaw.facerecognitionlibrary.Helpers.MatName;
 import ch.zhaw.facerecognitionlibrary.Helpers.MatOperation;
 import ch.zhaw.facerecognitionlibrary.PreProcessor.PreProcessorFactory;
 import ch.zhaw.facerecognitionlibrary.Recognition.Recognition;
@@ -40,7 +35,7 @@ import snu.facelab.helper.DatabaseHelper;
 import snu.facelab.model.Name;
 import snu.facelab.model.Picture;
 
-public class AddPhotoActivity extends AppCompatActivity {
+public class AutoAddActivity extends AppCompatActivity {
 
 
     //private ProgressBar progressBar;
@@ -71,7 +66,7 @@ public class AddPhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_photo);
+        setContentView(R.layout.activity_auto_add);
 
         //progressBar = (ProgressBar)findViewById(R.id.progressBar2);
         //progressBar.setVisibility(ProgressBar.VISIBLE);

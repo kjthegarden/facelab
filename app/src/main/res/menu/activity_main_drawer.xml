@@ -9,9 +9,9 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Add Person" />
         <item
-            android:id="@+id/nav_add_photo"
+            android:id="@+id/nav_auto_add"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Add Photo" />
+            android:title="Auto Add Photo" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
