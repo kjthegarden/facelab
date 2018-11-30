@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = DatabaseHelper.class.getName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // Database Name
     private static final String DATABASE_NAME = "picturesManager";
@@ -374,6 +374,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME_PICTURE, KEY_ID + " = ?",
                 new String[] { String.valueOf(id) });
+    }
+
+    public void changeNamePicture(long id, long name_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME_ID, name_id);
+
+        db.update(TABLE_NAME_PICTURE, values, KEY_ID + " =?", new String[]{String.valueOf(id)});
+
     }
 
     // closing database
