@@ -12,18 +12,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import snu.facelab.helper.DatabaseHelper;
-import snu.facelab.model.Picture;
+import snu.facelab.model.*;
 
 import static snu.facelab.MainActivity.PERSON;
 
 public class PersonPhotoActivity extends AppCompatActivity {
-    ArrayList<Photo> al = new ArrayList<Photo>();
+    //ArrayList<List<Picture>> pictures = new ArrayList<List<Picture>>();
     public static final String PHOTO = "Photo";
     DatabaseHelper db;
 
@@ -39,43 +40,24 @@ public class PersonPhotoActivity extends AppCompatActivity {
         // DBHelper 객체 생성
         db = new DatabaseHelper(getApplicationContext());
 
-        // get pictures from db
-        List<Picture> pictures = new ArrayList<Picture>();
+        // ListView 위한 객체 설정
+        ListView Lv = findViewById(R.id.listView);
+        ListAdapter adapter = new ListAdapter();
 
-        pictures = db.getAllPicturesByName(person.name);
+        // get pictures from db by date
+        List<Picture> picture_date = new ArrayList<Picture>();
+        List<Integer> dates = new ArrayList<Integer>();
 
-        int imgCount = pictures.size();
+        dates = db.getAllDatesByName(person.name);
 
-        for(int i = 0; i < imgCount; i++)
+        int dateCount = dates.size();
+
+        for (int i = 0; i < dateCount; i++)
         {
-           al.add(new Photo(pictures.get(i).getPath()));
+            picture_date = db.getAllPicturesByNameAndDate(person.name, dates.get(i));
+            adapter.addItem(dates.get(i), picture_date);
         }
 
-
-
-        Log.d("test", al.toString());
-
-        // adapter
-        PhotoAdapter adapter = new PhotoAdapter(
-                getApplicationContext(), // 현재 화면의 제어권자
-                R.layout.photo,             // 한행을 그려줄 layout
-                al);                     // 다량의 데이터
-
-        GridView Gv = findViewById(R.id.gridView2);
-        Gv.setAdapter(adapter);
-
-        // 이벤트 처리
-        Gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                GridView GridView = (GridView) adapterView;
-                Photo photo = (Photo) GridView.getItemAtPosition(position);
-
-                Intent i = new Intent(PersonPhotoActivity.this, PersonPhotoDetailActivity.class);
-                i.putExtra(PHOTO, photo);
-                startActivity(i);
-            }
-        });
 
         FloatingActionButton btn = (FloatingActionButton)findViewById(R.id.btn_sns);
 
@@ -85,6 +67,8 @@ public class PersonPhotoActivity extends AppCompatActivity {
                 shareImage();
             }
         });
+
+        Lv.setAdapter(adapter);
     }
 
     @Override

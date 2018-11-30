@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import snu.facelab.model.Picture;
+
 import static snu.facelab.MainActivity.PERSON;
 
 public class PersonPhotoDetailActivity extends AppCompatActivity {
@@ -28,18 +30,18 @@ public class PersonPhotoDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_photo_detail);
 
-        Photo photo = (Photo) getIntent().getExtras().getSerializable(PHOTO);
-        Log.d("test", String.valueOf(photo.getImg()));
+        Picture photo = (Picture) getIntent().getExtras().getSerializable(PHOTO);
+        Log.d("test", String.valueOf(photo.getPath()));
 
         LinearLayout imgHolder = (LinearLayout) findViewById(R.id.person_photo_holder);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
 
         iv = (ImageView) findViewById(R.id.person_photo_detail);
-        image = BitmapFactory.decodeFile(photo.getImg());
+        image = BitmapFactory.decodeFile(photo.getPath());
         iv.setImageBitmap(image);
         iv.setLayoutParams(params);
 
-        if (photo.getImg() != null) {
+        if (photo.getPath() != null) {
             imgHolder.removeAllViews();
         }
         imgHolder.addView(iv);
