@@ -8,7 +8,17 @@
         android:id="@+id/relativeLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/black" >
+        >
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_check"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/btn_sns"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50dp"
+            android:src="@drawable/ic_menu_send"
+            app:backgroundTint="@android:color/background_light" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_sns"

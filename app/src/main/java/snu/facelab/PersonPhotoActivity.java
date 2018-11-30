@@ -58,9 +58,19 @@ public class PersonPhotoActivity extends AppCompatActivity {
             adapter.addItem(dates.get(i), picture_date);
         }
 
+        Lv.setAdapter(adapter);
 
+        //Check
+        FloatingActionButton btn_check = (FloatingActionButton)findViewById(R.id.btn_check);
+        btn_check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkImage();
+            }
+        });
+
+        // Share
         FloatingActionButton btn = (FloatingActionButton)findViewById(R.id.btn_sns);
-
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +78,6 @@ public class PersonPhotoActivity extends AppCompatActivity {
             }
         });
 
-        Lv.setAdapter(adapter);
     }
 
     @Override
@@ -81,6 +90,12 @@ public class PersonPhotoActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void checkImage() {
+
+    }
+
+
 
     // 이미지 공유 함수
     public void shareImage() {
