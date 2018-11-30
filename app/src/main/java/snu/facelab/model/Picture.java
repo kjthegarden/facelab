@@ -1,6 +1,8 @@
 package snu.facelab.model;
 
-public class Picture {
+import java.io.Serializable;
+
+public class Picture implements Serializable {
     int id;
     String path;
     int date;
