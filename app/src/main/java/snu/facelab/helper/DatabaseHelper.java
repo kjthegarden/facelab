@@ -294,7 +294,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 +" WHERE nm." + KEY_NAME + " = '" + name + "'"
                 + " AND pc." + KEY_ID + " = " + "np." + KEY_PICTURE_ID
                 + " AND nm." + KEY_ID + " = " + "np." + KEY_NAME_ID
-                + " ORDER BY pc." + KEY_DATE_TIME + " DESC";
+                + " ORDER BY pc." + KEY_DATE + " DESC";
 
         Log.e(LOG, selectQuery);
 

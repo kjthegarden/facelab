@@ -12,16 +12,23 @@
         android:src="@drawable/abc_btn_radio_to_on_mtrl_015" />
 
     <Button
-        android:id="@+id/btn_edit"
+        android:id="@+id/btn_edit_date"
         android:layout_width="170dp"
-        android:layout_height="60dp"
+        android:layout_height="45dp"
         android:layout_centerInParent="true"
-        android:text="EDIT" />
+        android:text="EDIT DATE"/>
+
+    <Button
+        android:id="@+id/btn_edit_name"
+        android:layout_width="170dp"
+        android:layout_height="45dp"
+        android:layout_centerInParent="true"
+        android:text="EDIT NAME" />
 
     <Button
         android:id="@+id/btn_delete"
         android:layout_width="170dp"
-        android:layout_height="60dp"
+        android:layout_height="45dp"
         android:layout_centerInParent="true"
         android:text="DELETE" />
 
