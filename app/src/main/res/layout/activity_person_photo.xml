@@ -11,6 +11,15 @@
         >
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_add_photo"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="100dp"
+            android:layout_alignParentRight="true"
+            android:src="@android:drawable/ic_input_add"
+            app:backgroundTint="@android:color/background_light" />
+
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_check"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
