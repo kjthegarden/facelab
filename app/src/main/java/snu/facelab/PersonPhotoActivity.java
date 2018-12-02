@@ -7,15 +7,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ListView;
 
+import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
+import com.darsh.multipleimageselect.helpers.Constants;
+import com.darsh.multipleimageselect.models.Image;
+
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import snu.facelab.helper.DatabaseHelper;
@@ -24,7 +27,6 @@ import snu.facelab.model.*;
 import static snu.facelab.MainActivity.PERSON;
 
 public class PersonPhotoActivity extends AppCompatActivity {
-    //ArrayList<List<Picture>> pictures = new ArrayList<List<Picture>>();
     public static final String PHOTO = "Photo";
     DatabaseHelper db;
 
@@ -33,7 +35,6 @@ public class PersonPhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_photo);
 
-        //Intent intent = getIntent();
         Person person = (Person) getIntent().getExtras().getSerializable(PERSON);
         setTitle(person.name);
 
@@ -59,6 +60,15 @@ public class PersonPhotoActivity extends AppCompatActivity {
         }
 
         Lv.setAdapter(adapter);
+
+        // Add Picture
+        FloatingActionButton btn_add_photo = (FloatingActionButton) findViewById(R.id.btn_add_photo);
+        btn_add_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addImage();
+            }
+        });
 
         //Check
         FloatingActionButton btn_check = (FloatingActionButton)findViewById(R.id.btn_check);
@@ -95,8 +105,6 @@ public class PersonPhotoActivity extends AppCompatActivity {
 
     }
 
-
-
     // 이미지 공유 함수
     public void shareImage() {
 
@@ -121,6 +129,53 @@ public class PersonPhotoActivity extends AppCompatActivity {
 
         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
         startActivity(Intent.createChooser(intent, "Choose")); //Activity를 이용하여 호출 합니다.
+    }
+
+    // 새로운 사진 추가하기
+    public void addImage() {
+        Intent newIntent = new Intent(this, AlbumSelectActivity.class);
+        startActivityForResult(newIntent, Constants.REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            final ArrayList<Image> image_list = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+            int size = image_list.size();
+            System.out.println("add photo activity result image_list size :" + size);
+
+            db = new DatabaseHelper(getApplicationContext());
+
+            for (int i = 0; i < image_list.size(); i++) {
+
+                // last modified time
+                File file = new File(image_list.get(i).path);
+                long last_modified = file.lastModified();
+
+                // convert to Date format
+                Date date_time = new Date(last_modified);
+
+                // convert to SimpleDateFormat
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String simple_date = formatter.format(date_time);
+
+                // convert to yyyymmdd format
+                int date = Integer.parseInt(simple_date.replace("-", ""));
+
+                // creating and inserting pictures
+                Picture pic = new Picture(image_list.get(i).path, date, last_modified);
+                long pic_id = db.createPicture(pic);
+
+                // Get name_id with name
+                Person person = (Person) getIntent().getExtras().getSerializable(PERSON);
+                Name name = db.getNameWithString(person.name);
+                long name_id = name.getId();
+                // Inserting name_id & picture_id pair
+                long name_picture_id = db.createNamePicture(name_id, pic_id);
+
+            }
+        }
     }
 }
 
