@@ -3,10 +3,12 @@ package snu.facelab;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -110,6 +112,9 @@ public class PersonPhotoActivity extends AppCompatActivity {
     public void shareImage(ListAdapter adapter) {
 
         // 사진 절대 경로 받아오기
+        adapter.notifyDataSetChanged();
+        ArrayList<String> checked_paths = adapter.get_paths();
+        Log.d("check", "checked: "+ checked_paths.toString());
 
         // 여러 개의 사진 공유
         Intent intent = new Intent();
@@ -118,8 +123,13 @@ public class PersonPhotoActivity extends AppCompatActivity {
 
         ArrayList<Uri> files = new ArrayList<Uri>();
 
-        String[] filesToSend={"/storage/emulated/0/DCIM/Camera/20181103_084637_HDR.jpg",
-                "/storage/emulated/0/DCIM/Camera/20181101_192825.jpg"};
+        int checked = checked_paths.size();
+        String[] filesToSend = new String[checked];
+        for (int i = 0; i < checked; i++) {
+            filesToSend[i] = checked_paths.get(i);
+        }
+
+        adapter.reset_check();
 
         for(String path : filesToSend /* List of the files you want to send */) {
             File file = new File(path);
@@ -130,6 +140,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
 
         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
         startActivity(Intent.createChooser(intent, "Choose")); //Activity를 이용하여 호출 합니다.
+
     }
 
     // 새로운 사진 추가하기

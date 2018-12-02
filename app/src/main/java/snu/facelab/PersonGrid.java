@@ -9,6 +9,7 @@ import snu.facelab.model.Picture;
 public class PersonGrid implements Serializable { // 자바 빈 (java Bean)
     Integer date;
     List<Picture> photos;
+    ArrayList<String> checked_paths;
 
     // 생성자가 있으면 객체 생성시 편리하다
     public PersonGrid(Integer date, List<Picture> photos) {
@@ -25,6 +26,12 @@ public class PersonGrid implements Serializable { // 자바 빈 (java Bean)
         this.photos = photos;
     }
 
+    public void setChecked_paths(ArrayList<String> paths) { this.checked_paths = paths; }
+
+    public void addChecked_paths(String path) {
+        this.checked_paths.add(path);
+    }
+
     public Integer getDate() {
         return date;
     }
@@ -32,4 +39,8 @@ public class PersonGrid implements Serializable { // 자바 빈 (java Bean)
     public List<Picture> getPhotos() {
         return photos;
     }
+
+    public ArrayList<String> getChecked_paths() { return checked_paths; }
+
+    public Integer getSize() { return this.photos.size(); }
 }

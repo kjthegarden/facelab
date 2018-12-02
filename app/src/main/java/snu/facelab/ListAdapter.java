@@ -2,8 +2,6 @@ package snu.facelab;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,6 +22,7 @@ class ListAdapter extends BaseAdapter {
     ArrayList<PersonGrid> al = new ArrayList<PersonGrid>(); // 다량의 데이터
     LayoutInflater inf; // 화면을 그려줄 때 필요
     private int visibleFlag = 0;
+    private int updateFlag = 0;
 
     public static final String PHOTO = "Photo";
 
@@ -35,6 +33,42 @@ class ListAdapter extends BaseAdapter {
     public void updateView(int flag) {
         visibleFlag = flag;
         notifyDataSetChanged();
+    }
+
+    public ArrayList<String> get_paths() {
+        ArrayList<String> checked_paths = new ArrayList<>();
+        int grid_size = al.size();
+
+        for (int i = 0; i < grid_size; i++) {
+            int pic_size = al.get(i).getSize();
+            PersonGrid pg = al.get(i);
+
+            for (int j = 0; j < pic_size; j++) {
+                Picture p = pg.getPhotos().get(j);
+                if (p.getChecked()) {
+                    if (!checked_paths.contains(p.getPath())) {
+                        checked_paths.add(p.getPath());
+                    }
+                }
+            }
+        }
+        return checked_paths;
+    }
+
+    public void reset_check() {
+        int grid_size = al.size();
+
+        for (int i = 0; i < grid_size; i++) {
+            int pic_size = al.get(i).getSize();
+            PersonGrid pg = al.get(i);
+
+            for (int j = 0; j < pic_size; j++) {
+                Picture p = pg.getPhotos().get(j);
+                if (p.getChecked()) {
+                    p.setChecked(false);
+                }
+            }
+        }
     }
 
     @Override
@@ -75,6 +109,7 @@ class ListAdapter extends BaseAdapter {
         if (visibleFlag == 1) {
             adapter.updateView(1);
         }
+
         Gv.setAdapter(adapter);
 
         // 이벤트 처리

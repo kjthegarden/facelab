@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -29,6 +31,8 @@ class PhotoAdapter extends BaseAdapter {
     LayoutInflater inf; // 화면을 그려줄 때 필요
     private Bitmap image;
     private int visibleFlag = 0;
+    private int updateFlag = 0;
+    ArrayList<String> paths = new ArrayList<String>();
 
     public PhotoAdapter(Context context, int layout, List<Picture> al) {
         this.context = context;
@@ -56,11 +60,13 @@ class PhotoAdapter extends BaseAdapter {
         return position;
     }
     @Override // 해당번째의 행에 내용을 셋팅(데이터와 레이아웃의 연결관계 정의)
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null)
             convertView = inf.inflate(layout, null);
 
         ImageView iv = (ImageView)convertView.findViewById(R.id.photoView);
+
+        final Picture m = al.get(position);
 
         CheckBox checkbox = convertView.findViewById(R.id.checkBox1);
         checkbox.setVisibility(View.GONE);
@@ -69,7 +75,17 @@ class PhotoAdapter extends BaseAdapter {
             checkbox.setVisibility(View.VISIBLE);
         }
 
-        Picture m = al.get(position);
+        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+                if (isChecked) {
+                    m.setChecked(true);
+                } else {
+                    m.setChecked(false);
+                }
+            }
+        });
 
         Uri imageUri = Uri.fromFile(new File(m.getPath()));
         Glide.with(context)

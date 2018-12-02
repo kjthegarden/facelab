@@ -7,6 +7,7 @@ public class Picture implements Serializable {
     String path;
     int date;
     long dateTime;
+    boolean checked = false;
 
     public Picture() {
 
@@ -39,8 +40,12 @@ public class Picture implements Serializable {
 
     public void setDate(int date) { this.date = date; }
 
+    public void setChecked(boolean b) { this.checked = b; }
+
     public long getDateTime() { return dateTime; }
 
     public void setDateTime(long dateTime) { this.dateTime = dateTime; }
+
+    public boolean getChecked() { return this.checked; }
 
 }
