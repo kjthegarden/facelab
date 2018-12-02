@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
@@ -68,79 +70,85 @@ public class OpenGalleryActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             ArrayList<Image> image_list = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+            int image_list_size = image_list.size();
+            if( image_list_size<10){
+                Toast.makeText(getApplicationContext(), "Choose at least 10 pictures.", Toast.LENGTH_SHORT).show();
+                Intent newIntent = new Intent(this, AlbumSelectActivity.class);
 
-            // DBHelper 객체 생성
-            db = new DatabaseHelper(getApplicationContext());
+                startActivityForResult(newIntent, Constants.REQUEST_CODE);
+            }else{
+                // DBHelper 객체 생성
+                db = new DatabaseHelper(getApplicationContext());
 
-            // Array for pictures
-            long pic_ids[] = new long[10];
+                // Array for pictures
+                long pic_ids[] = new long[image_list_size];
 
-            for (int i = 0; i < 10; i++) {
-                // last modified time
-                File file = new File(image_list.get(i).path);
-                long last_modified = file.lastModified();
+                for (int i = 0; i < image_list_size; i++) {
+                    // last modified time
+                    File file = new File(image_list.get(i).path);
+                    long last_modified = file.lastModified();
 
-                // convert to Date format
-                Date date_time = new Date(last_modified);
-                System.out.println(date_time);
+                    // convert to Date format
+                    Date date_time = new Date(last_modified);
+                    System.out.println(date_time);
 
-                // convert to SimpleDateFormat
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                String simple_date = formatter.format(date_time);
-                System.out.println(simple_date);
+                    // convert to SimpleDateFormat
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    String simple_date = formatter.format(date_time);
+                    System.out.println(simple_date);
 
-                // convert to yyyymmdd format
-                int date= Integer.parseInt(simple_date.replace("-", ""));
+                    // convert to yyyymmdd format
+                    int date= Integer.parseInt(simple_date.replace("-", ""));
 
-                // creating and inserting pictures
-                Picture pic = new Picture(image_list.get(i).path, date, last_modified);
-                pic_ids[i] = db.createPicture(pic);
+                    // creating and inserting pictures
+                    Picture pic = new Picture(image_list.get(i).path, date, last_modified);
+                    pic_ids[i] = db.createPicture(pic);
 
-                Mat mat = Imgcodecs.imread(image_list.get(i).path);
-                Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
-                Mat imgCopy = new Mat();
-                mat.copyTo(imgCopy);
-                List<Mat> images = ppF.getCroppedImage(imgCopy);
+                    Mat mat = Imgcodecs.imread(image_list.get(i).path);
+                    Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
+                    Mat imgCopy = new Mat();
+                    mat.copyTo(imgCopy);
+                    List<Mat> images = ppF.getCroppedImage(imgCopy);
 
-                // Check that only 1 face is found. Skip if any or more than 1 are found.
-                if (images != null && images.size() == 1) {
-                    Mat img = images.get(0);
-                    if (img != null) {
-                        Rect[] faces = ppF.getFacesForRecognition();
-                        //Only proceed if 1 face has been detected, ignore if 0 or more than 1 face have been detected
-                        if ((faces != null) && (faces.length == 1)) {
-                            faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
-                            MatName m = new MatName(name + "_" + i, img);
+                    // Check that only 1 face is found. Skip if any or more than 1 are found.
+                    if (images != null && images.size() == 1) {
+                        Mat img = images.get(0);
+                        if (img != null) {
+                            Rect[] faces = ppF.getFacesForRecognition();
+                            //Only proceed if 1 face has been detected, ignore if 0 or more than 1 face have been detected
+                            if ((faces != null) && (faces.length == 1)) {
+                                faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
+                                MatName m = new MatName(name + "_" + i, img);
 
-                            // trainging 사진이 저장되는 경로
-                            String wholeFolderPath = fh.TRAINING_PATH + "facelab" + db.getNameCount();
+                                // trainging 사진이 저장되는 경로
+                                String wholeFolderPath = fh.TRAINING_PATH + "facelab" + db.getNameCount();
 
-                            new File(wholeFolderPath).mkdirs();
-                            fh.saveMatToImage(m, wholeFolderPath + "/");
-                            total++;
-                        }
+                                new File(wholeFolderPath).mkdirs();
+                                fh.saveMatToImage(m, wholeFolderPath + "/");
+                                total++;
+                            }
 
-                        for (int j = 0; j < faces.length; j++) {
-                            MatOperation.drawRectangleAndLabelOnPreview(mat, faces[j], String.valueOf(i), true);
-                        }
+                            for (int j = 0; j < faces.length; j++) {
+                                MatOperation.drawRectangleAndLabelOnPreview(mat, faces[j], String.valueOf(i), true);
+                            }
 
-                        for (int j = 0; j < faces.length; j++) {
-                            MatOperation.drawRectangleOnPreview(mat, faces[j], true);
+                            for (int j = 0; j < faces.length; j++) {
+                                MatOperation.drawRectangleOnPreview(mat, faces[j], true);
+                            }
                         }
                     }
                 }
+
+                // creating name
+                Name name1 = new Name(name);
+                // inserting name with pictures in db
+                long name_id = db.createName(name1, pic_ids);
+
+                Intent intent = new Intent(getApplicationContext(), TrainingActivity.class);
+                intent.putExtra("FolderName", "facelab" + (db.getNameCount()-1));
+
+                startActivity(intent);
             }
-
-            // creating name
-            Name name1 = new Name(name);
-
-            // inserting name with pictures in db
-            long name_id = db.createName(name1, pic_ids);
-
-            Intent intent = new Intent(getApplicationContext(), TrainingActivity.class);
-            intent.putExtra("FolderName", "facelab" + (db.getNameCount()-1));
-
-            startActivity(intent);
         }
     }
 
