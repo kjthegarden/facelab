@@ -218,15 +218,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Creating Picture
      */
     public long createPicture(Picture picture) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        Long picture_id = getPictureIdByPath(picture.getPath());
 
-        ContentValues values = new ContentValues();
-        values.put(KEY_PATH, picture.getPath());
-        values.put(KEY_DATE, picture.getDate());
-        values.put(KEY_DATE_TIME, picture.getDateTime());
+        if(picture_id==null){
+            System.out.println(picture_id);
+            SQLiteDatabase db = this.getWritableDatabase();
 
-        // insert row
-        long picture_id = db.insert(TABLE_PICTURE, null, values);
+            ContentValues values = new ContentValues();
+            values.put(KEY_PATH, picture.getPath());
+            values.put(KEY_DATE, picture.getDate());
+            values.put(KEY_DATE_TIME, picture.getDateTime());
+
+            // insert row
+            picture_id = db.insert(TABLE_PICTURE, null, values);
+        }
 
         return picture_id;
     }
@@ -384,15 +389,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Creating name_pictures
      */
     public long createNamePicture(long name_id, long picture_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        Long id = getPictureIdByNameIdAndPicId(name_id, picture_id);
 
-        ContentValues values = new ContentValues();
-        values.put(KEY_NAME_ID, name_id);
-        values.put(KEY_PICTURE_ID, picture_id);
+        if(id==null){
+            SQLiteDatabase db = this.getWritableDatabase();
 
-        long id = db.insert(TABLE_NAME_PICTURE, null, values);
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME_ID, name_id);
+            values.put(KEY_PICTURE_ID, picture_id);
+
+            id = db.insert(TABLE_NAME_PICTURE, null, values);
+        }
 
         return id;
+    }
+
+    /**
+     * getting id by name_id and pic_id
+     * */
+    public long getPictureIdByNameIdAndPicId(long name_id, long pic_id) {
+        List<Picture> pictures = new ArrayList<Picture>();
+        String selectQuery = "SELECT  *" + " FROM " + TABLE_NAME_PICTURE +" WHERE " + KEY_NAME_ID + " = '" + name_id+ "'"+ " AND "+KEY_PICTURE_ID + " = '" + pic_id+ "'";
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+            c.moveToFirst();
+
+        return c.getInt(c.getColumnIndex(KEY_ID));
     }
 
     /**
