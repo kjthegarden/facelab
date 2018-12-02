@@ -24,13 +24,14 @@ import ch.zhaw.facerecognitionlibrary.Helpers.PreferencesHelper;
 import ch.zhaw.facerecognitionlibrary.PreProcessor.PreProcessorFactory;
 import ch.zhaw.facerecognitionlibrary.Recognition.Recognition;
 import ch.zhaw.facerecognitionlibrary.Recognition.RecognitionFactory;
+import snu.facelab.helper.DatabaseHelper;
 
 public class TrainingActivity extends Activity {
     private static final String TAG = "Training";
     TextView progress;
     Thread thread;
 
-    private String name;
+    private String folder_name;
 
     static {
         if (!OpenCVLoader.initDebug()) {
@@ -44,8 +45,7 @@ public class TrainingActivity extends Activity {
         setContentView(R.layout.activity_training);
 
         Intent intent = getIntent();
-        name = intent.getStringExtra("Name");
-
+        folder_name = intent.getStringExtra("FolderName");
 
         progress = (TextView) findViewById(R.id.progressText);
         progress.setMovementMethod(new ScrollingMovementMethod());
@@ -62,21 +62,23 @@ public class TrainingActivity extends Activity {
                 if(!Thread.currentThread().isInterrupted()){
                     PreProcessorFactory ppF = new PreProcessorFactory(getApplicationContext());
                     PreferencesHelper preferencesHelper = new PreferencesHelper(getApplicationContext());
-                    //String algorithm = preferencesHelper.getClassificationMethod();
                     String algorithm = "TensorFlow with SVM or KNN";
+
                     FileHelper fileHelper = new FileHelper();
                     fileHelper.createDataFolderIfNotExsiting();
                     final File[] persons = fileHelper.getTrainingList();
+
                     if (persons.length > 0) {
                         Recognition rec = RecognitionFactory.getRecognitionAlgorithm(getApplicationContext(), Recognition.TRAINING, algorithm);
-                        // rec.loadTrainingList();
+
                         for (File person : persons) {
                             if (person.isDirectory()) {
                                 // The last token is the name --> Folder name = Person name
                                 String[] tokens = person.getAbsolutePath().split("/");
+
                                 final String foldername = tokens[tokens.length - 1];
-                                //System.out.println(foldername + " " + name + " " + foldername.equals(name));
-                                if (foldername.equals(name)) {
+
+                                if (foldername.equals(folder_name)) {
                                     File[] files = person.listFiles();
                                     int counter = 1;
                                     for (File file : files) {
@@ -110,7 +112,7 @@ public class TrainingActivity extends Activity {
                                             progress.post(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    progress.append("Image " + counterPost + " of " + filesLength + " from " + name + " imported.\n");
+                                                    progress.append("Image " + counterPost + " of " + filesLength + " from " + folder_name + " imported.\n");
                                                 }
                                             });
 

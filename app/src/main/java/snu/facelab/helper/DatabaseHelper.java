@@ -267,7 +267,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting picture id by path
      * */
-    public long getPictureIdByPath(String path) {
+    public Long getPictureIdByPath(String path) {
         List<Picture> pictures = new ArrayList<Picture>();
         String selectQuery = "SELECT  *" + " FROM " + TABLE_PICTURE +" WHERE " + KEY_PATH + " = '" + path+ "'";
 
@@ -276,10 +276,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if (c != null)
-            c.moveToFirst();
-
-        return c.getInt(c.getColumnIndex(KEY_ID));
+        if (c != null && c.moveToFirst()){
+            return c.getLong(c.getColumnIndex(KEY_ID));
+        }else{
+            return null;
+        }
     }
 
     /**
@@ -407,7 +408,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting id by name_id and pic_id
      * */
-    public long getPictureIdByNameIdAndPicId(long name_id, long pic_id) {
+    public Long getPictureIdByNameIdAndPicId(long name_id, long pic_id) {
         List<Picture> pictures = new ArrayList<Picture>();
         String selectQuery = "SELECT  *" + " FROM " + TABLE_NAME_PICTURE +" WHERE " + KEY_NAME_ID + " = '" + name_id+ "'"+ " AND "+KEY_PICTURE_ID + " = '" + pic_id+ "'";
 
@@ -416,10 +417,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if (c != null)
-            c.moveToFirst();
-
-        return c.getInt(c.getColumnIndex(KEY_ID));
+        if (c != null && c.moveToFirst()){
+            return c.getLong(c.getColumnIndex(KEY_ID));
+        }else{
+            return null;
+        }
     }
 
     /**
