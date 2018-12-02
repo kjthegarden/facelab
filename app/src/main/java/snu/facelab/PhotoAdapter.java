@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +28,7 @@ class PhotoAdapter extends BaseAdapter {
     List<Picture> al;     // 다량의 데이터
     LayoutInflater inf; // 화면을 그려줄 때 필요
     private Bitmap image;
+    private int visibleFlag = 0;
 
     public PhotoAdapter(Context context, int layout, List<Picture> al) {
         this.context = context;
@@ -35,6 +37,12 @@ class PhotoAdapter extends BaseAdapter {
         this.inf = (LayoutInflater)context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
+    public void updateView(int flag) {
+        visibleFlag = flag;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() { // 총 데이터의 개수를 리턴
         return al.size();
@@ -53,6 +61,13 @@ class PhotoAdapter extends BaseAdapter {
             convertView = inf.inflate(layout, null);
 
         ImageView iv = (ImageView)convertView.findViewById(R.id.photoView);
+
+        CheckBox checkbox = convertView.findViewById(R.id.checkBox1);
+        checkbox.setVisibility(View.GONE);
+
+        if (visibleFlag == 1) {
+            checkbox.setVisibility(View.VISIBLE);
+        }
 
         Picture m = al.get(position);
 
