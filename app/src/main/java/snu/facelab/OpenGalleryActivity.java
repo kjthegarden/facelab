@@ -1,13 +1,9 @@
 package snu.facelab;
 
 import android.content.Intent;
-import android.media.ExifInterface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
@@ -15,7 +11,6 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,8 +34,6 @@ public class OpenGalleryActivity extends AppCompatActivity {
     private String folder;
     private String name;
     private int total;
-    private ImageView[] imgView=new ImageView[10];
-    //private Bitmap[] image=new Bitmap[10];
     public static final String IMAGES = "images";
 
     // DatabaseHelper 객체
@@ -65,8 +58,6 @@ public class OpenGalleryActivity extends AppCompatActivity {
         total = 0;
 
         Intent newIntent = new Intent(this, AlbumSelectActivity.class);
-
-        //newIntent.putExtra("Folder", folder);
 
         startActivityForResult(newIntent, Constants.REQUEST_CODE);
     }
@@ -120,7 +111,10 @@ public class OpenGalleryActivity extends AppCompatActivity {
                         if ((faces != null) && (faces.length == 1)) {
                             faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
                             MatName m = new MatName(name + "_" + i, img);
-                            String wholeFolderPath = fh.TRAINING_PATH + name;
+
+                            // trainging 사진이 저장되는 경로
+                            String wholeFolderPath = fh.TRAINING_PATH + "facelab" + db.getNameCount();
+
                             new File(wholeFolderPath).mkdirs();
                             fh.saveMatToImage(m, wholeFolderPath + "/");
                             total++;
@@ -144,12 +138,8 @@ public class OpenGalleryActivity extends AppCompatActivity {
             long name_id = db.createName(name1, pic_ids);
 
             Intent intent = new Intent(getApplicationContext(), TrainingActivity.class);
-            intent.putExtra("Name", name);
-            /*Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            if(total>0){
-                intent.putExtra(name, total+"success");
-            }*/
+            intent.putExtra("FolderName", "facelab" + (db.getNameCount()-1));
+
             startActivity(intent);
         }
     }
