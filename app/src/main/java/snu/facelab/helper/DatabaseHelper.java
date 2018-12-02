@@ -260,6 +260,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * getting picture id by path
+     * */
+    public long getPictureIdByPath(String path) {
+        List<Picture> pictures = new ArrayList<Picture>();
+        String selectQuery = "SELECT  *" + " FROM " + TABLE_PICTURE +" WHERE " + KEY_PATH + " = '" + path+ "'";
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+            c.moveToFirst();
+
+        return c.getInt(c.getColumnIndex(KEY_ID));
+    }
+
+    /**
      * getting all dates under single name
      * */
     public List<Integer> getAllDatesByName(String name) {
@@ -350,6 +368,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return pictures;
     }
 
+    public void changePictureDate(long id, int date) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_DATE, date);
+
+        db.update(TABLE_PICTURE, values, KEY_ID + " =?", new String[]{String.valueOf(id)});
+
+    }
+
     // ------------------------ "name_pictures" table methods ----------------//
 
     /**
@@ -381,8 +409,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME_ID, name_id);
+        values.put(KEY_PICTURE_ID, id);
 
-        db.update(TABLE_NAME_PICTURE, values, KEY_ID + " =?", new String[]{String.valueOf(id)});
+        db.update(TABLE_NAME_PICTURE, values, KEY_PICTURE_ID + " =?", new String[]{String.valueOf(id)});
 
     }
 
