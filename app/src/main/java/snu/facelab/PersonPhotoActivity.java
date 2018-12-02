@@ -43,7 +43,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
 
         // ListView 위한 객체 설정
         ListView Lv = findViewById(R.id.listView);
-        ListAdapter adapter = new ListAdapter();
+        final ListAdapter adapter = new ListAdapter();
 
         // get pictures from db by date
         List<Picture> picture_date = new ArrayList<Picture>();
@@ -75,7 +75,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
         btn_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkImage();
+                checkImage(adapter);
             }
         });
 
@@ -84,7 +84,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareImage();
+                shareImage(adapter);
             }
         });
 
@@ -101,12 +101,13 @@ public class PersonPhotoActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void checkImage() {
+    public void checkImage(ListAdapter adapter) {
+        adapter.updateView(1);
 
     }
 
     // 이미지 공유 함수
-    public void shareImage() {
+    public void shareImage(ListAdapter adapter) {
 
         // 사진 절대 경로 받아오기
 

@@ -24,10 +24,17 @@ class ListAdapter extends BaseAdapter {
     int layout; // 한행을 그려줄 layout
     ArrayList<PersonGrid> al = new ArrayList<PersonGrid>(); // 다량의 데이터
     LayoutInflater inf; // 화면을 그려줄 때 필요
+    private int visibleFlag = 0;
+
     public static final String PHOTO = "Photo";
 
     public ListAdapter() {
 
+    }
+
+    public void updateView(int flag) {
+        visibleFlag = flag;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -64,7 +71,10 @@ class ListAdapter extends BaseAdapter {
                 Pg.getPhotos()); // 다량의 데이터
 
         GridView Gv = convertView.findViewById(R.id.gridView2);
-        Log.d("test", Gv.toString());
+
+        if (visibleFlag == 1) {
+            adapter.updateView(1);
+        }
         Gv.setAdapter(adapter);
 
         // 이벤트 처리
@@ -79,6 +89,7 @@ class ListAdapter extends BaseAdapter {
                 context.startActivity(i);
             }
         });
+
 
         return convertView;
     }

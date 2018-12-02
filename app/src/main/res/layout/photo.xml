@@ -1,13 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<snu.facelab.layout.CheckableRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
 
     <ImageView
         android:id="@+id/photoView"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
+        android:layout_width="70sp"
+        android:layout_height="70sp"
         android:layout_centerInParent="true"
         android:src="@drawable/abc_btn_radio_to_on_mtrl_015" />
 
-</RelativeLayout>
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</snu.facelab.layout.CheckableRelativeLayout>
