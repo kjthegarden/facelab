@@ -1,27 +1,27 @@
 package snu.facelab;
 
-import android.app.ActionBar;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-
-import com.wx.wheelview.adapter.ArrayWheelAdapter;
-import com.wx.wheelview.widget.WheelView;
 import com.wx.wheelview.widget.WheelViewDialog;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import snu.facelab.model.Name;
@@ -29,11 +29,12 @@ import snu.facelab.model.Picture;
 
 import snu.facelab.helper.DatabaseHelper;
 
-public class PersonPhotoDetailActivity extends AppCompatActivity {
+public class PersonPhotoDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     public static final String PHOTO = "Photo";
     private ImageView iv;
     private Bitmap image;
     private String changeName;
+    private long pic_id;
 
     // DatabaseHelper 객체
     DatabaseHelper db;
@@ -52,20 +53,27 @@ public class PersonPhotoDetailActivity extends AppCompatActivity {
         image = BitmapFactory.decodeFile(photo.getPath());
         iv.setImageBitmap(image);
 
-        final long pic_id = db.getPictureIdByPath(photo.getPath());
+        pic_id = db.getPictureIdByPath(photo.getPath());
 
-        Button btnEdit = (Button) findViewById(R.id.btn_edit);
+        Button btnEditDate = (Button) findViewById(R.id.btn_edit_date);
+        btnEditDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // select date from calendar
+                datePicker(v);
+            }
+        });
 
-        btnEdit.setOnClickListener(new View.OnClickListener() {
+        Button btnEditName = (Button) findViewById(R.id.btn_edit_name);
+        btnEditName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // select name from wheel view dialog
-                showDialog(v, pic_id);
+                showNameDialog(v);
             }
         });
 
         Button btnDelete = (Button) findViewById(R.id.btn_delete);
-
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,11 +83,27 @@ public class PersonPhotoDetailActivity extends AppCompatActivity {
         });
     }
 
-    public void showDialog(View view, final long id) {
-        WheelViewDialog dialog = new WheelViewDialog(this);
-        dialog.setTitle("Select Name").setItems(createNameArrays()).setButtonText("OK").setDialogStyle(Color
-                .parseColor("#6699ff")).setCount(getNameWheelSize()).show();
 
+    /****** EDIT DATE *******/
+    public void datePicker(View view){
+        DatePickerFragment fragment = new DatePickerFragment();
+        fragment.show(getSupportFragmentManager(), "date");
+    }
+
+    // To receive a callback when the user sets the date.
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+       // convert to yyyymmdd format
+        int date = year * 10000 + (month+1) * 100 + day;
+        db.changePictureDate(pic_id, date);
+        Toast.makeText(getApplicationContext(), "Successfully edited.", Toast.LENGTH_SHORT).show();
+    }
+
+    /****** EDIT NAME *******/
+    public void showNameDialog(View view) {
+        WheelViewDialog dialog = new WheelViewDialog(this);
+        dialog.setTitle("Select name").setItems(createNameArrays()).setButtonText("OK").setDialogStyle(Color
+                .parseColor("#6699ff")).setCount(getNameWheelSize()).show();
 
         dialog.setOnDialogItemClickListener(new WheelViewDialog.OnDialogItemClickListener() {
             @Override
@@ -88,8 +112,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity {
 
                 // change name matched with the picture
                 int change_name_id = db.getNameWithString(changeName).getId();
-                db.changeNamePicture(id, change_name_id);
-                System.out.println("changeNamePicture end");
+                db.changeNamePicture(pic_id, change_name_id);
 
                 Toast.makeText(getApplicationContext(), "Successfully edited.", Toast.LENGTH_SHORT).show();
             }
