@@ -152,8 +152,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_auto_add) {
             Intent i = new Intent(MainActivity.this, AutoAddActivity.class);
             startActivity(i);
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_tutorial) {
+            Intent i = new Intent(MainActivity.this, TutorialActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_manage) {
             Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(i);
