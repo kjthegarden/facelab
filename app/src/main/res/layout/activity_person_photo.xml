@@ -14,20 +14,22 @@
             android:id="@+id/btn_add_photo"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="100dp"
+            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="161dp"
             android:src="@android:drawable/ic_input_add"
             app:backgroundTint="@android:color/background_light" />
 
-        <android.support.design.widget.FloatingActionButton
+        <ToggleButton
             android:id="@+id/btn_check"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/btn_sns"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="50dp"
-            android:src="@drawable/ic_menu_send"
-            app:backgroundTint="@android:color/background_light" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="56dp"
+            android:textOn="CHECK"
+            android:textOff="SHARE"/>
+
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_sns"
@@ -37,12 +39,13 @@
             android:src="@drawable/ic_menu_share"
             app:backgroundTint="@android:color/background_light" />
 
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-        </ListView>
     </RelativeLayout>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+    </ListView>
 
 </LinearLayout>
