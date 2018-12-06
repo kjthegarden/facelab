@@ -23,6 +23,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -93,11 +94,23 @@ public class RecognitionActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Mat mat = Imgcodecs.imread(path);
-        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
+        Mat src = Imgcodecs.imread(path);
+        Imgproc.cvtColor(src, src, Imgproc.COLOR_BGRA2RGBA);
 
+        //System.out.println("width" + src.width() + " height" + src.height());
+        Mat mat = new Mat();
         Mat processedImage = new Mat();
-        mat.copyTo(processedImage);
+
+        if(src.width()>1000){
+            Size sz = new Size(src.width()/4, src.height()/4);
+            Imgproc.resize(src, mat, sz);
+            mat.copyTo(processedImage);
+        }
+        else{
+            src.copyTo(mat);
+            src.copyTo(processedImage);
+        }
+
 
         List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
         Rect[] faces = ppF.getFacesForRecognition();
@@ -143,6 +156,8 @@ public class RecognitionActivity extends AppCompatActivity {
         });
 
         t.start();
+
+
 
         // Wait until Eigenfaces loading thread has finished
         try {

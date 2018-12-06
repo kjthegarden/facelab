@@ -111,7 +111,7 @@ public class OpenGalleryActivity extends AppCompatActivity {
                     Mat mat = new Mat();
                     Mat imgCopy = new Mat();
 
-                    if(src.width()>10000){
+                    if(src.width()>1000){
 
                         Size sz = new Size(src.width()/4, src.height()/4);
                         Imgproc.resize(src, mat, sz);
