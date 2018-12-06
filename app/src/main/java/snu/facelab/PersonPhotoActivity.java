@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ToggleButton;
 
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
@@ -72,23 +73,33 @@ public class PersonPhotoActivity extends AppCompatActivity {
             }
         });
 
+        // Button for check & share
+        final ToggleButton btn_check = findViewById(R.id.btn_check);
+        FloatingActionButton btn_share = (FloatingActionButton)findViewById(R.id.btn_sns);
+        btn_share.setVisibility(View.INVISIBLE);
+
         //Check
-        FloatingActionButton btn_check = (FloatingActionButton)findViewById(R.id.btn_check);
         btn_check.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                checkImage(adapter);
-            }
+                if(btn_check.isChecked()){
+                    checkImage(adapter);
+                }else{
+                    stopCheck(adapter);
+                } // end if
+            } // end onClick()
+
         });
 
         // Share
-        FloatingActionButton btn = (FloatingActionButton)findViewById(R.id.btn_sns);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareImage(adapter);
-            }
-        });
+//        btn_share.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                shareImage(adapter);
+//            }
+//        });
+        //btn_share.setVisibility(View.INVISIBLE);
 
     }
 
@@ -104,7 +115,17 @@ public class PersonPhotoActivity extends AppCompatActivity {
     }
 
     public void checkImage(ListAdapter adapter) {
-        adapter.updateView(1);
+        final ListAdapter a = adapter;
+        a.updateView(1);
+
+        FloatingActionButton btn_share = findViewById(R.id.btn_sns);
+        btn_share.setVisibility(View.VISIBLE);
+        btn_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareImage(a);
+            }
+        });
 
     }
 
@@ -141,6 +162,14 @@ public class PersonPhotoActivity extends AppCompatActivity {
         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
         startActivity(Intent.createChooser(intent, "Choose")); //Activity를 이용하여 호출 합니다.
 
+    }
+
+    public void stopCheck(ListAdapter adapter) {
+        final ListAdapter a = adapter;
+        a.updateView(0);
+
+        FloatingActionButton btn_share = (FloatingActionButton)findViewById(R.id.btn_sns);
+        btn_share.setVisibility(View.INVISIBLE);
     }
 
     // 새로운 사진 추가하기
