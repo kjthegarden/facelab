@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">facelab</string>
+    <string name="app_name">FACELAB</string>
     <string name="title_activity_person_photo">PersonPhoto</string>
     <string name="profile">PROFILE</string>
     <string name="feed">FEED</string>
