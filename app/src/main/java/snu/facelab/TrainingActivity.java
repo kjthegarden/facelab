@@ -3,6 +3,8 @@ package snu.facelab;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -11,11 +13,17 @@ import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
 import org.opencv.core.Mat;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
@@ -83,10 +91,70 @@ public class TrainingActivity extends Activity {
                                     int counter = 1;
                                     for (File file : files) {
                                         if (FileHelper.isFileAnImage(file)) {
+                                            /*
+                                            Mat imgRgb = new Mat();
+                                            BitmapFactory.Options options = new BitmapFactory.Options();
+                                            options.inSampleSize = 8;
+                                            Bitmap src = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+                                            //Bitmap resized = Bitmap.createScaledBitmap(src, src.getWidth(), src.getHeight(), true);
+
+                                            Bitmap bmp32 = src.copy(Bitmap.Config.ARGB_8888, true);
+
+                                            Utils.bitmapToMat(bmp32, imgRgb);*/
+
+                                            /*
+                                            String file_path = file.getAbsolutePath();
+                                            File dir = new File(file_path);
+
+                                            Bitmap src = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+                                            FileOutputStream fOut;
+                                            try {
+                                                fOut = new FileOutputStream(file);
+                                                src.compress(Bitmap.CompressFormat.JPEG, 10, fOut);
+                                                fOut.flush();
+                                                fOut.close();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            */
+
+                                            //System.out.println(file.getAbsolutePath());
+
+                                            /*
+                                            int scale = 4;
+
+                                            int h = dst.rows();
+                                            int w = dst.cols();
+                                            for(int y=0; y<h/scale; y++){
+                                                for(int x=0; x<w/scale; x++){
+                                                    Mat subimage = new Mat(dst, new Rect(scale*x, scale*y, scale, scale));
+                                                    Scalar avgvalue = org.opencv.core.Core.mean(subimage);
+                                                    for(int mr=0; mr<scale; mr++){
+                                                        for (int mc=0; mc<scale; mc++){
+                                                            double[] buff = dst.get(scale*y+mr, scale*x+mc);
+                                                            if(dst.channels()==3){
+                                                               buff[2] = avgvalue.val[2];
+                                                               buff[1] = avgvalue.val[1];
+                                                               buff[0] = avgvalue.val[0];
+                                                            }
+                                                            else if(dst.channels()==1){
+                                                                buff[0] = avgvalue.val[0];
+                                                            }
+                                                            System.out.println(buff[0]);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            */
+
+                                            //System.out.println("prcImg size" + processedImage.rows() + " " + processedImage.cols());
+
                                             Mat imgRgb = Imgcodecs.imread(file.getAbsolutePath());
                                             Imgproc.cvtColor(imgRgb, imgRgb, Imgproc.COLOR_BGRA2RGBA);
                                             Mat processedImage = new Mat();
                                             imgRgb.copyTo(processedImage);
+
                                             List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
                                             if (images == null || images.size() > 1) {
                                                 // More than 1 face detected --> cannot use this file for training

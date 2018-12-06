@@ -9,6 +9,7 @@ import android.widget.Toast;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -104,11 +105,25 @@ public class OpenGalleryActivity extends AppCompatActivity {
                     Picture pic = new Picture(image_list.get(i).path, date, last_modified);
                     pic_ids[i] = db.createPicture(pic);
 
-                    Mat mat = Imgcodecs.imread(image_list.get(i).path);
-                    Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
+                    Mat src = Imgcodecs.imread(file.getAbsolutePath());
+                    Imgproc.cvtColor(src, src, Imgproc.COLOR_BGRA2RGBA);
+                    //System.out.println("width" + src.width() + " height" + src.height());
+                    Mat mat = new Mat();
                     Mat imgCopy = new Mat();
-                    mat.copyTo(imgCopy);
+
+                    if(src.width()>10000){
+
+                        Size sz = new Size(src.width()/4, src.height()/4);
+                        Imgproc.resize(src, mat, sz);
+                        mat.copyTo(imgCopy);
+                    }
+                    else{
+                        src.copyTo(mat);
+                        src.copyTo(imgCopy);
+                    }
+
                     List<Mat> images = ppF.getCroppedImage(imgCopy);
+
 
                     // Check that only 1 face is found. Skip if any or more than 1 are found.
                     if (images != null && images.size() == 1) {
@@ -135,6 +150,7 @@ public class OpenGalleryActivity extends AppCompatActivity {
                             for (int j = 0; j < faces.length; j++) {
                                 MatOperation.drawRectangleOnPreview(mat, faces[j], true);
                             }
+
                         }
                     }
                 }
