@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#61BFAD</color>
     <color name="colorPrimaryDark">#61BFAD</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#3D9584</color>
     <color name="guillotine_background">#61BFAD</color>
     <color name="guillotine_background_dark">#FAF8EC</color>
     <color name="selected_item_color">#30d1d5</color>
@@ -10,4 +10,6 @@
     <color name="colorGray">#bfbcbc</color>
     <color name="colorBlack">#000000</color>
     <color name="textColorPrimary">#FAF8EC</color>
+    <color name="colorBackground">#FAF8EC</color>
+    <color name="mainBackground">#FCFBF2</color>
 </resources>
