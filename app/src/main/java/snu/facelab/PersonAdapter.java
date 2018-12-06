@@ -3,6 +3,7 @@ package snu.facelab;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.io.File;
 import java.util.ArrayList;
 
 class PersonAdapter extends BaseAdapter {
@@ -48,8 +53,13 @@ class PersonAdapter extends BaseAdapter {
 
         Person m = al.get(position);
 
-        image = BitmapFactory.decodeFile(m.getMainImg());
-        iv.setImageBitmap(image);
+        Uri imageUri = Uri.fromFile(new File(m.getMainImg()));
+        Glide.with(context)
+                .load(imageUri)
+                .apply(new RequestOptions()
+                        .centerCrop())
+                .into(iv);
+
         tvName.setText(m.name);
         return convertView;
     }
