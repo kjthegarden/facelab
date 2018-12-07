@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
@@ -140,8 +141,12 @@ public class AutoAddActivity extends AppCompatActivity {
                         }
                     }
                 }
-
             }
+
+            // Toast.makeText(getApplicationContext(), "Successfully added.", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         }
     }
 
