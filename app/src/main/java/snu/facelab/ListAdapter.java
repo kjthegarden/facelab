@@ -25,7 +25,7 @@ class ListAdapter extends BaseAdapter {
     ArrayList<PersonGrid> al = new ArrayList<PersonGrid>(); // 다량의 데이터
     LayoutInflater inf; // 화면을 그려줄 때 필요
     private int visibleFlag = 0;
-    private int updateFlag = 0;
+    private int resetFlag = 0;
 
     public static final String PHOTO = "Photo";
 
@@ -59,6 +59,7 @@ class ListAdapter extends BaseAdapter {
     }
 
     public void reset_check() {
+
         int grid_size = al.size();
 
         for (int i = 0; i < grid_size; i++) {
@@ -72,6 +73,7 @@ class ListAdapter extends BaseAdapter {
                 }
             }
         }
+
     }
 
     @Override
@@ -87,8 +89,9 @@ class ListAdapter extends BaseAdapter {
         return position;
     }
     @Override // 해당번째의 행에 내용을 셋팅(데이터와 레이아웃의 연결관계 정의)
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final Context context = parent.getContext();
+        final View ConvertView = convertView;
 
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null) {
@@ -101,6 +104,8 @@ class ListAdapter extends BaseAdapter {
         TextView Tv = convertView.findViewById(R.id.gridTitle);
         Tv.setText(Pg.getDate().toString());
 
+        final PhotoGridView gridView = convertView.findViewById(R.id.gridView2);
+
         CheckBox checkbox = convertView.findViewById(R.id.checkBox_date);
         checkbox.setVisibility(View.INVISIBLE);
 
@@ -111,6 +116,7 @@ class ListAdapter extends BaseAdapter {
                 Pg.getPhotos()); // 다량의 데이터
 
         PhotoGridView Gv = convertView.findViewById(R.id.gridView2);
+        final int size = gridView.getChildCount();
 
         if (visibleFlag == 1) {
             adapter.updateView(1);
@@ -122,13 +128,26 @@ class ListAdapter extends BaseAdapter {
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
                 if (isChecked) {
-                    Log.d("check", "all check");
-                    adapter.allCheck(1);
+                    for (int i = 0; i < size; i++) {
+                        gridView.setItemChecked(i, true);
+                    }
                 } else {
-                    adapter.allCheck(0);
+                    for (int i = 0; i < size; i++) {
+                        gridView.setItemChecked(i, false);
+                    }
                 }
             }
         });
+
+        // 모든 사진이 선택되었을 경우 전체선택에 이를 표시 - not working
+//        if (size == gridView.getCheckedItemCount()) {
+//            checkbox.setChecked(true);
+//        }
+
+        // Reset Select all - not working
+        if (resetFlag == 1) {
+            checkbox.setChecked(false);
+        }
 
         Gv.setAdapter(adapter);
 

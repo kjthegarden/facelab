@@ -29,7 +29,6 @@ class PhotoAdapter extends BaseAdapter {
     int layout;              // 한행을 그려줄 layout
     List<Picture> al;     // 다량의 데이터
     LayoutInflater inf; // 화면을 그려줄 때 필요
-    private Bitmap image;
     private int visibleFlag = 0;
     private int allCheckFlag = 0;
 
@@ -79,15 +78,16 @@ class PhotoAdapter extends BaseAdapter {
 
         if (visibleFlag == 1) {
             checkbox.setVisibility(View.VISIBLE);
-        }
 
-        if (allCheckFlag == 1) {
-            checkbox.setChecked(true);
-            //Log.d("check", String.valueOf(checkbox.isChecked()));
-        }
-        if (allCheckFlag == 0) {
-            checkbox.setChecked(false);
-            Log.d("check", "unchecked");
+            if (allCheckFlag == 1) {
+                checkbox.setChecked(true);
+                //Log.d("check", String.valueOf(checkbox.isChecked()));
+            }
+            else if (allCheckFlag == 0) {
+                checkbox.setChecked(false);
+                Log.d("check", "unchecked");
+            }
+
         }
 
         Log.d("check", String.valueOf(checkbox.isChecked()));

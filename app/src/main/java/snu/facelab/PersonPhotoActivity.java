@@ -8,9 +8,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -41,10 +44,11 @@ public class PersonPhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_photo);
 
+        // Person 객체 받아오고 title 설정
         Person person = (Person) getIntent().getExtras().getSerializable(PERSON);
-        setTitle(person.name);
+        String title = "<font color=#E6E6FA>#</font>" + person.name;
         TextView name = findViewById(R.id.personPhotoName);
-        name.setText(person.name);
+        name.setText(Html.fromHtml(title));
 
         // DBHelper 객체 생성
         db = new DatabaseHelper(getApplicationContext());
@@ -70,7 +74,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
         Lv.setAdapter(adapter);
 
         // Add Picture
-        FloatingActionButton btn_add_photo = findViewById(R.id.btn_add_photo);
+        final AppCompatButton btn_add_photo = findViewById(R.id.btn_add_photo);
         btn_add_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,22 +83,32 @@ public class PersonPhotoActivity extends AppCompatActivity {
         });
 
         // Button for check & share
-        final ToggleButton btn_check = findViewById(R.id.btn_check);
-        FloatingActionButton btn_share = findViewById(R.id.btn_sns);
+        final AppCompatButton btn_check = findViewById(R.id.btn_check);
+        final AppCompatButton btn_cancel = findViewById(R.id.btn_cancel);
+        btn_cancel.setVisibility(View.GONE);
+        AppCompatButton btn_share = findViewById(R.id.btn_sns);
         btn_share.setVisibility(View.INVISIBLE);
 
         //Check
-        btn_check.setOnClickListener(new View.OnClickListener() {
-
+        btn_check.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btn_check.isChecked()){
-                    checkImage(adapter);
-                }else{
-                    stopCheck(adapter);
-                } // end if
-            } // end onClick()
+                checkImage(adapter);
+                btn_add_photo.setVisibility(View.GONE);
+                btn_check.setVisibility(View.GONE);
+                btn_cancel.setVisibility(View.VISIBLE);
+            }
+        });
 
+        //Cancel
+        btn_cancel.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopCheck(adapter);
+                btn_add_photo.setVisibility(View.VISIBLE);
+                btn_cancel.setVisibility(View.GONE);
+                btn_check.setVisibility(View.VISIBLE);
+            }
         });
     }
 
@@ -113,7 +127,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
         final ListAdapter a = adapter;
         a.updateView(1);
 
-        FloatingActionButton btn_share = findViewById(R.id.btn_sns);
+        AppCompatButton btn_share = findViewById(R.id.btn_sns);
         btn_share.setVisibility(View.VISIBLE);
         btn_share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +177,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
         final ListAdapter a = adapter;
         a.updateView(0);
 
-        FloatingActionButton btn_share = (FloatingActionButton)findViewById(R.id.btn_sns);
+        AppCompatButton btn_share = findViewById(R.id.btn_sns);
         btn_share.setVisibility(View.INVISIBLE);
     }
 

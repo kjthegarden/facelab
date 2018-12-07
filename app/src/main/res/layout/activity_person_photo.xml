@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="fill_parent"
-        android:layout_height="80sp"
+        android:layout_height="60sp"
         android:background="@color/colorPrimary">
 
         <TextView
@@ -22,35 +22,56 @@
             android:textColor="@color/colorBackground"
             android:textSize="30sp" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btn_add_photo"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="161dp"
-            android:src="@android:drawable/ic_input_add"
-            app:backgroundTint="@android:color/background_light" />
 
-        <ToggleButton
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_check"
-            android:layout_width="wrap_content"
+            android:layout_width="70sp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="63dp"
-            android:textOff="SHARE"
-            android:textOn="CHECK" />
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btn_sns"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_menu_share"
-            app:backgroundTint="@android:color/background_light" />
+            android:layout_centerVertical="true"
+            android:layout_marginRight="50sp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="Share"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorPrimary"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="70sp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="50sp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="Cancel"
+            android:textColor="@color/colorBlue"
+            android:textAllCaps="false"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_add_photo"
+            android:layout_width="60sp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="0sp"
+            android:text="Add"
+            android:textColor="@color/textColorPrimary"
+            android:textAllCaps="false"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_sns"
+            android:layout_width="60sp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="0sp"
+            android:text="Send"
+            android:textColor="@color/textColorPrimary"
+            android:textAllCaps="false"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
 
     </RelativeLayout>
 
