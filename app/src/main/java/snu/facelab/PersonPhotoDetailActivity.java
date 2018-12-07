@@ -54,8 +54,6 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         db = new DatabaseHelper(getApplicationContext());
 
         iv = findViewById(R.id.person_photo_detail);
-//        image = BitmapFactory.decodeFile(photo.getPath());
-//        iv.setImageBitmap(image);
 
         Uri imageUri = Uri.fromFile(new File(photo.getPath()));
         Glide.with(PersonPhotoDetailActivity.this)
