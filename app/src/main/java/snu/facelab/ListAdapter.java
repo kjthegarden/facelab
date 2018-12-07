@@ -8,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import snu.facelab.model.PhotoGridView;
 import snu.facelab.model.Picture;
 
 class ListAdapter extends BaseAdapter {
@@ -98,17 +101,34 @@ class ListAdapter extends BaseAdapter {
         TextView Tv = convertView.findViewById(R.id.gridTitle);
         Tv.setText(Pg.getDate().toString());
 
+        CheckBox checkbox = convertView.findViewById(R.id.checkBox_date);
+        checkbox.setVisibility(View.INVISIBLE);
+
         // adapter
-        PhotoAdapter adapter = new PhotoAdapter(
+        final PhotoAdapter adapter = new PhotoAdapter(
                 context, // 현재 화면의 제어권자
                 R.layout.photo, // 한행을 그려줄 layout
                 Pg.getPhotos()); // 다량의 데이터
 
-        GridView Gv = convertView.findViewById(R.id.gridView2);
+        PhotoGridView Gv = convertView.findViewById(R.id.gridView2);
 
         if (visibleFlag == 1) {
             adapter.updateView(1);
+            checkbox.setVisibility(View.VISIBLE);
         }
+
+        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+                if (isChecked) {
+                    Log.d("check", "all check");
+                    adapter.allCheck(1);
+                } else {
+                    adapter.allCheck(0);
+                }
+            }
+        });
 
         Gv.setAdapter(adapter);
 

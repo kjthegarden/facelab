@@ -31,8 +31,7 @@ class PhotoAdapter extends BaseAdapter {
     LayoutInflater inf; // 화면을 그려줄 때 필요
     private Bitmap image;
     private int visibleFlag = 0;
-    private int updateFlag = 0;
-    ArrayList<String> paths = new ArrayList<String>();
+    private int allCheckFlag = 0;
 
     public PhotoAdapter(Context context, int layout, List<Picture> al) {
         this.context = context;
@@ -44,6 +43,11 @@ class PhotoAdapter extends BaseAdapter {
 
     public void updateView(int flag) {
         visibleFlag = flag;
+        notifyDataSetChanged();
+    }
+
+    public void allCheck(int flag) {
+        allCheckFlag = flag;
         notifyDataSetChanged();
     }
 
@@ -64,7 +68,9 @@ class PhotoAdapter extends BaseAdapter {
         if (convertView == null)
             convertView = inf.inflate(layout, null);
 
-        ImageView iv = (ImageView)convertView.findViewById(R.id.photoView);
+        Log.d("check", "-------------------------------------");
+
+        ImageView iv = convertView.findViewById(R.id.photoView);
 
         final Picture m = al.get(position);
 
@@ -75,6 +81,17 @@ class PhotoAdapter extends BaseAdapter {
             checkbox.setVisibility(View.VISIBLE);
         }
 
+        if (allCheckFlag == 1) {
+            checkbox.setChecked(true);
+            //Log.d("check", String.valueOf(checkbox.isChecked()));
+        }
+        if (allCheckFlag == 0) {
+            checkbox.setChecked(false);
+            Log.d("check", "unchecked");
+        }
+
+        Log.d("check", String.valueOf(checkbox.isChecked()));
+
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,
@@ -83,6 +100,7 @@ class PhotoAdapter extends BaseAdapter {
                     m.setChecked(true);
                 } else {
                     m.setChecked(false);
+                    Log.d("check", String.valueOf(allCheckFlag));
                 }
             }
         });

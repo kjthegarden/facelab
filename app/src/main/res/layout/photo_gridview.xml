@@ -4,26 +4,44 @@
     android:orientation="vertical"
     >
 
-    <TextView
-        android:id="@+id/gridTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SECTION">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40sp">
 
-    </TextView>
+        <TextView
+            android:id="@+id/gridTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10sp"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:text="SECTION">
+        </TextView>
 
-    <GridView
+        <CheckBox
+            android:id="@+id/checkBox_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10sp"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <snu.facelab.model.PhotoGridView
         android:id="@+id/gridView2"
-        android:layout_width="wrap_content"
-        android:layout_height="300sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:verticalSpacing="1sp"
         android:horizontalSpacing="1sp"
         android:gravity="center"
         android:columnWidth="70sp"
+        android:layout_marginBottom="10sp"
         android:numColumns="auto_fit"
         android:choiceMode="multipleChoice"
         android:stretchMode="columnWidth">
-    </GridView>
+    </snu.facelab.model.PhotoGridView>
 
 
 </LinearLayout>

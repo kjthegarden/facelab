@@ -12,11 +12,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
 import com.darsh.multipleimageselect.models.Image;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -40,6 +43,8 @@ public class PersonPhotoActivity extends AppCompatActivity {
 
         Person person = (Person) getIntent().getExtras().getSerializable(PERSON);
         setTitle(person.name);
+        TextView name = findViewById(R.id.personPhotoName);
+        name.setText(person.name);
 
         // DBHelper 객체 생성
         db = new DatabaseHelper(getApplicationContext());
@@ -65,7 +70,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
         Lv.setAdapter(adapter);
 
         // Add Picture
-        FloatingActionButton btn_add_photo = (FloatingActionButton) findViewById(R.id.btn_add_photo);
+        FloatingActionButton btn_add_photo = findViewById(R.id.btn_add_photo);
         btn_add_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,7 +80,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
 
         // Button for check & share
         final ToggleButton btn_check = findViewById(R.id.btn_check);
-        FloatingActionButton btn_share = (FloatingActionButton)findViewById(R.id.btn_sns);
+        FloatingActionButton btn_share = findViewById(R.id.btn_sns);
         btn_share.setVisibility(View.INVISIBLE);
 
         //Check
@@ -91,16 +96,6 @@ public class PersonPhotoActivity extends AppCompatActivity {
             } // end onClick()
 
         });
-
-        // Share
-//        btn_share.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                shareImage(adapter);
-//            }
-//        });
-        //btn_share.setVisibility(View.INVISIBLE);
-
     }
 
     @Override
