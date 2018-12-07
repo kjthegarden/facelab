@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/photo_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,97 +16,28 @@
         android:layout_gravity="center"
         android:src="@drawable/abc_btn_radio_to_on_mtrl_015" />
 
-
-    <RelativeLayout
-        android:id="@+id/title_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="60sp"
-        android:layout_marginBottom="10sp"
-        android:background="@color/colorPrimary">
-
-        <TextView
-            android:id="@+id/photo_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20sp"
-            android:text="name"
-            android:textColor="@color/colorBackground"
-            android:textSize="30sp" />
-
-    </RelativeLayout>
-
-
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-
-        <!--<ImageView-->
-            <!--android:id="@+id/person_photo_detail"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:src="@drawable/abc_btn_radio_to_on_mtrl_015" />-->
-    <!--</RelativeLayout>-->
-
-    <RelativeLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme">
 
-        <TextView
-            android:textSize="20dp"
-            android:textStyle="bold"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_photo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/hash_tag"/>
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        <Button
-            android:id="@+id/btn_edit_date"
-            android:layout_width="170dp"
-            android:layout_height="40dp"
-            android:layout_centerHorizontal="true"
-            android:text="EDIT DATE"/>
+            <TextView
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/hash_tag"/>
 
-        <Button
-            android:id="@+id/btn_edit_name"
-            android:layout_width="170dp"
-            android:layout_height="40dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/btn_edit_date"
-            android:text="EDIT NAME" />
+        </android.support.v7.widget.Toolbar>
 
-        <Button
-            android:id="@+id/btn_delete"
-            android:layout_width="170dp"
-            android:layout_height="40dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/btn_edit_name"
-            android:text="DELETE" />
-
-        <!--<Button-->
-            <!--android:id="@+id/btn_edit_date"-->
-            <!--android:layout_width="170dp"-->
-            <!--android:layout_height="45dp"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:text="EDIT DATE"/>-->
-
-        <!--<Button-->
-            <!--android:id="@+id/btn_edit_name"-->
-            <!--android:layout_width="170dp"-->
-            <!--android:layout_height="45dp"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_below="@id/btn_edit_date"-->
-            <!--android:text="EDIT NAME" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/btn_delete"-->
-            <!--android:layout_width="170dp"-->
-            <!--android:layout_height="45dp"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_below="@id/btn_edit_name"-->
-            <!--android:text="DELETE" />-->
-
-    <!--</RelativeLayout>-->
-
+    </android.support.design.widget.AppBarLayout>
 
 </RelativeLayout>

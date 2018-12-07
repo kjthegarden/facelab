@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity
 //                .putBoolean("isFirstRun", false).apply();
 
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
