@@ -12,4 +12,6 @@
     <color name="textColorPrimary">#FAF8EC</color>
     <color name="colorBackground">#FAF8EC</color>
     <color name="mainBackground">#FCFBF2</color>
+    <color name="colorSalmon">#FA8072</color>
+    <color name="colorBlue">#191970</color>
 </resources>
