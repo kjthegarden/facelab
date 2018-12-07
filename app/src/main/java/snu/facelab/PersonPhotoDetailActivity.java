@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,8 +15,11 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.wx.wheelview.widget.WheelViewDialog;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,9 +53,14 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
 
         db = new DatabaseHelper(getApplicationContext());
 
-        iv = (ImageView) findViewById(R.id.person_photo_detail);
-        image = BitmapFactory.decodeFile(photo.getPath());
-        iv.setImageBitmap(image);
+        iv = findViewById(R.id.person_photo_detail);
+//        image = BitmapFactory.decodeFile(photo.getPath());
+//        iv.setImageBitmap(image);
+
+        Uri imageUri = Uri.fromFile(new File(photo.getPath()));
+        Glide.with(PersonPhotoDetailActivity.this)
+                .load(imageUri)
+                .into(iv);
 
         pic_id = db.getPictureIdByPath(photo.getPath());
 
