@@ -43,7 +43,7 @@ import static snu.facelab.MainActivity.PERSON;
 
 public class PersonPhotoDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     public static final String PHOTO = "Photo";
-    public static final String NAME = "Name";
+    public static final String PERSON = "Person";
     private ImageView iv;
     private Bitmap image;
     private String changeName;
@@ -63,10 +63,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Picture photo = (Picture) getIntent().getExtras().getSerializable(PHOTO);
-        Name name = (Name) getIntent().getExtras().getSerializable(NAME);
-
-//        TextView tv = findViewById(R.id.photo_name);
-//        tv.setText(name.getName());
+        Person person = (Person) getIntent().getExtras().getSerializable(PERSON);
 
         db = new DatabaseHelper(getApplicationContext());
 
@@ -77,7 +74,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
                 .load(imageUri)
                 .into(iv);
 
-        name_id = db.getNameWithString(name.getName()).getId();
+        name_id = db.getNameWithString(person.name).getId();
         pic_id = db.getPictureIdByPath(photo.getPath());
 
         List<String> names = new ArrayList<String>();

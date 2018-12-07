@@ -29,7 +29,7 @@ class ListAdapter extends BaseAdapter {
     private int resetFlag = 0;
 
     public static final String PHOTO = "Photo";
-    public static final String NAME = "Name";
+    public static final String PERSON = "Person";
 
     public ListAdapter() {
 
@@ -159,11 +159,11 @@ class ListAdapter extends BaseAdapter {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 GridView GridView = (GridView) adapterView;
                 Picture photo = (Picture) GridView.getItemAtPosition(position);
-                Name name = Pg.name;
+                Person person = Pg.person;
 
                 Intent i = new Intent(context, PersonPhotoDetailActivity.class);
                 i.putExtra(PHOTO, photo);
-                i.putExtra(NAME, name);
+                i.putExtra(PERSON, person);
                 context.startActivity(i);
             }
         });
@@ -172,8 +172,8 @@ class ListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void addItem(Integer date, List<Picture> photos, Name name) {
-        PersonGrid Pg = new PersonGrid(date, photos, name);
+    public void addItem(Integer date, List<Picture> photos, Person person) {
+        PersonGrid Pg = new PersonGrid(date, photos, person);
         al.add(Pg);
     }
 }
