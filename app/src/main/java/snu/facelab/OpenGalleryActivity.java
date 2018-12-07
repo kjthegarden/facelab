@@ -1,7 +1,10 @@
 package snu.facelab;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -19,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.andremion.louvre.Louvre;
+import com.andremion.louvre.home.GalleryActivity;
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
 import com.darsh.multipleimageselect.models.Image;
@@ -32,6 +37,8 @@ import snu.facelab.model.Name;
 import snu.facelab.model.Picture;
 
 public class OpenGalleryActivity extends AppCompatActivity {
+
+    private static final int LOUVRE_REQUEST_CODE = 0;
     private PreProcessorFactory ppF;
     private FileHelper fh;
     private String folder;
@@ -60,16 +67,23 @@ public class OpenGalleryActivity extends AppCompatActivity {
         fh = new FileHelper();
         total = 0;
 
-        Intent newIntent = new Intent(this, AlbumSelectActivity.class);
+        Louvre.init(OpenGalleryActivity.this)
+                .setRequestCode(LOUVRE_REQUEST_CODE)
+                .open();
 
-        startActivityForResult(newIntent, Constants.REQUEST_CODE);
+        // Intent newIntent = new Intent(this, AlbumSelectActivity.class);
+        // startActivityForResult(newIntent, Constants.REQUEST_CODE);
+
     }
 
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+//        if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+        if (requestCode == LOUVRE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            List<Uri> imgUri = GalleryActivity.getSelection(data);
+
             ArrayList<Image> image_list = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
             int image_list_size = image_list.size();
             if( image_list_size<10){
@@ -102,7 +116,10 @@ public class OpenGalleryActivity extends AppCompatActivity {
                     int date= Integer.parseInt(simple_date.replace("-", ""));
 
                     // creating and inserting pictures
-                    Picture pic = new Picture(image_list.get(i).path, date, last_modified);
+                    // Picture pic = new Picture(image_list.get(i).path, date, last_modified);
+                    String path = getRealPathFromURI(imgUri.get(i));
+                    Picture pic = new Picture(path, date, last_modified);
+
                     pic_ids[i] = db.createPicture(pic);
 
                     Mat src = Imgcodecs.imread(file.getAbsolutePath());
@@ -174,5 +191,15 @@ public class OpenGalleryActivity extends AppCompatActivity {
         super.onResume();
         ppF = new PreProcessorFactory(this);
     }
+
+    public String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        cursor.moveToNext(); String path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+        Uri uri = Uri.fromFile(new File(path));
+        cursor.close(); return path;
+    }
+
+
 
 }
