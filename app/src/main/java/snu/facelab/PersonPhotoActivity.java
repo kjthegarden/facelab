@@ -50,9 +50,6 @@ public class PersonPhotoActivity extends AppCompatActivity {
         TextView name = findViewById(R.id.personPhotoName);
         name.setText(Html.fromHtml(title));
 
-        // Name 모델로 변환
-        Name nameM = new Name(person.name);
-
         // DBHelper 객체 생성
         db = new DatabaseHelper(getApplicationContext());
 
@@ -71,7 +68,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
         for (int i = 0; i < dateCount; i++)
         {
             picture_date = db.getAllPicturesByNameAndDate(person.name, dates.get(i));
-            adapter.addItem(dates.get(i), picture_date, nameM);
+            adapter.addItem(dates.get(i), picture_date, person);
         }
 
         Lv.setAdapter(adapter);

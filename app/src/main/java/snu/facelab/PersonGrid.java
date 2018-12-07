@@ -11,13 +11,13 @@ public class PersonGrid implements Serializable { // 자바 빈 (java Bean)
     Integer date;
     List<Picture> photos;
     ArrayList<String> checked_paths;
-    Name name;
+    Person person;
 
     // 생성자가 있으면 객체 생성시 편리하다
-    public PersonGrid(Integer date, List<Picture> photos, Name name) {
+    public PersonGrid(Integer date, List<Picture> photos, Person person) {
         this.date = date;
         this.photos = photos;
-        this.name = name;
+        this.person = person;
     }
     public PersonGrid() {}// 기존 코드와 호환을 위해서 생성자 작업시 기본생성자도 추가
 
