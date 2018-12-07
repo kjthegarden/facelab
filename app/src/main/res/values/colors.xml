@@ -14,4 +14,5 @@
     <color name="mainBackground">#FCFBF2</color>
     <color name="colorSalmon">#FA8072</color>
     <color name="colorBlue">#191970</color>
+    <color name="photoBackground">#FFFFFF</color>
 </resources>
