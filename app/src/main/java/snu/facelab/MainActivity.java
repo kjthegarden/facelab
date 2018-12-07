@@ -1,6 +1,7 @@
 package snu.facelab;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -39,18 +40,26 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-                .getBoolean("isFirstRun", true);
+//        Intent intent = new Intent(this, LoadingActivity.class);
+//        startActivity(intent);
 
-        if (isFirstRun) {
-            Intent intent = new Intent(this, LoadingActivity.class);
-            startActivity(intent);
-        }
+        //checkFirstRun();
 
-        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isFirstRun", false).apply();
+//        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+//                .getBoolean("isFirstRun", true);
+//
+//        Log.d("check", isFirstRun.toString());
+//
+//        if (isFirstRun) {
+//            Intent intent = new Intent(this, LoadingActivity.class);
+//            startActivity(intent);
+//        }
+//
+//        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+//                .putBoolean("isFirstRun", false).apply();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -96,7 +105,7 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 GridView GridView = (GridView) adapterView;
                 Person person = (Person) GridView.getItemAtPosition(position);
-                Log.d("JO", "selected item => "+person.name);
+                Log.d("JO", "selected item => " + person.name);
 
                 Intent i = new Intent(MainActivity.this, PersonPhotoActivity.class);
                 i.putExtra(PERSON, person);
@@ -144,5 +153,44 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    private void checkFirstRun() {
+
+        final String PREFS_NAME = "MyPrefsFile";
+        final String PREF_VERSION_CODE_KEY = "version_code";
+        final int DOESNT_EXIST = -1;
+
+        // Get current version code
+        int currentVersionCode = BuildConfig.VERSION_CODE;
+
+        // Get saved version code
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
+
+        // Check for first run or upgrade
+        if (currentVersionCode == savedVersionCode) {
+
+            // This is just a normal run
+            Intent intent = new Intent(this, LoadingActivity.class);
+            startActivity(intent);
+            return;
+
+        } else if (savedVersionCode == DOESNT_EXIST) {
+
+            // TODO This is a new install (or the user cleared the shared preferences)
+            Intent intent = new Intent(this, LoadingActivity.class);
+            startActivity(intent);
+
+        } else if (currentVersionCode > savedVersionCode) {
+
+            // TODO This is an upgrade
+            Intent intent = new Intent(this, LoadingActivity.class);
+            startActivity(intent);
+        }
+
+        // Update the shared preferences with the current version code
+        prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
     }
 }

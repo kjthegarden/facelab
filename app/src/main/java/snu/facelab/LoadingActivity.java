@@ -1,6 +1,7 @@
 package snu.facelab;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,7 @@ public class LoadingActivity extends Activity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                startActivity(new Intent(LoadingActivity.this, MainActivity.class));
                 finish();
             }
         }, 2000);
