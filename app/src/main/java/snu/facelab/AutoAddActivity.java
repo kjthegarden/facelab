@@ -133,9 +133,8 @@ public class AutoAddActivity extends AppCompatActivity {
                         System.out.println(j + " : " + rec_name);
 
                         if(rec_name!=null){
-                            // Get name_id with name
-                            Name name = db.getNameWithString(rec_name);
-                            long name_id = name.getId();
+                            // 폴더명에서 facelab 제외해서 name_id 구하기
+                            long name_id = Long.parseLong(rec_name.substring(7))+1;
                             // Inserting name_id & picture_id pair
                             long name_picture_id = db.createNamePicture(name_id, pic_id);
                         }
