@@ -34,6 +34,8 @@ import snu.facelab.model.Picture;
 
 import snu.facelab.helper.DatabaseHelper;
 
+import static snu.facelab.MainActivity.PERSON;
+
 public class PersonPhotoDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     public static final String PHOTO = "Photo";
     public static final String NAME = "Name";
@@ -41,6 +43,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
     private Bitmap image;
     private String changeName;
     private long pic_id;
+    private long name_id;
 
     // DatabaseHelper 객체
     DatabaseHelper db;
@@ -65,7 +68,22 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
                 .load(imageUri)
                 .into(iv);
 
+        Person person = (Person) getIntent().getExtras().getSerializable(PERSON);
+        Name name = db.getNameWithString(person.name);
+        name_id = name.getId();
         pic_id = db.getPictureIdByPath(photo.getPath());
+
+        List<Name> names = new ArrayList<Name>();
+        names = db.getAllNameByPicIdAndNameId(pic_id, name_id);
+
+        String name_hash_tag = new String();
+        for(int i=0; i<names.size(); i++){
+            name_hash_tag += "# ";
+            name_hash_tag += names.get(i);
+        }
+
+        TextView hashTag = (TextView) findViewById(R.id.hash_tag);
+        hashTag.setText(name_hash_tag);
 
         Button btnEditDate = (Button) findViewById(R.id.btn_edit_date);
         btnEditDate.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +107,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.deleteNamePicture(pic_id);
+                db.deleteNamePicture(name_id, pic_id);
                 Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -124,7 +142,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
 
                 // change name matched with the picture
                 int change_name_id = db.getNameWithString(changeName).getId();
-                db.changeNamePicture(pic_id, change_name_id);
+                db.changeNamePicture(pic_id, name_id, change_name_id);
 
                 Toast.makeText(getApplicationContext(), "Successfully edited.", Toast.LENGTH_SHORT).show();
             }
