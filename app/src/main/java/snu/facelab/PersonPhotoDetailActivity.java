@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
     private String changeName;
     private long pic_id;
     private long name_id;
+    private boolean toggleFlag = false;
 
     // DatabaseHelper 객체
     DatabaseHelper db;
@@ -52,6 +55,9 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_photo_detail);
+
+        // 전체화면
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Picture photo = (Picture) getIntent().getExtras().getSerializable(PHOTO);
         Name name = (Name) getIntent().getExtras().getSerializable(NAME);
@@ -92,15 +98,6 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
             }
         });
 
-        Button btnEditName = (Button) findViewById(R.id.btn_edit_name);
-        btnEditName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // select name from wheel view dialog
-                showNameDialog(v);
-            }
-        });
-
         Button btnDelete = (Button) findViewById(R.id.btn_delete);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +106,52 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
                 Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        final RelativeLayout backLayout = findViewById(R.id.photo_detail);
+        final RelativeLayout titleLayout = findViewById(R.id.title_layout);
+
+        // 배경 클릭할 시 검은 바탕에 사진만 뜨기
+        backLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleDisplay(backLayout, titleLayout);
+            }
+        });
+
+        // 제목창 클릭 시 아무일 없도록
+        titleLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // do nothing
+            }
+        });
+
+//        Button btnEditDate = (Button) findViewById(R.id.btn_edit_date);
+//        btnEditDate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // select date from calendar
+//                datePicker(v);
+//            }
+//        });
+//
+//        Button btnEditName = (Button) findViewById(R.id.btn_edit_name);
+//        btnEditName.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // select name from wheel view dialog
+//                showNameDialog(v);
+//            }
+//        });
+//
+//        Button btnDelete = (Button) findViewById(R.id.btn_delete);
+//        btnDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                db.deleteNamePicture(pic_id);
+//                Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
 
@@ -167,4 +210,20 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         }
         return names_string;
     }
+
+    public void toggleDisplay(RelativeLayout backLayout, RelativeLayout titleLayout) {
+        toggleFlag = !toggleFlag;
+
+        if (toggleFlag) {
+            titleLayout.setVisibility(View.GONE);
+            backLayout.setBackgroundColor(Color.parseColor("#000000"));
+        }
+        else {
+            titleLayout.setVisibility(View.VISIBLE);
+            backLayout.setBackgroundColor(getResources().getColor(R.color.photoBackground));
+
+        }
+
+    }
 }
+
