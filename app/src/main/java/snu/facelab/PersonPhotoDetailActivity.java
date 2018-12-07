@@ -68,13 +68,11 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
                 .load(imageUri)
                 .into(iv);
 
-        Person person = (Person) getIntent().getExtras().getSerializable(PERSON);
-        Name name = db.getNameWithString(person.name);
-        name_id = name.getId();
+        name_id = db.getNameWithString(name.getName()).getId();
         pic_id = db.getPictureIdByPath(photo.getPath());
 
-        List<Name> names = new ArrayList<Name>();
-        names = db.getAllNameByPicIdAndNameId(pic_id, name_id);
+        List<String> names = new ArrayList<String>();
+        names = db.getAllNameByPicId(pic_id);
 
         String name_hash_tag = new String();
         for(int i=0; i<names.size(); i++){
@@ -107,7 +105,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.deleteNamePicture(name_id, pic_id);
+                db.deleteNamePicture(pic_id, name_id);
                 Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_SHORT).show();
             }
         });
