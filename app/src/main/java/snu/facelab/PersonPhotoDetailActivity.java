@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -35,6 +36,7 @@ import snu.facelab.helper.DatabaseHelper;
 
 public class PersonPhotoDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     public static final String PHOTO = "Photo";
+    public static final String NAME = "Name";
     private ImageView iv;
     private Bitmap image;
     private String changeName;
@@ -49,7 +51,10 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         setContentView(R.layout.activity_person_photo_detail);
 
         Picture photo = (Picture) getIntent().getExtras().getSerializable(PHOTO);
-        Log.d("test", String.valueOf(photo.getPath()));
+        Name name = (Name) getIntent().getExtras().getSerializable(NAME);
+        
+        TextView tv = findViewById(R.id.photo_name);
+        tv.setText(name.getName());
 
         db = new DatabaseHelper(getApplicationContext());
 

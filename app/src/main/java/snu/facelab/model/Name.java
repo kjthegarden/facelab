@@ -1,6 +1,8 @@
 package snu.facelab.model;
 
-public class Name {
+import java.io.Serializable;
+
+public class Name implements Serializable {
     int id;
     String name;
 

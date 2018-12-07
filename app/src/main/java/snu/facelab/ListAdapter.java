@@ -16,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import snu.facelab.model.Name;
 import snu.facelab.model.PhotoGridView;
 import snu.facelab.model.Picture;
 
@@ -28,6 +29,7 @@ class ListAdapter extends BaseAdapter {
     private int resetFlag = 0;
 
     public static final String PHOTO = "Photo";
+    public static final String NAME = "Name";
 
     public ListAdapter() {
 
@@ -99,7 +101,7 @@ class ListAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.photo_gridview, parent, false);
         }
 
-        PersonGrid Pg = al.get(position);
+        final PersonGrid Pg = al.get(position);
 
         TextView Tv = convertView.findViewById(R.id.gridTitle);
         Tv.setText(Pg.getDate().toString());
@@ -157,9 +159,11 @@ class ListAdapter extends BaseAdapter {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 GridView GridView = (GridView) adapterView;
                 Picture photo = (Picture) GridView.getItemAtPosition(position);
+                Name name = Pg.name;
 
                 Intent i = new Intent(context, PersonPhotoDetailActivity.class);
                 i.putExtra(PHOTO, photo);
+                i.putExtra(NAME, name);
                 context.startActivity(i);
             }
         });
@@ -168,8 +172,8 @@ class ListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void addItem(Integer date, List<Picture> photos) {
-        PersonGrid Pg = new PersonGrid(date, photos);
+    public void addItem(Integer date, List<Picture> photos, Name name) {
+        PersonGrid Pg = new PersonGrid(date, photos, name);
         al.add(Pg);
     }
 }
