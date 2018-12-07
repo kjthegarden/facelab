@@ -125,7 +125,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
             case R.id.edit_date:
                 datePicker();
             case R.id.edit_name:
-                Toast.makeText(this, "2222",Toast.LENGTH_SHORT).show();
+                showNameDialog();
                 break;
             case R.id.delete:
                 db.deleteNamePicture(pic_id, name_id);
@@ -152,7 +152,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
     }
 
     /****** EDIT NAME *******/
-    public void showNameDialog(View view) {
+    public void showNameDialog() {
         WheelViewDialog dialog = new WheelViewDialog(this);
         dialog.setTitle("Select name").setItems(createNameArrays()).setButtonText("OK").setDialogStyle(Color
                 .parseColor("#6699ff")).setCount(getNameWheelSize()).show();
