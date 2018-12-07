@@ -8,7 +8,10 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -61,9 +64,9 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
 
         Picture photo = (Picture) getIntent().getExtras().getSerializable(PHOTO);
         Name name = (Name) getIntent().getExtras().getSerializable(NAME);
-        
-        TextView tv = findViewById(R.id.photo_name);
-        tv.setText(name.getName());
+
+//        TextView tv = findViewById(R.id.photo_name);
+//        tv.setText(name.getName());
 
         db = new DatabaseHelper(getApplicationContext());
 
@@ -86,35 +89,20 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
             name_hash_tag += names.get(i);
         }
 
-        TextView hashTag = (TextView) findViewById(R.id.hash_tag);
+        TextView hashTag = findViewById(R.id.hash_tag);
         hashTag.setText(name_hash_tag);
 
-        Button btnEditDate = (Button) findViewById(R.id.btn_edit_date);
-        btnEditDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // select date from calendar
-                datePicker(v);
-            }
-        });
-
-        Button btnDelete = (Button) findViewById(R.id.btn_delete);
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                db.deleteNamePicture(pic_id, name_id);
-                Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         final RelativeLayout backLayout = findViewById(R.id.photo_detail);
-        final RelativeLayout titleLayout = findViewById(R.id.title_layout);
+        //final RelativeLayout titleLayout = findViewById(R.id.title_layout);
+        final Toolbar titleLayout = findViewById(R.id.toolbar_photo);
+        setSupportActionBar(titleLayout);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // 배경 클릭할 시 검은 바탕에 사진만 뜨기
         backLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleDisplay(backLayout, titleLayout);
+                toggleDisplay(backLayout);
             }
         });
 
@@ -126,37 +114,33 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
             }
         });
 
-//        Button btnEditDate = (Button) findViewById(R.id.btn_edit_date);
-//        btnEditDate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // select date from calendar
-//                datePicker(v);
-//            }
-//        });
-//
-//        Button btnEditName = (Button) findViewById(R.id.btn_edit_name);
-//        btnEditName.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // select name from wheel view dialog
-//                showNameDialog(v);
-//            }
-//        });
-//
-//        Button btnDelete = (Button) findViewById(R.id.btn_delete);
-//        btnDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                db.deleteNamePicture(pic_id);
-//                Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.photo_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.edit_date:
+                datePicker();
+            case R.id.edit_name:
+                Toast.makeText(this, "2222",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.delete:
+                db.deleteNamePicture(pic_id, name_id);
+                Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_SHORT).show();
+        }
+        return true;
     }
 
 
+
     /****** EDIT DATE *******/
-    public void datePicker(View view){
+    public void datePicker(){
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.show(getSupportFragmentManager(), "date");
     }
@@ -211,15 +195,15 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         return names_string;
     }
 
-    public void toggleDisplay(RelativeLayout backLayout, RelativeLayout titleLayout) {
+    public void toggleDisplay(RelativeLayout backLayout) {
         toggleFlag = !toggleFlag;
 
         if (toggleFlag) {
-            titleLayout.setVisibility(View.GONE);
+            getSupportActionBar().hide();
             backLayout.setBackgroundColor(Color.parseColor("#000000"));
         }
         else {
-            titleLayout.setVisibility(View.VISIBLE);
+            getSupportActionBar().show();
             backLayout.setBackgroundColor(getResources().getColor(R.color.photoBackground));
 
         }
