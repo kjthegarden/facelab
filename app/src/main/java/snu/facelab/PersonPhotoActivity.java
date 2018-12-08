@@ -59,16 +59,19 @@ public class PersonPhotoActivity extends AppCompatActivity {
 
         // get pictures from db by date
         List<Picture> picture_date = new ArrayList<Picture>();
-        List<Integer> dates = new ArrayList<Integer>();
+        List<Integer> months = new ArrayList<Integer>();
 
-        dates = db.getAllDatesByName(person.name);
+        months = db.getAllMonthsByName(person.name);
 
-        int dateCount = dates.size();
+        int monthCount = months.size();
 
-        for (int i = 0; i < dateCount; i++)
+        for (int i = 0; i < monthCount; i++)
         {
-            picture_date = db.getAllPicturesByNameAndDate(person.name, dates.get(i));
-            adapter.addItem(dates.get(i), picture_date, person);
+            picture_date = db.getAllPicturesByNameAndMonth(person.name, months.get(i));
+            Log.d("check", person.name);
+            Log.d("check", months.get(i).toString());
+            Log.d("check", picture_date.toString());
+            adapter.addItem(months.get(i), picture_date, person);
         }
 
         Lv.setAdapter(adapter);
