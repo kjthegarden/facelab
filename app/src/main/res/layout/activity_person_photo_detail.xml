@@ -20,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true">
+
         <TextView
             android:textSize="20dp"
             android:textStyle="bold"
@@ -42,10 +43,18 @@
             android:id="@+id/toolbar_photo"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#80FFFFFF"
+            android:background="@color/toolbarBackground"
             android:gravity="center"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:contentInsetStart="0dp">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/photo_back"
+                android:layout_width="35sp"
+                android:layout_height="35sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5sp"
+                android:background = "@drawable/ic_keyboard_arrow_left_primary_24dp"/>
 
             <TextView
                 android:id="@+id/date_title"
@@ -53,8 +62,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 app:contentInsetStart="0dp"
-                android:textSize="13sp"
-                android:text="NAME"
+                android:maxLines="2"
+                android:textSize="14sp"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@color/colorBlack"
+                android:text="Title"
                 />
 
         </android.support.v7.widget.Toolbar>
