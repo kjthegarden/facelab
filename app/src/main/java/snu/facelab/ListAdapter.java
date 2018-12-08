@@ -169,6 +169,7 @@ class ListAdapter extends BaseAdapter {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 GridView GridView = (GridView) adapterView;
                 Picture photo = (Picture) GridView.getItemAtPosition(position);
+
                 Person person = Pg.person;
 
                 Intent i = new Intent(context, PersonPhotoDetailActivity.class);

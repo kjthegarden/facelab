@@ -54,4 +54,5 @@ public class Picture implements Serializable {
 
     public boolean getChecked() { return this.checked; }
 
+
 }
