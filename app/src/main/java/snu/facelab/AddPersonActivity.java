@@ -4,7 +4,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,7 +22,10 @@ public class AddPersonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_person);
 
-        Button btnImage = (Button) findViewById(R.id.btn_Start);
+        // 전체화면
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        Button btnImage = findViewById(R.id.btn_Start);
         btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,6 +46,14 @@ public class AddPersonActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
 
+            }
+        });
+
+        AppCompatButton btnCancel = findViewById(R.id.add_cancel);
+        btnCancel.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
