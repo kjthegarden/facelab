@@ -103,8 +103,19 @@ class ListAdapter extends BaseAdapter {
 
         final PersonGrid Pg = al.get(position);
 
+        // 0000년 00월 형태의 제목
         TextView Tv = convertView.findViewById(R.id.gridTitle);
-        Tv.setText(Pg.getDate().toString());
+        String year_and_month = Pg.getMonth().toString();
+        String year = year_and_month.substring(0,4);
+        String month = year_and_month.substring(4,6);
+
+        if (month.substring(0,1) == "0") {
+            month = month.substring(1);
+        }
+
+        String title = year + "년 " + month + "월";
+
+        Tv.setText(title);
 
         final PhotoGridView gridView = convertView.findViewById(R.id.gridView2);
 
@@ -172,8 +183,8 @@ class ListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void addItem(Integer date, List<Picture> photos, Person person) {
-        PersonGrid Pg = new PersonGrid(date, photos, person);
+    public void addItem(Integer month, List<Picture> photos, Person person) {
+        PersonGrid Pg = new PersonGrid(month, photos, person);
         al.add(Pg);
     }
 }
