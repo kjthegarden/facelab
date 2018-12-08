@@ -41,7 +41,11 @@ public class AddPersonActivity extends AppCompatActivity {
 
                 if (isNameAlreadyUsed(new FileHelper().getTrainingList(), name)) {
                     Toast.makeText(getApplicationContext(), "This name is already used. Please choose another one.", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+                else if (name.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter a name.", Toast.LENGTH_SHORT).show();
+                }
+                else {
                     intent.putExtra("Folder", "Training");
                     startActivity(intent);
                 }
