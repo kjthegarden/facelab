@@ -7,10 +7,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.opencv.android.OpenCVLoader;
@@ -39,6 +44,9 @@ public class TrainingActivity extends Activity {
     private static final String TAG = "Training";
     TextView progress;
     Thread thread;
+    Integer[] statusBtn = {R.id.rec_1, R.id.rec_2, R.id.rec_3, R.id.rec_4, R.id.rec_5,
+                           R.id.rec_6, R.id.rec_7, R.id.rec_8, R.id.rec_9, R.id.rec_10};
+    Button[] btn = new Button[10];
 
     private String folder_name;
 
@@ -61,6 +69,10 @@ public class TrainingActivity extends Activity {
 
 //        progress = (TextView) findViewById(R.id.progressText);
 //        progress.setMovementMethod(new ScrollingMovementMethod());
+        for (int i = 0; i < 10; i++) {
+            btn[i] = findViewById(statusBtn[i]);
+            btn[i].setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -187,6 +199,14 @@ public class TrainingActivity extends Activity {
 //                                                    progress.append("Image " + counterPost + " of " + filesLength + " from " + folder_name + " imported.\n");
 //                                                }
 //                                            });
+
+                                            final int counterPost = counter-1;
+                                            btn[counterPost].post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    btn[counterPost].setVisibility(View.VISIBLE);
+                                                }
+                                            });
 
                                             counter++;
                                         }
