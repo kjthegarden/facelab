@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,6 +66,12 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
 
         Picture photo = (Picture) getIntent().getExtras().getSerializable(PHOTO);
         person = (Person) getIntent().getExtras().getSerializable(PERSON);
+
+        // 제목 설정(임시)
+        TextView title = findViewById(R.id.date_title);
+        String dateAll = String.valueOf(photo.getDate());
+        String year = dateAll;
+        title.setText(person.name);
 
         db = new DatabaseHelper(getApplicationContext());
 
