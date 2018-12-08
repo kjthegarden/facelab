@@ -398,7 +398,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 Picture pic = new Picture();
                 pic.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-                pic.setPath((c.getString(c.getColumnIndex(KEY_PATH))));
+                pic.setPath(c.getString(c.getColumnIndex(KEY_PATH)));
+                pic.setMonth(c.getInt(c.getColumnIndex(KEY_MONTH)));
+                pic.setDate(c.getInt(c.getColumnIndex(KEY_DATE)));
+                pic.setDateTime(c.getInt(c.getColumnIndex(KEY_DATE_TIME)));
 
                 // adding to picture list
                 pictures.add(pic);
