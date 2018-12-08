@@ -2,6 +2,7 @@ package snu.facelab;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.andremion.louvre.Louvre;
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
 import com.darsh.multipleimageselect.models.Image;
@@ -36,11 +38,14 @@ import snu.facelab.helper.DatabaseHelper;
 import snu.facelab.model.Name;
 import snu.facelab.model.Picture;
 
+import com.andremion.louvre.Louvre;
+import com.andremion.louvre.home.GalleryActivity;
 public class AutoAddActivity extends AppCompatActivity {
 
 
     //private ProgressBar progressBar;
-
+    private static final int LOUVRE_REQUEST_CODE = 0;
+    private List<Uri> mSelection;
     private static final String TAG = "From gallery";
     private FileHelper fh;
     private static int PICK_IMAGE_REQUEST = 1;
@@ -81,26 +86,45 @@ public class AutoAddActivity extends AppCompatActivity {
         }
         //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        Intent newIntent = new Intent(this, AlbumSelectActivity.class);
-        startActivityForResult(newIntent, Constants.REQUEST_CODE);
+        //Intent newIntent = new Intent(this, AlbumSelectActivity.class);
+        //startActivityForResult(newIntent, Constants.REQUEST_CODE);
+        Louvre.init(AutoAddActivity.this)
+                .setRequestCode(LOUVRE_REQUEST_CODE)
+                .setMaxSelection(100)
+                .setSelection((List<Uri>)mSelection)
+                .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG, Louvre.IMAGE_TYPE_PNG)
+                .open();
 
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        //noinspection unchecked
+        mSelection = (List<Uri>) getLastCustomNonConfigurationInstance();
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return mSelection;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            final ArrayList<Image> image_list = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
-            int size = image_list.size();
+        //super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == LOUVRE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+           // final ArrayList<Image> image_list = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+            mSelection = GalleryActivity.getSelection(data);
+            int size = mSelection.size();
             System.out.println("add photo activity result image_list size :" + size);
 
             db = new DatabaseHelper(getApplicationContext());
 
-            for (int i = 0; i < image_list.size(); i++) {
+            for (int i = 0; i < size; i++) {
 
                 // last modified time
-                File file = new File(image_list.get(i).path);
+                String filePath = mSelection.get(i).getPath();
+                File file = new File(filePath);
                 long last_modified = file.lastModified();
 
                 // convert to Date format
@@ -114,10 +138,10 @@ public class AutoAddActivity extends AppCompatActivity {
                 int date= Integer.parseInt(simple_date.replace("-", ""));
 
                 // creating and inserting pictures
-                Picture pic = new Picture(image_list.get(i).path, date, last_modified);
+                Picture pic = new Picture(filePath, date, last_modified);
                 long pic_id = db.createPicture(pic);
 
-                Mat mat = Imgcodecs.imread(image_list.get(i).path);
+                Mat mat = Imgcodecs.imread(filePath);
                 Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
                 Mat imgCopy = new Mat();
                 mat.copyTo(imgCopy);
@@ -128,7 +152,7 @@ public class AutoAddActivity extends AppCompatActivity {
                     Rect[] faces = ppF.getFacesForRecognition();
 
                     faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
-
+                    System.out.println("#of detected faces : "+faces.length);
                     for (int j = 0; j < faces.length; j++) {
                         String rec_name = rec.recognize(images.get(j), "");
                         System.out.println(j + " : " + rec_name);
