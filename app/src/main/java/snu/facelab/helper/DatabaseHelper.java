@@ -443,6 +443,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_DATE, date);
+        int month = date/100;
+        values.put(KEY_MONTH, month);
 
         db.update(TABLE_PICTURE, values, KEY_ID + " =?", new String[]{String.valueOf(id)});
 

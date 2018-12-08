@@ -109,9 +109,8 @@ class ListAdapter extends BaseAdapter {
         String year = year_and_month.substring(0,4);
         String month = year_and_month.substring(4,6);
 
-        if (month.substring(0,1) == "0") {
-            month = month.substring(1);
-        }
+        Integer month_int = Integer.valueOf(month);
+        month = String.valueOf(month_int);
 
         String title = year + "년 " + month + "월";
 
