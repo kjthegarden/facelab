@@ -50,6 +50,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
     private long pic_id;
     private long name_id;
     private boolean toggleFlag = false;
+    private Person person;
 
     // DatabaseHelper 객체
     DatabaseHelper db;
@@ -63,7 +64,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Picture photo = (Picture) getIntent().getExtras().getSerializable(PHOTO);
-        Person person = (Person) getIntent().getExtras().getSerializable(PERSON);
+        person = (Person) getIntent().getExtras().getSerializable(PERSON);
 
         db = new DatabaseHelper(getApplicationContext());
 
@@ -130,6 +131,11 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
             case R.id.delete:
                 db.deleteNamePicture(pic_id, name_id);
                 Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(getApplicationContext(), PersonPhotoActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.putExtra(PERSON, person);
+                startActivity(i);
         }
         return true;
     }
@@ -149,6 +155,11 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         int date = year * 10000 + (month+1) * 100 + day;
         db.changePictureDate(pic_id, date);
         Toast.makeText(getApplicationContext(), "Successfully edited.", Toast.LENGTH_SHORT).show();
+
+        Intent i = new Intent(getApplicationContext(), PersonPhotoActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.putExtra(PERSON, person);
+        startActivity(i);
     }
 
     /****** EDIT NAME *******/
@@ -167,6 +178,11 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
                 db.changeNamePicture(pic_id, name_id, change_name_id);
 
                 Toast.makeText(getApplicationContext(), "Successfully edited.", Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(getApplicationContext(), PersonPhotoActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.putExtra(PERSON, person);
+                startActivity(i);
             }
         });
 
