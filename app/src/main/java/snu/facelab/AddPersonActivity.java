@@ -25,7 +25,7 @@ public class AddPersonActivity extends AppCompatActivity {
         // 전체화면
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Button btnImage = findViewById(R.id.btn_Start);
+        AppCompatButton btnImage = findViewById(R.id.btn_Start);
         btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

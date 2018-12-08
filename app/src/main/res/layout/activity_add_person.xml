@@ -6,10 +6,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--장식용-->
+    <RelativeLayout
+        android:layout_marginTop="120sp"
+        android:layout_width="40sp"
+        android:layout_height="10sp"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/sq_1"
+            android:layout_width="10sp"
+            android:layout_height="10sp"
+            android:background="@drawable/rec_shape"/>
+
+        <Button
+            android:id="@+id/sq_2"
+            android:layout_width="10sp"
+            android:layout_height="10sp"
+            android:layout_toRightOf="@id/sq_1"
+            android:layout_marginLeft="5sp"
+            android:background="@drawable/rec_shape"/>
+
+        <Button
+            android:id="@+id/sq_3"
+            android:layout_width="10sp"
+            android:layout_height="10sp"
+            android:layout_toRightOf="@id/sq_2"
+            android:layout_marginLeft="5sp"
+            android:background="@drawable/rec_shape"/>
+
+    </RelativeLayout>
+
+
     <RelativeLayout
         android:layout_width="250sp"
         android:layout_height="250sp"
-        android:layout_marginTop="120sp"
+        android:layout_marginTop="10sp"
         android:layout_gravity="center"
         android:background="@drawable/circle_shape">
 
@@ -22,13 +54,18 @@
             android:inputType="textPersonName"
             android:text="Name" />
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_Start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txt_Name"
             android:layout_centerInParent="true"
-            android:text="Start" />
+            android:textAllCaps="false"
+            android:text="Start"
+            android:layout_marginTop="10sp"
+            android:textSize="20sp"
+            android:textColor="@color/colorAccent"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
 
     </RelativeLayout>
 
