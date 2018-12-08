@@ -5,11 +5,23 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.AlignmentSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,11 +79,39 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         Picture photo = (Picture) getIntent().getExtras().getSerializable(PHOTO);
         person = (Person) getIntent().getExtras().getSerializable(PERSON);
 
-        // 제목 설정(임시)
+        // 제목 설정
         TextView title = findViewById(R.id.date_title);
         String dateAll = String.valueOf(photo.getDate());
-        String year = dateAll;
-        title.setText(person.name);
+        String year = dateAll.substring(0,4);
+
+        String month = dateAll.substring(4, 6);
+        Integer month_int = Integer.valueOf(month);
+        month = String.valueOf(month_int);
+
+        String date = dateAll.substring(6, 8);
+        Integer date_int = Integer.valueOf(month);
+        date = String.valueOf(date_int);
+
+        String titleFormat = year + "년 " + month + "월 " + date + "일";
+
+
+        // last modified time
+        File file = new File(photo.getPath());
+        long last_modified = file.lastModified();
+
+        // convert to Date format
+        Date date_time = new Date(last_modified);
+
+        // convert to SimpleDateFormat
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        String simple_date = formatter.format(date_time);
+
+        // convert to yyyymmdd format
+        //int date_= Integer.parseInt(simple_date.replace("-", ""));
+        String subTitleFormat = simple_date;
+        title.setText(getFormattedLabelText(titleFormat, subTitleFormat));
+
+
 
         db = new DatabaseHelper(getApplicationContext());
 
@@ -116,6 +156,15 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
             @Override
             public void onClick(View v) {
                 // do nothing
+            }
+        });
+
+        // 뒤로가기 버튼
+        AppCompatButton backBtn = findViewById(R.id.photo_back);
+        backBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -228,6 +277,29 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
 
         }
 
+    }
+
+    private Spanned getFormattedLabelText(String text, String subText) {
+        String fullText = String.format("%s\n%s", text, subText);
+
+        int fullTextLength = fullText.length();
+        int titleEnd = text.length();
+
+        SpannableStringBuilder s = new SpannableStringBuilder(fullText);
+
+        // Center align the text
+        AlignmentSpan alignmentSpan = new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
+        s.setSpan(alignmentSpan, 0, fullTextLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Make the title bold
+       // s.setSpan(new StyleSpan(Typeface.BOLD), 0, titleEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); //bold
+
+        // Make the subtext small
+        //int smallTextSize = DisplayUtil.getPixels(TypedValue.COMPLEX_UNIT_SP, 10);
+        s.setSpan(new AbsoluteSizeSpan(17), titleEnd + 1, fullTextLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); //bold
+        //s.setSpan(new ForegroundColorSpan(Color.GRAY), titleEnd + 1, fullTextLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return s;
     }
 }
 
