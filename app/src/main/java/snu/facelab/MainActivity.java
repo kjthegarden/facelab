@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,10 +19,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import snu.facelab.helper.DatabaseHelper;
 import snu.facelab.model.Name;
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     private GridView gridView;
     DatabaseHelper db;
     private String personImage;
+    private List<Name> names;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +84,7 @@ public class MainActivity extends AppCompatActivity
 
         // DBHelper 객체 생성
         db = new DatabaseHelper(getApplicationContext());
-        List<Name> names = db.getAllNames();
+        names = db.getAllNames();
 
         int personCount = names.size();
         for (int i = 0; i < personCount; i++) {
@@ -89,6 +94,53 @@ public class MainActivity extends AppCompatActivity
             al.add(new Person(personImage, personName));
         }
 
+        final EditText searchText = (EditText) findViewById(R.id.search_text);
+
+        /*
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable arg0) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+                if(searchText.getText().toString()!=null){
+                    names.clear();
+                    String text = searchText.getText().toString();
+                    Name temp =db.getNameWithString(text);
+                    System.out.println(temp.getId() + " "+temp.getName());
+                    if(temp.getName()!=null){
+                        names.add(db.getNameWithString(text));
+                    }
+
+                    int personCount = names.size();
+                    al.clear();
+                    for (int i = 0; i < personCount; i++) {
+                        String personName = names.get(i).getName();
+                        List<Picture> pictures = db.getAllPicturesByName(personName);
+                        personImage = pictures.get(0).getPath();
+                        al.add(new Person(personImage, personName));
+                    }
+                }else{
+                    names = db.getAllNames();
+
+                    int personCount = names.size();
+                    for (int i = 0; i < personCount; i++) {
+                        String personName = names.get(i).getName();
+                        List<Picture> pictures = db.getAllPicturesByName(personName);
+                        personImage = pictures.get(0).getPath();
+                        al.add(new Person(personImage, personName));
+                    }
+                }
+            }
+        });
+*/
 
         // adapter
         PersonAdapter adapter = new PersonAdapter(
