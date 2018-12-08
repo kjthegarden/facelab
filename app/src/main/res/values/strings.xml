@@ -13,4 +13,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_person_photo_detail">PersonPhotoDetailActivity</string>
+    <string name="max_select_prompt">Select the maximum selection</string>
+    <string name="media_type_prompt">Select the media type filter</string>
 </resources>

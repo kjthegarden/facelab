@@ -20,7 +20,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity" />
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".PersonPhotoActivity"
             android:label="@string/title_activity_person_photo"
@@ -30,6 +32,17 @@
                 android:value=".MainActivity" />
         </activity>
         <activity android:name=".AddPersonActivity" />
+        <activity
+            android:name="com.andremion.louvre.home.GalleryActivity"
+            android:parentActivityName=".AddPersonActivity"
+            android:theme="@style/AppTheme.Louvre.Light.DarkActionBar">
+            <meta-data
+                android:name="parentActivityName"
+                android:value=".AddPersonActivity" />
+        </activity>
+        <activity
+            android:name="com.andremion.louvre.preview.PreviewActivity"
+            android:theme="@style/AppTheme.Louvre.Preview" />
         <activity android:name=".OpenGalleryActivity" />
         <activity android:name=".TrainingActivity" />
         <activity android:name=".AutoAddActivity"/>
