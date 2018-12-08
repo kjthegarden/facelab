@@ -2,25 +2,48 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:gravity="center"
+    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:id="@+id/txt_Name"
-        android:layout_centerInParent="true" />
+    <RelativeLayout
+        android:layout_width="250sp"
+        android:layout_height="250sp"
+        android:layout_marginTop="120sp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_shape">
 
-    <Button
+        <EditText
+            android:id="@+id/txt_Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <Button
+            android:id="@+id/btn_Start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_Name"
+            android:layout_centerInParent="true"
+            android:text="Start" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/add_cancel"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start"
-        android:id="@+id/btn_Start"
-        android:layout_below="@+id/txt_Name"
-        android:layout_centerInParent="true" />
+        android:layout_height="20sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="40sp"
+        android:textAllCaps="false"
+        android:text="Cancel"
+        android:textColor="@color/colorBackground"
+        android:background="@color/colorPrimary"
+        style="@style/Widget.AppCompat.Button.Borderless"/>
+
+
 
 </LinearLayout>
