@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import org.opencv.android.OpenCVLoader;
@@ -52,11 +53,14 @@ public class TrainingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
 
+        // 전체화면
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         Intent intent = getIntent();
         folder_name = intent.getStringExtra("FolderName");
 
-        progress = (TextView) findViewById(R.id.progressText);
-        progress.setMovementMethod(new ScrollingMovementMethod());
+//        progress = (TextView) findViewById(R.id.progressText);
+//        progress.setMovementMethod(new ScrollingMovementMethod());
     }
 
     @Override
@@ -175,14 +179,14 @@ public class TrainingActivity extends Activity {
                                             //fileHelper.saveCroppedImage(imgRgb, ppF, file, name, counter);
 
                                             // Update screen to show the progress
-                                            final int counterPost = counter;
-                                            final int filesLength = files.length;
-                                            progress.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    progress.append("Image " + counterPost + " of " + filesLength + " from " + folder_name + " imported.\n");
-                                                }
-                                            });
+//                                            final int counterPost = counter;
+//                                            final int filesLength = files.length;
+//                                            progress.post(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    progress.append("Image " + counterPost + " of " + filesLength + " from " + folder_name + " imported.\n");
+//                                                }
+//                                            });
 
                                             counter++;
                                         }

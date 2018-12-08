@@ -3,6 +3,7 @@ package snu.facelab;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -52,6 +53,9 @@ public class OpenGalleryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_gallery);
+
+        // 전체화면
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Intent intent = getIntent();
         folder = intent.getStringExtra("Folder");
@@ -165,6 +169,9 @@ public class OpenGalleryActivity extends AppCompatActivity {
 
                 startActivity(intent);
             }
+        }
+        else {
+            finish();
         }
     }
 
