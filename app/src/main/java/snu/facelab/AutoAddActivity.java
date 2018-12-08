@@ -146,6 +146,7 @@ public class AutoAddActivity extends AppCompatActivity {
             // Toast.makeText(getApplicationContext(), "Successfully added.", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
     }
