@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:keepScreenOn="true"
-    android:gravity="center"
     android:background="@color/colorPrimary"
     tools:context=".TrainingActivity">
 
     <com.wang.avi.AVLoadingIndicatorView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         app:indicatorName="BallGridPulseIndicator"
         app:indicatorColor="@color/textColorPrimary"/>
 
@@ -29,7 +29,11 @@
 
     <!--상태바-->
     <RelativeLayout
-        android:layout_width="145sp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20sp"
+        android:gravity="center"
+        android:layout_width="200sp"
         android:layout_height="30sp">
 
         <Button
@@ -37,7 +41,8 @@
             android:layout_width="10sp"
             android:layout_height="10sp"
             android:backgroundTint="@color/colorBackground"
-            android:background="@drawable/rec_shape"/>
+            android:background="@drawable/rec_shape"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
 
         <Button
             android:id="@+id/rec_2"
@@ -46,7 +51,8 @@
             android:layout_toRightOf="@id/rec_1"
             android:layout_marginLeft="5sp"
             android:backgroundTint="@color/colorBackground"
-            android:background="@drawable/rec_shape"/>
+            android:background="@drawable/rec_shape"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
 
         <Button
             android:id="@+id/rec_3"
@@ -55,7 +61,78 @@
             android:layout_toRightOf="@id/rec_2"
             android:layout_marginLeft="5sp"
             android:backgroundTint="@color/colorBackground"
-            android:background="@drawable/rec_shape"/>
+            android:background="@drawable/rec_shape"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/rec_4"
+            android:layout_width="10sp"
+            android:layout_height="10sp"
+            android:layout_toRightOf="@id/rec_3"
+            android:layout_marginLeft="5sp"
+            android:backgroundTint="@color/colorBackground"
+            android:background="@drawable/rec_shape"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/rec_5"
+            android:layout_width="10sp"
+            android:layout_height="10sp"
+            android:layout_toRightOf="@id/rec_4"
+            android:layout_marginLeft="5sp"
+            android:backgroundTint="@color/colorBackground"
+            android:background="@drawable/rec_shape"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/rec_6"
+            android:layout_width="10sp"
+            android:layout_height="10sp"
+            android:layout_toRightOf="@id/rec_5"
+            android:layout_marginLeft="5sp"
+            android:backgroundTint="@color/colorBackground"
+            android:background="@drawable/rec_shape"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/rec_7"
+            android:layout_width="10sp"
+            android:layout_height="10sp"
+            android:layout_toRightOf="@id/rec_6"
+            android:layout_marginLeft="5sp"
+            android:backgroundTint="@color/colorBackground"
+            android:background="@drawable/rec_shape"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/rec_8"
+            android:layout_width="10sp"
+            android:layout_height="10sp"
+            android:layout_toRightOf="@id/rec_7"
+            android:layout_marginLeft="5sp"
+            android:backgroundTint="@color/colorBackground"
+            android:background="@drawable/rec_shape"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/rec_9"
+            android:layout_width="10sp"
+            android:layout_height="10sp"
+            android:layout_toRightOf="@id/rec_8"
+            android:layout_marginLeft="5sp"
+            android:backgroundTint="@color/colorBackground"
+            android:background="@drawable/rec_shape"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/rec_10"
+            android:layout_width="10sp"
+            android:layout_height="10sp"
+            android:layout_toRightOf="@id/rec_9"
+            android:layout_marginLeft="5sp"
+            android:backgroundTint="@color/colorBackground"
+            android:background="@drawable/rec_shape"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
     </RelativeLayout>
 
 </RelativeLayout>
