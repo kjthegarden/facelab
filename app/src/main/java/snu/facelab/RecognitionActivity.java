@@ -2,25 +2,17 @@ package snu.facelab;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Size;
@@ -28,6 +20,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
@@ -60,6 +53,7 @@ public class RecognitionActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         path = intent.getStringExtra("Path");
+        System.out.println(path);
 
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -74,30 +68,12 @@ public class RecognitionActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        /*
-        Mat mat = Imgcodecs.imread(path);
-        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
+        File file = new File(path);
+        long last_modified = file.lastModified();
 
-        Mat processedImage = new Mat();
-        mat.copyTo(processedImage);
-
-        List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
-        Rect[] faces = ppF.getFacesForRecognition();
-
-        faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
-        for(int i = 0; i<faces.length; i++){
-            //MatOperation.drawRectangleAndLabelOnPreview(mat, faces[i], rec.recognize(images.get(i), ""), true);
-            System.out.println(rec.recognize(images.get(i), ""));
-        }
-        */
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Mat src = Imgcodecs.imread(path);
         Imgproc.cvtColor(src, src, Imgproc.COLOR_BGRA2RGBA);
 
-        //System.out.println("width" + src.width() + " height" + src.height());
         Mat mat = new Mat();
         Mat processedImage = new Mat();
 
@@ -112,13 +88,24 @@ public class RecognitionActivity extends AppCompatActivity {
         }
 
 
-        List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
-        Rect[] faces = ppF.getFacesForRecognition();
+        final List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
 
-        faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
-        for(int i = 0; i<faces.length; i++){
-            MatOperation.drawRectangleAndLabelOnPreview(mat, faces[i], rec.recognize(images.get(i), ""), true);
-            System.out.println(rec.recognize(images.get(i), ""));
+        if(images!=null){
+            Rect[] faces = ppF.getFacesForRecognition();
+
+            faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
+            System.out.println("#of detected faces : "+faces.length);
+
+            ArrayList<String> names = new ArrayList<String>(faces.length);
+
+            for (int j = 0; j < faces.length; j++) {
+                String rec_name = rec.recognize(images.get(j), "");
+                System.out.println(j + " : " + rec_name);
+                names.add(rec_name);
+            }
+            Intent intent_return = new Intent(getApplicationContext(), AutoAddActivity.class);
+            intent_return.putStringArrayListExtra("Names", names);
+            startActivity(intent_return);   
         }
     }
 

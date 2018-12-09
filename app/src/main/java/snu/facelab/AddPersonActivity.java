@@ -63,25 +63,6 @@ public class AddPersonActivity extends AppCompatActivity {
         // 전체화면
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        /*
-        final int spacing = getResources().getDimensionPixelSize(R.dimen.gallery_item_offset);
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.addItemDecoration(new ItemOffsetDecoration(spacing));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(mAdapter = new MainAdapter());
-        recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
-                int size = getResources().getDimensionPixelSize(R.dimen.gallery_item_size);
-                int width = recyclerView.getMeasuredWidth();
-                int columnCount = width / (size + spacing);
-                recyclerView.setLayoutManager(new GridLayoutManager(AddPersonActivity.this, columnCount));
-                return false;
-            }
-        });
-        */
-
         fh = new FileHelper();
         total = 0;
 
@@ -105,15 +86,11 @@ public class AddPersonActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please enter a name.", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    /*intent.putExtra("Folder", "Training");
-                    startActivity(intent);*/
-
-                    //NumberPickerDialog.show(getSupportFragmentManager(), LOUVRE_REQUEST_CODE, mSelection);
                     Louvre.init(AddPersonActivity.this)
                             .setRequestCode(LOUVRE_REQUEST_CODE)
                             .setMaxSelection(10)
                             .setSelection((List<Uri>)mSelection)
-                            .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG, Louvre.IMAGE_TYPE_PNG)
+                            .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG)
                             .open();
                 }
 
@@ -159,21 +136,19 @@ public class AddPersonActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /*if (requestCode == LOUVRE_REQUEST_CODE && resultCode == RESULT_OK) {
-            mAdapter.swapData(mSelection = GalleryActivity.getSelection(data));
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);*/
-
+        //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LOUVRE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             mSelection = GalleryActivity.getSelection(data);
-            //ArrayList<Image> image_list = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+
             int image_list_size = mSelection.size();
             if( image_list_size<10){
                 Toast.makeText(getApplicationContext(), "Choose at least 10 pictures.", Toast.LENGTH_SHORT).show();
-                //Intent newIntent = new Intent(this, AlbumSelectActivity.class);
-
-                //startActivityForResult(newIntent, Constants.REQUEST_CODE);
+                Louvre.init(AddPersonActivity.this)
+                        .setRequestCode(LOUVRE_REQUEST_CODE)
+                        .setMaxSelection(10)
+                        .setSelection((List<Uri>)mSelection)
+                        .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG)
+                        .open();
             }else{
                 // DBHelper 객체 생성
                 db = new DatabaseHelper(getApplicationContext());
@@ -206,7 +181,7 @@ public class AddPersonActivity extends AppCompatActivity {
 
                     Mat src = Imgcodecs.imread(file.getAbsolutePath());
                     Imgproc.cvtColor(src, src, Imgproc.COLOR_BGRA2RGBA);
-                    //System.out.println("width" + src.width() + " height" + src.height());
+
                     Mat mat = new Mat();
                     Mat imgCopy = new Mat();
 
@@ -231,6 +206,8 @@ public class AddPersonActivity extends AppCompatActivity {
                             //Only proceed if 1 face has been detected, ignore if 0 or more than 1 face have been detected
                             if ((faces != null) && (faces.length == 1)) {
                                 faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
+
+                                //트레이닝 폴더에 이미지 저장할 때 이름 맞는지??
                                 MatName m = new MatName(name + "_" + i, img);
 
                                 // trainging 사진이 저장되는 경로

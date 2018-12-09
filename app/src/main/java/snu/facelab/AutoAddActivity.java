@@ -10,24 +10,21 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
+
+import com.andremion.louvre.Louvre;
+import com.andremion.louvre.home.GalleryActivity;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.andremion.louvre.Louvre;
-import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
-import com.darsh.multipleimageselect.helpers.Constants;
-import com.darsh.multipleimageselect.models.Image;
 
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
 import ch.zhaw.facerecognitionlibrary.Helpers.MatOperation;
@@ -35,11 +32,8 @@ import ch.zhaw.facerecognitionlibrary.PreProcessor.PreProcessorFactory;
 import ch.zhaw.facerecognitionlibrary.Recognition.Recognition;
 import ch.zhaw.facerecognitionlibrary.Recognition.RecognitionFactory;
 import snu.facelab.helper.DatabaseHelper;
-import snu.facelab.model.Name;
 import snu.facelab.model.Picture;
 
-import com.andremion.louvre.Louvre;
-import com.andremion.louvre.home.GalleryActivity;
 public class AutoAddActivity extends AppCompatActivity {
 
 
@@ -72,7 +66,7 @@ public class AutoAddActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auto_add);
+        setContentView(R.layout.content_main);
 
         //progressBar = (ProgressBar)findViewById(R.id.progressBar2);
         //progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -84,15 +78,12 @@ public class AutoAddActivity extends AppCompatActivity {
         } else {
             Log.i(TAG,"Photos directory already existing");
         }
-        //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        //Intent newIntent = new Intent(this, AlbumSelectActivity.class);
-        //startActivityForResult(newIntent, Constants.REQUEST_CODE);
         Louvre.init(AutoAddActivity.this)
                 .setRequestCode(LOUVRE_REQUEST_CODE)
                 .setMaxSelection(100)
                 .setSelection((List<Uri>)mSelection)
-                .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG, Louvre.IMAGE_TYPE_PNG)
+                .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG)
                 .open();
 
     }
@@ -113,8 +104,9 @@ public class AutoAddActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LOUVRE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-           // final ArrayList<Image> image_list = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+
             mSelection = GalleryActivity.getSelection(data);
+
             int size = mSelection.size();
             System.out.println("add photo activity result image_list size :" + size);
 
@@ -141,12 +133,25 @@ public class AutoAddActivity extends AppCompatActivity {
                 Picture pic = new Picture(filePath, date, last_modified);
                 long pic_id = db.createPicture(pic);
 
-                Mat mat = Imgcodecs.imread(filePath);
-                Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2RGBA);
-                Mat imgCopy = new Mat();
-                mat.copyTo(imgCopy);
 
-                final List<Mat> images = ppF.getProcessedImage(imgCopy, PreProcessorFactory.PreprocessingMode.RECOGNITION);
+                Mat src = Imgcodecs.imread(filePath);
+                Imgproc.cvtColor(src, src, Imgproc.COLOR_BGRA2RGBA);
+
+                Mat mat = new Mat();
+                Mat processedImage = new Mat();
+
+                if(src.width()>1000){
+                    Size sz = new Size(src.width()/4, src.height()/4);
+                    Imgproc.resize(src, mat, sz);
+                    mat.copyTo(processedImage);
+                }
+                else{
+                    src.copyTo(mat);
+                    src.copyTo(processedImage);
+                }
+
+
+                final List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
 
                 if(images!=null){
                     Rect[] faces = ppF.getFacesForRecognition();
