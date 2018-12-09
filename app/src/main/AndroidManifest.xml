@@ -54,7 +54,7 @@
         <activity
             android:name=".PersonPhotoDetailActivity"
             android:label="@string/title_activity_person_photo_detail"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

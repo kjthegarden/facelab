@@ -78,6 +78,9 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         // 전체화면
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        // No default action bar
+        //getSupportActionBar().hide();
+
         Picture photo = (Picture) getIntent().getExtras().getSerializable(PHOTO);
         person = (Person) getIntent().getExtras().getSerializable(PERSON);
 
@@ -142,7 +145,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         }
 
         // Hash Tag Layout
-        RelativeLayout htLayout = findViewById(R.id.hash_tag_area);
+        final RelativeLayout htLayout = findViewById(R.id.hash_tag_area);
         TextView hashTag = findViewById(R.id.hash_tag);
         hashTag.setText(name_hash_tag);
 
@@ -165,7 +168,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         backLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleDisplay(backLayout);
+                toggleDisplay(backLayout, htLayout);
             }
         });
 
@@ -176,7 +179,6 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
                 // do nothing
             }
         });
-
 
 
         // 뒤로가기 버튼
@@ -201,6 +203,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         switch (item.getItemId()){
             case R.id.edit_date:
                 datePicker();
+                break;
             case R.id.edit_name:
                 showNameDialog();
                 break;
@@ -212,6 +215,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.putExtra(PERSON, person);
                 startActivity(i);
+                finish();
         }
         return true;
     }
@@ -284,16 +288,18 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         return names_string;
     }
 
-    public void toggleDisplay(RelativeLayout backLayout) {
+    public void toggleDisplay(RelativeLayout backLayout, RelativeLayout htLayout) {
         toggleFlag = !toggleFlag;
 
         if (toggleFlag) {
             getSupportActionBar().hide();
             backLayout.setBackgroundColor(Color.parseColor("#000000"));
+            htLayout.setVisibility(View.GONE);
         }
         else {
             getSupportActionBar().show();
             backLayout.setBackgroundColor(getResources().getColor(R.color.photoBackground));
+            htLayout.setVisibility(View.VISIBLE);
 
         }
 

@@ -44,6 +44,9 @@ public class PersonPhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_photo);
 
+        // No default action bar
+        getSupportActionBar().hide();
+
         // Person 객체 받아오고 title 설정
         Person person = (Person) getIntent().getExtras().getSerializable(PERSON);
         String title = "<font color=#E6E6FA>#</font>" + person.name;
