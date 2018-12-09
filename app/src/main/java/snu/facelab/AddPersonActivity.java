@@ -185,6 +185,8 @@ public class AddPersonActivity extends AppCompatActivity {
                     Mat mat = new Mat();
                     Mat imgCopy = new Mat();
 
+                    System.out.println("size of origin : " + src.width() + " " + src.height());
+
                     if(src.width()>1000){
                         Size sz = new Size(src.width()/4, src.height()/4);
                         Imgproc.resize(src, mat, sz);
@@ -195,6 +197,7 @@ public class AddPersonActivity extends AppCompatActivity {
                         src.copyTo(imgCopy);
                     }
 
+                    System.out.println("size of resized : " + imgCopy.width() + " " + imgCopy.height());
                     List<Mat> images = ppF.getCroppedImage(imgCopy);
 
 
