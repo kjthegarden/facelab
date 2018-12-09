@@ -17,17 +17,20 @@
 
     <!--해시태그 레이아웃-->
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="30sp"
+        android:background="@color/toolbarBackground"
+        android:id="@+id/hash_tag_area"
         android:layout_centerHorizontal="true">
 
         <TextView
-            android:textSize="20dp"
-            android:textStyle="bold"
+            android:textSize="15dp"
             android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="10sp"
             android:text="tag"
             android:id="@+id/hash_tag"/>
 

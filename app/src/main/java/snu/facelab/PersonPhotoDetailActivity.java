@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
@@ -130,12 +132,28 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
 
         String name_hash_tag = new String();
         for(int i=0; i<names.size(); i++){
-            name_hash_tag += "# ";
+            if (i == 0) {
+                name_hash_tag += "# ";
+            }
+            else {
+                name_hash_tag += " # ";
+            }
             name_hash_tag += names.get(i);
         }
 
+        // Hash Tag Layout
+        RelativeLayout htLayout = findViewById(R.id.hash_tag_area);
         TextView hashTag = findViewById(R.id.hash_tag);
         hashTag.setText(name_hash_tag);
+
+        // 해시태그 레이아웃 클릭 시 아무일 없도록
+        htLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // do nothing
+            }
+        });
+
 
         final RelativeLayout backLayout = findViewById(R.id.photo_detail);
         //final RelativeLayout titleLayout = findViewById(R.id.title_layout);
@@ -151,13 +169,15 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
             }
         });
 
-        // 제목창 클릭 시 아무일 없도록
+        // 툴바 레이아웃 클릭 시 아무일 없도록
         titleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // do nothing
             }
         });
+
+
 
         // 뒤로가기 버튼
         AppCompatButton backBtn = findViewById(R.id.photo_back);
