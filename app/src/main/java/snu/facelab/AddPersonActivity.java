@@ -90,7 +90,7 @@ public class AddPersonActivity extends AppCompatActivity {
                             .setRequestCode(LOUVRE_REQUEST_CODE)
                             .setMaxSelection(10)
                             .setSelection((List<Uri>)mSelection)
-                            .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG)
+                            .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG, Louvre.IMAGE_TYPE_PNG)
                             .open();
                 }
 
@@ -147,7 +147,7 @@ public class AddPersonActivity extends AppCompatActivity {
                         .setRequestCode(LOUVRE_REQUEST_CODE)
                         .setMaxSelection(10)
                         .setSelection((List<Uri>)mSelection)
-                        .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG)
+                        .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG, Louvre.IMAGE_TYPE_PNG)
                         .open();
             }else{
                 // DBHelper 객체 생성

@@ -83,7 +83,7 @@ public class AutoAddActivity extends AppCompatActivity {
                 .setRequestCode(LOUVRE_REQUEST_CODE)
                 .setMaxSelection(100)
                 .setSelection((List<Uri>)mSelection)
-                .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG)
+                .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG, Louvre.IMAGE_TYPE_PNG)
                 .open();
 
     }
