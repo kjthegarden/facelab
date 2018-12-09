@@ -17,6 +17,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="General">
+
         <snu.facelab.SwitchPreference
         android:title="Camera"
         android:key="key_front_camera"
@@ -52,6 +53,7 @@
             android:key="key_default_button"
             android:summary="Reset all settings to default"/>
     </PreferenceCategory>
+
     <PreferenceCategory
         android:title="Add Person">
         <snu.facelab.EditTextPreference
@@ -71,6 +73,7 @@
             android:numeric="integer"
             android:key="key_faceSize"/>
     </PreferenceCategory>
+
     <PreferenceCategory
         android:title="Face detection">
         <snu.facelab.SwitchPreference

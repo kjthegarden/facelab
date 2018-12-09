@@ -16,22 +16,22 @@
             android:id="@+id/nav_tutorial"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Tutorial" />
-        <item
+        <!--<item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Setting" />
+            android:title="Setting" />-->
     </group>
 
     <item android:title="Communicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_about"
                 android:icon="@drawable/ic_menu_share"
                 android:title="About" />
-            <item
+            <!--<item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="Send" />-->
         </menu>
     </item>
 

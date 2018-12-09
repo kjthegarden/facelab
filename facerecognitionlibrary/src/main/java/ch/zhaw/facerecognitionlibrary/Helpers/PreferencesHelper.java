@@ -28,11 +28,11 @@ public class PreferencesHelper {
     
 
     public String getClassificationMethod(){
-        return sharedPreferences.getString("key_classification_method", resources.getString(R.string.eigenfaces));
+        return sharedPreferences.getString("key_classification_method", resources.getString(R.string.svm));
     }
 
     public boolean getClassificationMethodTFCaffe(){
-        return sharedPreferences.getBoolean("key_classificationMethodTFCaffe", true);
+        return sharedPreferences.getBoolean("key_classificationMethodTFCaffe", false);
     }
 
     public float getGamma(){
