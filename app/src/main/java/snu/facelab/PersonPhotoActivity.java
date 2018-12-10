@@ -38,6 +38,7 @@ import static snu.facelab.MainActivity.PERSON;
 public class PersonPhotoActivity extends AppCompatActivity {
     public static final String PHOTO = "Photo";
     DatabaseHelper db;
+    private Person person;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         // Person 객체 받아오고 title 설정
-        Person person = (Person) getIntent().getExtras().getSerializable(PERSON);
+        person = (Person) getIntent().getExtras().getSerializable(PERSON);
         String title = "<font color=#E6E6FA>#</font>" + person.name;
         TextView name = findViewById(R.id.personPhotoName);
         name.setText(Html.fromHtml(title));
@@ -228,6 +229,11 @@ public class PersonPhotoActivity extends AppCompatActivity {
                 long name_picture_id = db.createNamePicture(name_id, pic_id);
 
             }
+
+            Intent i = new Intent(getApplicationContext(), PersonPhotoActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.putExtra(PERSON, person);
+            startActivity(i);
         }
     }
 }
