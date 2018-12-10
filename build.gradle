@@ -8,11 +8,15 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
-        
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.7.3"
 }
 
 allprojects {
@@ -23,6 +27,24 @@ allprojects {
         maven { url "https://jitpack.io" }
         mavenCentral()
         maven { url 'https://maven.google.com' }
+    }
+    project.ext {
+
+        compileSdkVersion = 26
+        buildToolsVersion = '28.0.3'
+        minSdkVersion = 16
+        targetSdkVersion = 26
+
+        versionCode = 9
+        versionName = "1.2.3"
+
+        supportLibraryVersion = '26.1.0'
+        counterFabVersion = '1.0.2'
+        glideVersion = '4.3.1'
+        photoViewVersion = '2.0.0'
+
+        junitVersion = '4.12'
+        espressoVersion = '2.2.+'
     }
 }
 

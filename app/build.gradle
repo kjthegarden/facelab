@@ -30,7 +30,7 @@ dependencies {
     implementation project(':multipleimageselect')
     implementation project(':facerecognitionlibrary')
     implementation project(':openCVLibrary343')
-    implementation 'com.github.andremion:louvre:1.2.3'
+    implementation project(':louvre')
 
     // UI Library
     implementation 'com.wang.avi:library:2.1.3'
