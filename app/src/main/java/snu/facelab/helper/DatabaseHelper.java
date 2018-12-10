@@ -177,6 +177,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * getting all names
+     * */
+    public List<Name> getAllNamesWithKey(String Key) {
+        List<Name> names = new ArrayList<Name>();
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME +
+                " WHERE "+ KEY_NAME + " LIKE '%" + Key +"%'";
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Name name = new Name();
+                name.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                name.setName((c.getString(c.getColumnIndex(KEY_NAME))));
+
+                // adding to name list
+                names.add(name);
+            } while (c.moveToNext());
+        }
+
+        return names;
+    }
+
+    /**
      * getting name count
      */
     public int getNameCount() {

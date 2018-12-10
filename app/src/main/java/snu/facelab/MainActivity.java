@@ -1,10 +1,12 @@
 package snu.facelab;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +15,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,34 +35,16 @@ public class MainActivity extends AppCompatActivity
 
     ArrayList<Person> al = new ArrayList<Person>();
     public static final String PERSON = "Person";
-    private GridView gridView;
+    private GridView Gv;
     DatabaseHelper db;
     private String personImage;
     private List<Name> names;
+    private List<Picture> pictures;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        Intent intent = new Intent(this, LoadingActivity.class);
-//        startActivity(intent);
-
-        //checkFirstRun();
-
-//        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-//                .getBoolean("isFirstRun", true);
-//
-//        Log.d("check", isFirstRun.toString());
-//
-//        if (isFirstRun) {
-//            Intent intent = new Intent(this, LoadingActivity.class);
-//            startActivity(intent);
-//        }
-//
-//        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-//                .putBoolean("isFirstRun", false).apply();
-
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -70,80 +58,44 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        // GridView
-        //    1. 다량의 데이터
-        //    2. Adapter (데이터와 view의 연결 관계를 정의)
-        //    3. AdapterView (GridView)
-
         // DBHelper 객체 생성
         db = new DatabaseHelper(getApplicationContext());
+
         names = db.getAllNames();
+        setAlbumList();
 
-        int personCount = names.size();
-        for (int i = 0; i < personCount; i++) {
-            String personName = names.get(i).getName();
-            List<Picture> pictures = db.getAllPicturesByName(personName);
-            personImage = pictures.get(0).getPath();
-            al.add(new Person(personImage, personName));
-        }
+        // 검색창 클릭 전까지는 키보드가 뜨지 않도록 함
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        // 검색 키보드
+        final InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
+        // 검색창
         final EditText searchText = (EditText) findViewById(R.id.search_text);
-
-        /*
-        searchText.addTextChangedListener(new TextWatcher() {
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void afterTextChanged(Editable arg0) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchText.clearFocus();
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
 
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-                if(searchText.getText().toString()!=null){
-                    names.clear();
                     String text = searchText.getText().toString();
-                    Name temp =db.getNameWithString(text);
-                    System.out.println(temp.getId() + " "+temp.getName());
-                    if(temp.getName()!=null){
-                        names.add(db.getNameWithString(text));
-                    }
+                    if(al!=null)  al.clear();
+                    if(names!=null) names.clear();
+                    if(pictures!=null) pictures.clear();
 
-                    int personCount = names.size();
-                    al.clear();
-                    for (int i = 0; i < personCount; i++) {
-                        String personName = names.get(i).getName();
-                        List<Picture> pictures = db.getAllPicturesByName(personName);
-                        personImage = pictures.get(0).getPath();
-                        al.add(new Person(personImage, personName));
+                    if(text!=null) {
+                        names = db.getAllNamesWithKey(text);
+                        setAlbumList();
+                    }else {
+                        names = db.getAllNames();
+                        setAlbumList();
                     }
-                }else{
-                    names = db.getAllNames();
-
-                    int personCount = names.size();
-                    for (int i = 0; i < personCount; i++) {
-                        String personName = names.get(i).getName();
-                        List<Picture> pictures = db.getAllPicturesByName(personName);
-                        personImage = pictures.get(0).getPath();
-                        al.add(new Person(personImage, personName));
-                    }
+                    return true;
                 }
+                return false;
             }
         });
-*/
-
-        // adapter
-        PersonAdapter adapter = new PersonAdapter(
-                getApplicationContext(), // 현재 화면의 제어권자
-                R.layout.person_thumbnail,             // 한행을 그려줄 layout
-                al);                     // 다량의 데이터
-
-        GridView Gv = findViewById(R.id.gridView);
-        Gv.setAdapter(adapter);
 
         // 이벤트 처리
         Gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -158,6 +110,30 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i);
             }
         });
+    }
+
+    // 사진과 이름으로 앨범 목록 구성
+    public void setAlbumList() {
+        int personCount = names.size();
+        for (int i = 0; i < personCount; i++) {
+            String personName = names.get(i).getName();
+            pictures = db.getAllPicturesByName(personName);
+            personImage = pictures.get(0).getPath();
+            al.add(new Person(personImage, personName));
+        }
+
+        // adapter
+        PersonAdapter adapter = new PersonAdapter(
+                getApplicationContext(), // 현재 화면의 제어권자
+                R.layout.person_thumbnail,             // 한행을 그려줄 layout
+                al);                     // 다량의 데이터
+
+        // GridView
+        //    1. 다량의 데이터
+        //    2. Adapter (데이터와 view의 연결 관계를 정의)
+        //    3. AdapterView (GridView)
+        Gv = findViewById(R.id.gridView);
+        Gv.setAdapter(adapter);
     }
 
     @Override
