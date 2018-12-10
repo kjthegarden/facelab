@@ -14,8 +14,13 @@
 
         <EditText
             android:id="@+id/search_text"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
             android:layout_width="match_parent"
+            android:inputType="text"
             android:layout_height="50sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:drawableLeft="@drawable/abc_ic_search_api_material"
             android:hint="search by name" />
 
