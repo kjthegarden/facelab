@@ -53,7 +53,13 @@ class PersonAdapter extends BaseAdapter {
 
         Person m = al.get(position);
 
-        Uri imageUri = Uri.fromFile(new File(m.getMainImg()));
+        Uri imageUri;
+        if(m.getMainImg()!=null){
+            imageUri = Uri.fromFile(new File(m.getMainImg()));
+        }else{
+            imageUri =  Uri.parse("android.resource://snu.facelab/" + R.drawable.smile);
+        }
+
         Glide.with(context)
                 .load(imageUri)
                 .apply(new RequestOptions()

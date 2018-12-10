@@ -118,7 +118,10 @@ public class MainActivity extends AppCompatActivity
         for (int i = 0; i < personCount; i++) {
             String personName = names.get(i).getName();
             pictures = db.getAllPicturesByName(personName);
-            personImage = pictures.get(0).getPath();
+            if(!pictures.isEmpty()){
+                personImage = pictures.get(0).getPath();
+            } // else 앨범에 사진이 없는 경우 personImage가 null
+
             al.add(new Person(personImage, personName));
         }
 
