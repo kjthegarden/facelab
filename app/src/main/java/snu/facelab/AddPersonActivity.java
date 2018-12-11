@@ -63,6 +63,9 @@ public class AddPersonActivity extends AppCompatActivity {
         // 전체화면
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        // No default action bar
+        getSupportActionBar().hide();
+
         fh = new FileHelper();
         total = 0;
 
