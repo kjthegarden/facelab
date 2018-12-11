@@ -9,10 +9,12 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,14 +47,20 @@ public class PersonPhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_photo);
 
-        // No default action bar
-        getSupportActionBar().hide();
+        // 전체화면
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Custom toolbar
+        final Toolbar titleLayout = findViewById(R.id.toolbar_peron);
+        setSupportActionBar(titleLayout);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // Person 객체 받아오고 title 설정
         person = (Person) getIntent().getExtras().getSerializable(PERSON);
-        String title = "<font color=#E6E6FA>#</font>" + person.name;
+        String title = person.name;
         TextView name = findViewById(R.id.personPhotoName);
         name.setText(Html.fromHtml(title));
+        name.setSelected(true);
 
         // DBHelper 객체 생성
         db = new DatabaseHelper(getApplicationContext());
@@ -91,7 +99,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
         final AppCompatButton btn_cancel = findViewById(R.id.btn_cancel);
         btn_cancel.setVisibility(View.GONE);
         AppCompatButton btn_share = findViewById(R.id.btn_sns);
-        btn_share.setVisibility(View.INVISIBLE);
+        btn_share.setVisibility(View.GONE);
 
         //Check
         btn_check.setOnClickListener(new Button.OnClickListener() {
@@ -182,7 +190,7 @@ public class PersonPhotoActivity extends AppCompatActivity {
         a.updateView(0);
 
         AppCompatButton btn_share = findViewById(R.id.btn_sns);
-        btn_share.setVisibility(View.INVISIBLE);
+        btn_share.setVisibility(View.GONE);
     }
 
     // 새로운 사진 추가하기

@@ -1,5 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
@@ -35,13 +35,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:verticalSpacing="1sp"
-        android:horizontalSpacing="1sp"
         android:gravity="center"
         android:columnWidth="70sp"
         android:layout_marginBottom="10sp"
         android:numColumns="auto_fit"
         android:choiceMode="multipleChoice"
-        android:stretchMode="columnWidth">
+        android:stretchMode="spacingWidthUniform">
     </snu.facelab.model.PhotoGridView>
 
 

@@ -26,7 +26,8 @@
         <activity
             android:name=".PersonPhotoActivity"
             android:label="@string/title_activity_person_photo"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
