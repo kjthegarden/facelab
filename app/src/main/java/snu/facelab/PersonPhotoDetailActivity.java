@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -20,11 +19,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,9 +29,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.wx.wheelview.widget.WheelViewDialog;
 
 import java.io.File;
@@ -49,6 +43,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import snu.facelab.layout.BottomSheetDialog;
 import snu.facelab.model.Name;
 import snu.facelab.model.Picture;
 
@@ -130,30 +125,17 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         name_id = db.getNameWithString(person.name).getId();
         pic_id = db.getPictureIdByPath(photo.getPath());
 
-        List<String> names = new ArrayList<String>();
-        names = db.getAllNameByPicId(pic_id);
+        final List<String> names = db.getAllNameByPicId(pic_id);
 
-        String name_hash_tag = new String();
-        for(int i=0; i<names.size(); i++){
-            if (i == 0) {
-                name_hash_tag += "# ";
-            }
-            else {
-                name_hash_tag += " # ";
-            }
-            name_hash_tag += names.get(i);
-        }
 
-        // Hash Tag Layout
-        final RelativeLayout htLayout = findViewById(R.id.hash_tag_area);
-        TextView hashTag = findViewById(R.id.hash_tag);
-        hashTag.setText(name_hash_tag);
-
-        // 해시태그 레이아웃 클릭 시 아무일 없도록
-        htLayout.setOnClickListener(new View.OnClickListener() {
+        // 해시태그 sheet용 버튼
+        final FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // do nothing
+            public void onClick(View view) {
+                BottomSheetDialog bottomSheetDialog = BottomSheetDialog.getInstance();
+                bottomSheetDialog.getNames(names);
+                bottomSheetDialog.show(getSupportFragmentManager(),"bottomSheet");
             }
         });
 
@@ -168,7 +150,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         backLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleDisplay(backLayout, htLayout);
+                toggleDisplay(backLayout, fab);
             }
         });
 
@@ -288,18 +270,18 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         return names_string;
     }
 
-    public void toggleDisplay(RelativeLayout backLayout, RelativeLayout htLayout) {
+    public void toggleDisplay(RelativeLayout backLayout, FloatingActionButton hashButton) {
         toggleFlag = !toggleFlag;
 
         if (toggleFlag) {
             getSupportActionBar().hide();
             backLayout.setBackgroundColor(Color.parseColor("#000000"));
-            htLayout.setVisibility(View.GONE);
+            hashButton.hide();
         }
         else {
             getSupportActionBar().show();
             backLayout.setBackgroundColor(getResources().getColor(R.color.photoBackground));
-            htLayout.setVisibility(View.VISIBLE);
+            hashButton.show();
 
         }
 
