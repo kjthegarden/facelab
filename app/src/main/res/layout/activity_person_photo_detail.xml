@@ -19,25 +19,17 @@
         android:layout_marginTop="0dp"
         android:src="@drawable/abc_btn_radio_to_on_mtrl_015" />
 
-    <!--해시태그 레이아웃-->
-    <RelativeLayout
+    <!--해시태그용 버튼-->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="30sp"
-        android:background="@color/toolbarBackground"
-        android:id="@+id/hash_tag_area"
-        android:gravity="center"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
-
-        <TextView
-            android:textSize="15dp"
-            android:layout_alignParentBottom="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="tag"
-            android:id="@+id/hash_tag"/>
-
-    </RelativeLayout>
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_portrait_bright_24dp"
+        android:background="@color/colorPrimary"
+        />
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
