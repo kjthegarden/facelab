@@ -288,7 +288,7 @@ public class PersonPhotoActivity extends AppCompatActivity implements Navigation
             startActivity(i);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.person_photo_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
