@@ -247,9 +247,6 @@ public class AddPersonActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }
-        else {
-            finish();
-        }
     }
 
     @Override

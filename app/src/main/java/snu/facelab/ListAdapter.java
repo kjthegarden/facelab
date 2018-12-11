@@ -128,7 +128,6 @@ class ListAdapter extends BaseAdapter {
                 R.layout.photo, // 한행을 그려줄 layout
                 Pg.getPhotos()); // 다량의 데이터
 
-        PhotoGridView Gv = convertView.findViewById(R.id.gridView2);
         final int size = gridView.getChildCount();
 
         if (visibleFlag == 1) {
@@ -162,10 +161,10 @@ class ListAdapter extends BaseAdapter {
             checkbox.setChecked(false);
         }
 
-        Gv.setAdapter(adapter);
+        gridView.setAdapter(adapter);
 
         // 이벤트 처리
-        Gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 GridView GridView = (GridView) adapterView;

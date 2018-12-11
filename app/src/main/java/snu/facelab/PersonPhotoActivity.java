@@ -4,9 +4,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.FileProvider;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
@@ -37,7 +42,7 @@ import snu.facelab.model.*;
 
 import static snu.facelab.MainActivity.PERSON;
 
-public class PersonPhotoActivity extends AppCompatActivity {
+public class PersonPhotoActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String PHOTO = "Photo";
     DatabaseHelper db;
     private Person person;
@@ -55,9 +60,18 @@ public class PersonPhotoActivity extends AppCompatActivity {
         setSupportActionBar(titleLayout);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        DrawerLayout drawer = findViewById(R.id.person_photo_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, titleLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         // Person 객체 받아오고 title 설정
         person = (Person) getIntent().getExtras().getSerializable(PERSON);
-        String title = person.name;
+        String title = "<font color=#61BFAD>#</font>" + person.name;
         TextView name = findViewById(R.id.personPhotoName);
         name.setText(Html.fromHtml(title));
         name.setSelected(true);
@@ -243,6 +257,40 @@ public class PersonPhotoActivity extends AppCompatActivity {
             i.putExtra(PERSON, person);
             startActivity(i);
         }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        if (id == R.id.nav_add_person) {
+            // Handle the camera action
+            Intent i = new Intent(PersonPhotoActivity.this, AddPersonActivity.class);
+            startActivity(i);
+        } else if (id == R.id.nav_auto_add) {
+            Intent i = new Intent(PersonPhotoActivity.this, AutoAddActivity.class);
+            startActivity(i);
+        } else if (id == R.id.nav_tutorial) {
+            Intent i = new Intent(PersonPhotoActivity.this, TutorialActivity.class);
+            startActivity(i);
+        } /*else if (id == R.id.nav_manage) {
+            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(i);
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }*/else if(id == R.id.nav_about) {
+            Intent i = new Intent(PersonPhotoActivity.this, AboutActivity.class);
+            startActivity(i);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
 

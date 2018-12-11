@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/colorBackground"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme"
+        app:contentInsetStart="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_peron"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/toolbarBackground"
+            android:gravity="center"
+            app:contentInsetStart="0dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView
+                android:id="@+id/personPhotoName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:ellipsize="marquee"
+                android:textColor="#1C1C1C"
+                android:textSize="20sp"
+                app:contentInsetStart="0dp" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_add_photo"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="60sp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Add"
+                android:textAllCaps="false"
+                android:layout_gravity="right"
+                android:textColor="@color/colorPrimary" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_sns"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="60sp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Send"
+                android:textAllCaps="false"
+                android:layout_gravity="right"
+                android:textColor="@color/colorPrimary" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_check"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="70sp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Share"
+                android:textAllCaps="false"
+                android:paddingRight="-15sp"
+                android:layout_gravity="right"
+                android:textColor="@color/colorPrimary" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_cancel"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="70sp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:paddingRight="-15sp"
+                android:layout_gravity="right"
+                android:textColor="@color/colorBlue" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_person_photo" />
+
+</LinearLayout>
