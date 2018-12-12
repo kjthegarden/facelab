@@ -25,6 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.andremion.louvre.Louvre;
+import com.andremion.louvre.home.GalleryActivity;
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
 import com.darsh.multipleimageselect.models.Image;
@@ -46,6 +48,8 @@ public class PersonPhotoActivity extends AppCompatActivity implements Navigation
     public static final String PHOTO = "Photo";
     DatabaseHelper db;
     private Person person;
+    private static final int LOUVRE_REQUEST_CODE = 0;
+    private List<Uri> mSelection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,24 +213,33 @@ public class PersonPhotoActivity extends AppCompatActivity implements Navigation
 
     // 새로운 사진 추가하기
     public void addImage() {
-        Intent newIntent = new Intent(this, AlbumSelectActivity.class);
-        startActivityForResult(newIntent, Constants.REQUEST_CODE);
+        //Intent newIntent = new Intent(this, AlbumSelectActivity.class);
+        //startActivityForResult(newIntent, Constants.REQUEST_CODE);
+        Louvre.init(PersonPhotoActivity.this)
+                .setRequestCode(LOUVRE_REQUEST_CODE)
+                .setMaxSelection(100)
+                .setSelection((List<Uri>)mSelection)
+                .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG, Louvre.IMAGE_TYPE_PNG)
+                .open();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            final ArrayList<Image> image_list = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
-            int size = image_list.size();
+        if (requestCode == LOUVRE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            //final ArrayList<Image> image_list = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+
+            mSelection = GalleryActivity.getSelection(data);
+
+            int size = mSelection.size();
             System.out.println("add photo activity result image_list size :" + size);
 
             db = new DatabaseHelper(getApplicationContext());
 
-            for (int i = 0; i < image_list.size(); i++) {
+            for (int i = 0; i < size; i++) {
 
                 // last modified time
-                File file = new File(image_list.get(i).path);
+                File file = new File(mSelection.get(i).getPath());
                 long last_modified = file.lastModified();
 
                 // convert to Date format
@@ -240,7 +253,7 @@ public class PersonPhotoActivity extends AppCompatActivity implements Navigation
                 int date = Integer.parseInt(simple_date.replace("-", ""));
 
                 // creating and inserting pictures
-                Picture pic = new Picture(image_list.get(i).path, date, last_modified);
+                Picture pic = new Picture(mSelection.get(i).getPath(), date, last_modified);
                 long pic_id = db.createPicture(pic);
 
                 // Get name_id with name
