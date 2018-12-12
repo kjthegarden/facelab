@@ -107,65 +107,6 @@ public class TrainingActivity extends Activity {
                                     int counter = 1;
                                     for (File file : files) {
                                         if (FileHelper.isFileAnImage(file)) {
-                                            /*
-                                            Mat imgRgb = new Mat();
-                                            BitmapFactory.Options options = new BitmapFactory.Options();
-                                            options.inSampleSize = 8;
-                                            Bitmap src = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-                                            //Bitmap resized = Bitmap.createScaledBitmap(src, src.getWidth(), src.getHeight(), true);
-
-                                            Bitmap bmp32 = src.copy(Bitmap.Config.ARGB_8888, true);
-
-                                            Utils.bitmapToMat(bmp32, imgRgb);*/
-
-                                            /*
-                                            String file_path = file.getAbsolutePath();
-                                            File dir = new File(file_path);
-
-                                            Bitmap src = BitmapFactory.decodeFile(file.getAbsolutePath());
-
-                                            FileOutputStream fOut;
-                                            try {
-                                                fOut = new FileOutputStream(file);
-                                                src.compress(Bitmap.CompressFormat.JPEG, 10, fOut);
-                                                fOut.flush();
-                                                fOut.close();
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                            */
-
-                                            //System.out.println(file.getAbsolutePath());
-
-                                            /*
-                                            int scale = 4;
-
-                                            int h = dst.rows();
-                                            int w = dst.cols();
-                                            for(int y=0; y<h/scale; y++){
-                                                for(int x=0; x<w/scale; x++){
-                                                    Mat subimage = new Mat(dst, new Rect(scale*x, scale*y, scale, scale));
-                                                    Scalar avgvalue = org.opencv.core.Core.mean(subimage);
-                                                    for(int mr=0; mr<scale; mr++){
-                                                        for (int mc=0; mc<scale; mc++){
-                                                            double[] buff = dst.get(scale*y+mr, scale*x+mc);
-                                                            if(dst.channels()==3){
-                                                               buff[2] = avgvalue.val[2];
-                                                               buff[1] = avgvalue.val[1];
-                                                               buff[0] = avgvalue.val[0];
-                                                            }
-                                                            else if(dst.channels()==1){
-                                                                buff[0] = avgvalue.val[0];
-                                                            }
-                                                            System.out.println(buff[0]);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            */
-
-                                            //System.out.println("prcImg size" + processedImage.rows() + " " + processedImage.cols());
-
                                             Mat imgRgb = Imgcodecs.imread(file.getAbsolutePath());
                                             Imgproc.cvtColor(imgRgb, imgRgb, Imgproc.COLOR_BGRA2RGBA);
                                             Mat processedImage = new Mat();
@@ -185,20 +126,7 @@ public class TrainingActivity extends Activity {
                                             MatName m = new MatName("processedImage", processedImage);
                                             fileHelper.saveMatToImage(m, FileHelper.DATA_PATH);
 
-
                                             rec.addImage(processedImage, foldername, false);
-
-                                            //fileHelper.saveCroppedImage(imgRgb, ppF, file, name, counter);
-
-                                            // Update screen to show the progress
-//                                            final int counterPost = counter;
-//                                            final int filesLength = files.length;
-//                                            progress.post(new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//                                                    progress.append("Image " + counterPost + " of " + filesLength + " from " + folder_name + " imported.\n");
-//                                                }
-//                                            });
 
                                             final int counterPost = counter-1;
                                             btn[counterPost].post(new Runnable() {

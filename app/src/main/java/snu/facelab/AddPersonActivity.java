@@ -243,7 +243,6 @@ public class AddPersonActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), TrainingActivity.class);
                 intent.putExtra("FolderName", "facelab" + (db.getNameCount()-1));
-
                 startActivity(intent);
             }
         }

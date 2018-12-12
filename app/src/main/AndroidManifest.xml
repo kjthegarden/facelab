@@ -32,10 +32,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".AddPersonActivity" />
         <activity
             android:name="com.andremion.louvre.home.GalleryActivity"
-            android:parentActivityName=".AddPersonActivity"
             android:theme="@style/AppTheme.Louvre.Light.DarkActionBar">
             <meta-data
                 android:name="parentActivityName"
@@ -44,6 +42,7 @@
         <activity
             android:name="com.andremion.louvre.preview.PreviewActivity"
             android:theme="@style/AppTheme.Louvre.Preview" />
+        <activity android:name=".AddPersonActivity" />
         <activity android:name=".TrainingActivity" />
         <activity android:name=".AutoAddActivity"/>
         <activity android:name=".RecognitionActivity" />
