@@ -23,6 +23,7 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -110,14 +111,19 @@ public class AutoAddActivity extends AppCompatActivity {
             int size = mSelection.size();
             System.out.println("add photo activity result image_list size :" + size);
 
-            db = new DatabaseHelper(getApplicationContext());
+            //db = new DatabaseHelper(getApplicationContext());
+            ArrayList<String> path_list = new ArrayList<String>(size);
 
             for (int i = 0; i < size; i++) {
 
                 // last modified time
                 String filePath = mSelection.get(i).getPath();
-                File file = new File(filePath);
-                long last_modified = file.lastModified();
+                path_list.add(filePath);
+                //File file = new File(filePath);
+                //long last_modified = file.lastModified();
+
+
+                /*
 
                 // convert to Date format
                 Date date_time = new Date(last_modified);
@@ -132,8 +138,26 @@ public class AutoAddActivity extends AppCompatActivity {
                 // creating and inserting pictures
                 Picture pic = new Picture(filePath, date, last_modified);
                 long pic_id = db.createPicture(pic);
-
-
+                */
+                /*
+                Intent intent = new Intent(getApplicationContext(), RecognitionActivity.class);
+                intent.putExtra("Path", filePath);
+                startActivity(intent);
+                */
+                /*
+                Intent intent2 = getIntent();
+                ArrayList<String> names =  intent2.getStringArrayListExtra("Names");
+                for (int j = 0; j < names.size(); j++) {
+                    String rec_name = names.get(j);
+                    if(rec_name!=null){
+                        // 폴더명에서 facelab 제외해서 name_id 구하기
+                        long name_id = Long.parseLong(rec_name.substring(7))+1;
+                        // Inserting name_id & picture_id pair
+                        long name_picture_id = db.createNamePicture(name_id, pic_id);
+                    }
+                }
+                */
+                /*
                 Mat src = Imgcodecs.imread(filePath);
                 Imgproc.cvtColor(src, src, Imgproc.COLOR_BGRA2RGBA);
 
@@ -170,13 +194,19 @@ public class AutoAddActivity extends AppCompatActivity {
                         }
                     }
                 }
+                */
+
             }
+            Intent intent = new Intent(getApplicationContext(), RecognitionActivity.class);
+            intent.putStringArrayListExtra("Path", path_list);
+            startActivity(intent);
 
             // Toast.makeText(getApplicationContext(), "Successfully added.", Toast.LENGTH_SHORT).show();
-
+            /*
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            */
         }
         else {
             finish();
@@ -188,20 +218,20 @@ public class AutoAddActivity extends AppCompatActivity {
     {
         super.onResume();
 
-        ppF = new PreProcessorFactory(getApplicationContext());
-        final Handler handler = new Handler(Looper.getMainLooper());
-        Thread t = new Thread(new Runnable() {
-            public void run() {
+        //ppF = new PreProcessorFactory(getApplicationContext());
+        //final Handler handler = new Handler(Looper.getMainLooper());
+        //Thread t = new Thread(new Runnable() {
+            //public void run() {
                 /*handler.post(new Runnable() {
                     @Override
                     public void run() {
                         progressBar.setVisibility(View.VISIBLE);
                     }
                 });*/
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String algorithm = sharedPref.getString("key_classification_method", getResources().getString(R.string.eigenfaces));
+                //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                //String algorithm = sharedPref.getString("key_classification_method", getResources().getString(R.string.eigenfaces));
                 //System.out.println("algorithm : "+ algorithm);
-                rec = RecognitionFactory.getRecognitionAlgorithm(getApplicationContext(), Recognition.RECOGNITION, algorithm);
+                //rec = RecognitionFactory.getRecognitionAlgorithm(getApplicationContext(), Recognition.RECOGNITION, algorithm);
                 //System.out.println("algorithm : "+ algorithm);
                 /*handler.post(new Runnable() {
                     @Override
@@ -209,17 +239,17 @@ public class AutoAddActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                     }
                 });*/
-            }
-        });
+  //          }
+  //      });
 
-        t.start();
+    //    t.start();
 
         // Wait until Eigenfaces loading thread has finished
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+      //  try {
+        //    t.join();
+        //} catch (InterruptedException e) {
+            //e.printStackTrace();
+        //}*/
 
     }
 

@@ -9,8 +9,11 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
@@ -20,14 +23,20 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
+import ch.zhaw.facerecognitionlibrary.Helpers.MatName;
 import ch.zhaw.facerecognitionlibrary.Helpers.MatOperation;
+import ch.zhaw.facerecognitionlibrary.Helpers.PreferencesHelper;
 import ch.zhaw.facerecognitionlibrary.PreProcessor.PreProcessorFactory;
 import ch.zhaw.facerecognitionlibrary.Recognition.Recognition;
 import ch.zhaw.facerecognitionlibrary.Recognition.RecognitionFactory;
+import snu.facelab.helper.DatabaseHelper;
+import snu.facelab.model.Picture;
 
 public class RecognitionActivity extends AppCompatActivity {
     private static int PICK_IMAGE_REQUEST = 1;
@@ -38,7 +47,11 @@ public class RecognitionActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private static final String TAG = "From gallery";
     private FileHelper fh;
-    private String path;
+    //private String path;
+    private ArrayList<String> path_list;
+    TextView text_view;
+
+    DatabaseHelper db;
 
     static {
         if (!OpenCVLoader.initDebug()) {
@@ -50,109 +63,124 @@ public class RecognitionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recognition);
+        text_view = findViewById(R.id.rec_text);
+        System.out.println("Recognition activity");
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Intent intent = getIntent();
-        path = intent.getStringExtra("Path");
-        System.out.println(path);
+        path_list = intent.getStringArrayListExtra("Path");
 
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-
-        fh = new FileHelper();
-        File folder = new File(fh.getFolderPath());
-        if(folder.mkdir() || folder.isDirectory()){
-            Log.i(TAG,"New directory for photos created");
-        } else {
-            Log.i(TAG,"Photos directory already existing");
-        }
-
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-        File file = new File(path);
-        long last_modified = file.lastModified();
-
-        Mat src = Imgcodecs.imread(path);
-        Imgproc.cvtColor(src, src, Imgproc.COLOR_BGRA2RGBA);
-
-        Mat mat = new Mat();
-        Mat processedImage = new Mat();
-
-        if(src.width()>1000){
-            Size sz = new Size(src.width()/4, src.height()/4);
-            Imgproc.resize(src, mat, sz);
-            mat.copyTo(processedImage);
-        }
-        else{
-            src.copyTo(mat);
-            src.copyTo(processedImage);
-        }
-
-
-        final List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
-
-        if(images!=null){
-            Rect[] faces = ppF.getFacesForRecognition();
-
-            faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
-            System.out.println("#of detected faces : "+faces.length);
-
-            ArrayList<String> names = new ArrayList<String>(faces.length);
-
-            for (int j = 0; j < faces.length; j++) {
-                String rec_name = rec.recognize(images.get(j), "");
-                System.out.println(j + " : " + rec_name);
-                names.add(rec_name);
-            }
-            Intent intent_return = new Intent(getApplicationContext(), AutoAddActivity.class);
-            intent_return.putStringArrayListExtra("Names", names);
-            startActivity(intent_return);   
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ppF = new PreProcessorFactory(getApplicationContext());
+
         final Handler handler = new Handler(Looper.getMainLooper());
-        Thread t = new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.VISIBLE);
-                    }
-                });
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String algorithm = sharedPref.getString("key_classification_method", getResources().getString(R.string.eigenfaces));
-                //System.out.println("algorithm : "+ algorithm);
-                rec = RecognitionFactory.getRecognitionAlgorithm(getApplicationContext(), Recognition.RECOGNITION, algorithm);
-                //System.out.println("algorithm : "+ algorithm);
+                if(!Thread.currentThread().isInterrupted()){
+                    db = new DatabaseHelper(getApplicationContext());
 
-                /*final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.GONE);
-                        //startActivity(intent);
+                    fh = new FileHelper();
+                    File folder = new File(fh.getFolderPath());
+                    if(folder.mkdir() || folder.isDirectory()){
+                        Log.i(TAG,"New directory for photos created");
+                    } else {
+                        Log.i(TAG,"Photos directory already existing");
                     }
-                });
+
+                    for(int i=0; i<path_list.size(); i++){
+                        final int ii = i+1;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                text_view.setText(ii+" / "+path_list.size()+" 인식중...");
+                            }
+                        });
+
+
+                        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        String path = path_list.get(i);
+                        File file = new File(path);
+                        long last_modified = file.lastModified();
+
+                        // convert to Date format
+                        Date date_time = new Date(last_modified);
+
+                        // convert to SimpleDateFormat
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        String simple_date = formatter.format(date_time);
+
+                        // convert to yyyymmdd format
+                        int date= Integer.parseInt(simple_date.replace("-", ""));
+
+                        // creating and inserting pictures
+                        Picture pic = new Picture(path, date, last_modified);
+                        long pic_id = db.createPicture(pic);
+
+                        Mat src = Imgcodecs.imread(path);
+                        Imgproc.cvtColor(src, src, Imgproc.COLOR_BGRA2RGBA);
+
+                        Mat mat = new Mat();
+                        Mat processedImage = new Mat();
+
+                        if(src.width()>1000){
+                            Size sz = new Size(src.width()/4, src.height()/4);
+                            Imgproc.resize(src, mat, sz);
+                            mat.copyTo(processedImage);
+                        }
+
+
+                        else{
+                            src.copyTo(mat);
+                            mat.copyTo(processedImage);
+                        }
+
+                        ppF = new PreProcessorFactory(getApplicationContext());
+                        final List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
+
+                        if(images!=null) {
+                            Rect[] faces = ppF.getFacesForRecognition();
+                            faces = MatOperation.rotateFaces(mat, faces, ppF.getAngleForRecognition());
+                            System.out.println("#of detected faces : " + faces.length);
+
+
+                            String algorithm = sharedPref.getString("key_classification_method", getResources().getString(R.string.eigenfaces));
+                            rec = RecognitionFactory.getRecognitionAlgorithm(getApplicationContext(), Recognition.RECOGNITION, algorithm);
+
+                            for (int j = 0; j < faces.length; j++) {
+
+                                String rec_name = rec.recognize(images.get(j), "");
+                                System.out.println(j + " : " + rec_name);
+
+                                if (rec_name != null) {
+                                    // 폴더명에서 facelab 제외해서 name_id 구하기
+                                    long name_id = Long.parseLong(rec_name.substring(7)) + 1;
+                                    // Inserting name_id & picture_id pair
+                                    long name_picture_id = db.createNamePicture(name_id, pic_id);
+                                }
+                            }
+                        }
+
+                    }
+                    final Intent intent_return = new Intent(getApplicationContext(), MainActivity.class);
+                    intent_return.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(intent_return);
+                        }
+                    });
+                } else {
+                    Thread.currentThread().interrupt();
+                }
             }
-
         });
-
-        t.start();
-
-
-
-        // Wait until Eigenfaces loading thread has finished
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        thread.start();
 
     }
+
 
 }
