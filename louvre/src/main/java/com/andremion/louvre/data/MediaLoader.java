@@ -178,11 +178,13 @@ public class MediaLoader implements LoaderManager.LoaderCallbacks<Cursor> {
         String label = mActivity.getString(R.string.activity_gallery_bucket_all_media);
         String data = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
         MatrixCursor allMediaRow = new MatrixCursor(BUCKET_PROJECTION);
-        allMediaRow.newRow()
+        /*allMediaRow.newRow()
                 .add(id)
                 .add(label)
-                .add(data);
+                .add(data);*/
         return new MergeCursor(new Cursor[]{allMediaRow, cursor});
+
+
     }
 
 }
