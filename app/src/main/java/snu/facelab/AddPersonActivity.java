@@ -40,7 +40,6 @@ public class AddPersonActivity extends AppCompatActivity {
     private List<Uri> mSelection;
     private PreProcessorFactory ppF;
     private FileHelper fh;
-    private String folder;
     private String name;
     private int total;
     public static final String IMAGES = "images";
@@ -77,10 +76,6 @@ public class AddPersonActivity extends AppCompatActivity {
                 EditText txt_Folder_Name = (EditText) findViewById(R.id.txt_Name);
                 name = txt_Folder_Name.getText().toString();
 
-                // choose multiple pictures
-                /*Intent intent = new Intent(v.getContext(), OpenGalleryActivity.class);
-                intent.putExtra("Name", name);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
 
                 if (isNameAlreadyUsed(new FileHelper().getTrainingList(), name)) {
                     Toast.makeText(getApplicationContext(), "This name is already used. Please choose another one.", Toast.LENGTH_SHORT).show();
@@ -91,7 +86,7 @@ public class AddPersonActivity extends AppCompatActivity {
                 else {
                     Louvre.init(AddPersonActivity.this)
                             .setRequestCode(LOUVRE_REQUEST_CODE)
-                            .setMaxSelection(10)
+                            .setMaxSelection(30)
                             .setSelection((List<Uri>)mSelection)
                             .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG,  Louvre.IMAGE_TYPE_PNG)
                             .open();
@@ -148,7 +143,7 @@ public class AddPersonActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Choose at least 10 pictures.", Toast.LENGTH_SHORT).show();
                 Louvre.init(AddPersonActivity.this)
                         .setRequestCode(LOUVRE_REQUEST_CODE)
-                        .setMaxSelection(10)
+                        .setMaxSelection(30)
                         .setSelection((List<Uri>)mSelection)
                         .setMediaTypeFilter(Louvre.IMAGE_TYPE_JPEG, Louvre.IMAGE_TYPE_PNG)
                         .open();
@@ -162,18 +157,17 @@ public class AddPersonActivity extends AppCompatActivity {
                 for (int i = 0; i < image_list_size; i++) {
                     // last modified time
                     String filePath = mSelection.get(i).getPath();
-                    System.out.println(filePath);
                     File file = new File(filePath);
                     long last_modified = file.lastModified();
 
                     // convert to Date format
                     Date date_time = new Date(last_modified);
-                    System.out.println(date_time);
+                    //System.out.println(date_time);
 
                     // convert to SimpleDateFormat
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                     String simple_date = formatter.format(date_time);
-                    System.out.println(simple_date);
+                    //System.out.println(simple_date);
 
                     // convert to yyyymmdd format
                     int date= Integer.parseInt(simple_date.replace("-", ""));
@@ -188,9 +182,14 @@ public class AddPersonActivity extends AppCompatActivity {
                     Mat mat = new Mat();
                     Mat imgCopy = new Mat();
 
-                    System.out.println("size of origin : " + src.width() + " " + src.height());
+                    //System.out.println("size of origin : " + src.width() + " " + src.height());
 
-                    if(src.width()>1000){
+                    if(src.width()>2000){
+                        Size sz = new Size(src.width()/8, src.height()/8);
+                        Imgproc.resize(src, mat, sz);
+                        mat.copyTo(imgCopy);
+                    }
+                    else if(src.width()>1000){
                         Size sz = new Size(src.width()/4, src.height()/4);
                         Imgproc.resize(src, mat, sz);
                         mat.copyTo(imgCopy);
@@ -200,7 +199,7 @@ public class AddPersonActivity extends AppCompatActivity {
                         src.copyTo(imgCopy);
                     }
 
-                    System.out.println("size of resized : " + imgCopy.width() + " " + imgCopy.height());
+                    //System.out.println("size of resized : " + imgCopy.width() + " " + imgCopy.height());
                     List<Mat> images = ppF.getCroppedImage(imgCopy);
 
 
@@ -223,6 +222,7 @@ public class AddPersonActivity extends AppCompatActivity {
                                 fh.saveMatToImage(m, wholeFolderPath + "/");
                                 total++;
                             }
+                            /*
 
                             for (int j = 0; j < faces.length; j++) {
                                 MatOperation.drawRectangleAndLabelOnPreview(mat, faces[j], String.valueOf(i), true);
@@ -231,6 +231,7 @@ public class AddPersonActivity extends AppCompatActivity {
                             for (int j = 0; j < faces.length; j++) {
                                 MatOperation.drawRectangleOnPreview(mat, faces[j], true);
                             }
+                            */
 
                         }
                     }

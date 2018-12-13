@@ -2,43 +2,27 @@ package snu.facelab;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.preference.PreferenceManager;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
 import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
 import org.opencv.core.Mat;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
 import ch.zhaw.facerecognitionlibrary.Helpers.MatName;
-import ch.zhaw.facerecognitionlibrary.Helpers.PreferencesHelper;
 import ch.zhaw.facerecognitionlibrary.PreProcessor.PreProcessorFactory;
 import ch.zhaw.facerecognitionlibrary.Recognition.Recognition;
 import ch.zhaw.facerecognitionlibrary.Recognition.RecognitionFactory;
-import snu.facelab.helper.DatabaseHelper;
 
 public class TrainingActivity extends Activity {
     private static final String TAG = "Training";
@@ -67,8 +51,6 @@ public class TrainingActivity extends Activity {
         Intent intent = getIntent();
         folder_name = intent.getStringExtra("FolderName");
 
-//        progress = (TextView) findViewById(R.id.progressText);
-//        progress.setMovementMethod(new ScrollingMovementMethod());
         for (int i = 0; i < 10; i++) {
             btn[i] = findViewById(statusBtn[i]);
             btn[i].setVisibility(View.INVISIBLE);
@@ -85,7 +67,7 @@ public class TrainingActivity extends Activity {
             public void run() {
                 if(!Thread.currentThread().isInterrupted()){
                     PreProcessorFactory ppF = new PreProcessorFactory(getApplicationContext());
-                    PreferencesHelper preferencesHelper = new PreferencesHelper(getApplicationContext());
+                    //PreferencesHelper preferencesHelper = new PreferencesHelper(getApplicationContext());
                     String algorithm = "TensorFlow with SVM or KNN";
 
                     FileHelper fileHelper = new FileHelper();
