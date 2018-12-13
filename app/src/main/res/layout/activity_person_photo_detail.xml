@@ -9,10 +9,19 @@
     android:orientation="vertical"
     tools:context=".PersonPhotoDetailActivity">
 
-    <android.support.v4.view.ViewPager
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <snu.facelab.layout.ViewPagerFixed
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@null"
         android:id="@+id/view_detail" />
+
+    </FrameLayout>
 
 
     <!--해시태그용 버튼-->
@@ -25,6 +34,19 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_portrait_bright_24dp"
         android:background="@color/colorPrimary"
+        />
+
+    <!--전체보기용 버튼-->
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/up"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/ic_arrow_up_primary_24dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_marginRight="10sp"
+        android:layout_marginBottom="25sp"
         />
 
     <android.support.design.widget.AppBarLayout

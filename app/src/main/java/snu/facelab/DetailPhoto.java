@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.File;
 import java.util.List;
@@ -32,7 +33,7 @@ import snu.facelab.helper.DatabaseHelper;
 import snu.facelab.model.Picture;
 
 public class DetailPhoto extends android.support.v4.app.Fragment {
-    private ImageView iv;
+    private PhotoView iv;
     private Person person;
     private Picture photo;
     private List<Picture> photo_list;
@@ -56,7 +57,7 @@ public class DetailPhoto extends android.support.v4.app.Fragment {
 
     }
 
-    public void toggle(boolean ToggleFlag) {
+    public void toggle(boolean toggleFlag) {
         this.toggleFlag = toggleFlag;
     }
 

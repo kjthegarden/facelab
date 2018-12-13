@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -53,6 +54,7 @@ import java.util.List;
 
 import snu.facelab.helper.OnTouchClickListener;
 import snu.facelab.layout.BottomSheetDialog;
+import snu.facelab.layout.ViewPagerFixed;
 import snu.facelab.model.Name;
 import snu.facelab.model.Picture;
 
@@ -77,7 +79,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
 
     // Slider
     DetailAdapter adapter;
-    ViewPager viewPager;
+    ViewPagerFixed viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,18 +171,18 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
 
 
 
-        // 배경 클릭할 시 사진만 뜨기
-        final LayoutInflater factory = getLayoutInflater();
+        // 전체보기 버튼
+        final FrameLayout fL = findViewById(R.id.frame_layout);
+        AppCompatButton up = findViewById(R.id.up);
 
-        final View imageView = factory.inflate(R.layout.detail_slider, null);
-        final RelativeLayout backLayout = imageView.findViewById(R.id.photo_detail);
 
-        viewPager.setOnTouchListener(new OnTouchClickListener(new OnTouchClickListener.OnClickListener() {
+        up.setOnClickListener(new FrameLayout.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleDisplay(backLayout, fab);
+                toggleDisplay(fL, fab);
             }
-        },5));
+        });
+
 
         // 툴바 레이아웃 클릭 시 아무일 없도록
         titleLayout.setOnClickListener(new View.OnClickListener() {
@@ -302,18 +304,18 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         return names_string;
     }
 
-    public void toggleDisplay(RelativeLayout backLayout, FloatingActionButton hashButton) {
+    public void toggleDisplay(FrameLayout fL, FloatingActionButton hashButton) {
         toggleFlag = !toggleFlag;
-        adapter.toggle(toggleFlag);
+        //adapter.toggle(toggleFlag);
 
         if (toggleFlag) {
             getSupportActionBar().hide();
-            //viewPager.setBackgroundColor(Color.parseColor("#000000"));
+            fL.setBackgroundColor(Color.parseColor("#000000"));
             hashButton.hide();
         }
         else {
             getSupportActionBar().show();
-            //viewPager.setBackgroundColor(getResources().getColor(R.color.photoBackground));
+            fL.setBackgroundColor(getResources().getColor(R.color.photoBackground));
             hashButton.show();
 
         }
