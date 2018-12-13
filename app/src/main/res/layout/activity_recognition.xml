@@ -25,7 +25,7 @@
         android:layout_marginBottom="143dp"
         android:ems="10"
         android:textAlignment="center"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/textColorPrimary"
         android:textSize="20sp" />
 
 

@@ -30,6 +30,7 @@ class ListAdapter extends BaseAdapter {
     private int resetFlag = 0;
 
     public static final String PHOTO = "Photo";
+    public static final String PHOTOLIST = "PhotoList";
     public static final String PERSON = "Person";
 
     public ListAdapter() {
@@ -171,10 +172,16 @@ class ListAdapter extends BaseAdapter {
                 Picture photo = (Picture) GridView.getItemAtPosition(position);
 
                 Person person = Pg.person;
+                ArrayList<Picture> photo_list = new ArrayList<Picture>();
+
+                for (int i = 0; i < al.size(); i++) {
+                    photo_list.addAll(al.get(i).getPhotos());
+                }
 
                 Intent i = new Intent(context, PersonPhotoDetailActivity.class);
                 i.putExtra(PHOTO, photo);
                 i.putExtra(PERSON, person);
+                i.putExtra(PHOTOLIST, photo_list);
                 context.startActivity(i);
             }
         });
