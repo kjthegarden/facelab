@@ -129,12 +129,15 @@ public class TrainingActivity extends Activity {
                                             rec.addImage(processedImage, foldername, false);
 
                                             final int counterPost = counter-1;
-                                            btn[counterPost].post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    btn[counterPost].setVisibility(View.VISIBLE);
-                                                }
-                                            });
+
+                                            if (counterPost < 10) {
+                                                btn[counterPost].post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        btn[counterPost].setVisibility(View.VISIBLE);
+                                                    }
+                                                });
+                                            }
 
                                             counter++;
                                         }
