@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -48,7 +49,7 @@ import snu.facelab.layout.BottomSheetDialog;
 import snu.facelab.model.Name;
 import snu.facelab.model.Picture;
 
-public class DetailAdapter extends FragmentPagerAdapter {
+public class DetailAdapter extends FragmentStatePagerAdapter {
     private List<Picture> photo_list;
     private int photo_size;
     private int curr_index;
@@ -93,6 +94,7 @@ public class DetailAdapter extends FragmentPagerAdapter {
     }
 
     public void toggle(boolean toggleFlag) {
-        ((DetailPhoto) cur_fragment).toggle(toggleFlag);
+        this.toggleFlag = toggleFlag;
+        ((DetailPhoto) cur_fragment).toggle(this.toggleFlag);
     }
 }
