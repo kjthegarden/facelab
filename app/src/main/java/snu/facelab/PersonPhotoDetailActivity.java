@@ -9,6 +9,8 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +21,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,9 +52,10 @@ import snu.facelab.model.Picture;
 
 import snu.facelab.helper.DatabaseHelper;
 
+import static snu.facelab.ListAdapter.PHOTOLIST;
 import static snu.facelab.MainActivity.PERSON;
 
-public class PersonPhotoDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+public class PersonPhotoDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     public static final String PHOTO = "Photo";
     public static final String PERSON = "Person";
     private ImageView iv;
@@ -65,6 +69,10 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
     // DatabaseHelper 객체
     DatabaseHelper db;
 
+    // Slider Aapter
+    DetailAdapter adapter;
+    ViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,59 +81,74 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         // 전체화면
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // No default action bar
-        //getSupportActionBar().hide();
-
+        // Get Information
         Picture photo = (Picture) getIntent().getExtras().getSerializable(PHOTO);
         person = (Person) getIntent().getExtras().getSerializable(PERSON);
-
-        // 제목 설정
-        TextView title = findViewById(R.id.date_title);
-        String dateAll = String.valueOf(photo.getDate());
-        String year = dateAll.substring(0,4);
-
-        String month = dateAll.substring(4, 6);
-        Integer month_int = Integer.valueOf(month);
-        month = String.valueOf(month_int);
-
-        String date = dateAll.substring(6, 8);
-        Integer date_int = Integer.valueOf(month);
-        date = String.valueOf(date_int);
-
-        String titleFormat = year + "년 " + month + "월 " + date + "일";
-
-
-        // last modified time
-        File file = new File(photo.getPath());
-        long last_modified = file.lastModified();
-
-        // convert to Date format
-        Date date_time = new Date(last_modified);
-
-        // convert to SimpleDateFormat
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-        String simple_date = formatter.format(date_time);
-
-        // convert to yyyymmdd format
-        //int date_= Integer.parseInt(simple_date.replace("-", ""));
-        String subTitleFormat = simple_date;
-        title.setText(getFormattedLabelText(titleFormat, subTitleFormat));
-
-
+        final List<Picture> photo_list = (List<Picture>) getIntent().getExtras().getSerializable(PHOTOLIST);
 
         db = new DatabaseHelper(getApplicationContext());
-
-        iv = findViewById(R.id.person_photo_detail);
-
-        Uri imageUri = Uri.fromFile(new File(photo.getPath()));
-        Glide.with(PersonPhotoDetailActivity.this)
-                .load(imageUri)
-                .into(iv);
 
         name_id = db.getNameWithString(person.name).getId();
         pic_id = db.getPictureIdByPath(photo.getPath());
 
-        final List<String> names = db.getAllNameByPicId(pic_id);
+
+        // 툴바 설정
+        final Toolbar titleLayout = findViewById(R.id.toolbar_photo);
+        setSupportActionBar(titleLayout);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        // 제목 설정
+        final TextView title = findViewById(R.id.date_title);
+        title.setText(getToolbarTitle(photo));
+
+
+        // ViewPager 설정
+        int photo_size = photo_list.size();
+        int curr_index = -1;
+
+        String path;
+        String curr_path = photo.getPath();
+
+        for (int i = 0; i < photo_size; i++) {
+            path = photo_list.get(i).getPath();
+            if (path.matches(curr_path)) {
+                curr_index = i;
+            }
+        }
+
+        Log.d("check", String.valueOf(curr_index));
+
+        viewPager = findViewById(R.id.view_detail);
+        adapter = new DetailAdapter(getSupportFragmentManager(), getApplicationContext());
+        adapter.getData(person, photo_list, curr_index);
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(curr_index);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+                // do nothing
+            }
+
+            @Override
+            public void onPageSelected(int position)
+            {
+                // 정보 업데이트
+                Log.d("check", photo_list.toString());
+                Log.d("check", String.valueOf(position));
+                Picture new_photo = photo_list.get(position);
+                Log.d("check", String.valueOf(photo_list.get(position).getDate()));
+                title.setText(getToolbarTitle(new_photo));
+                pic_id = db.getPictureIdByPath(new_photo.getPath());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // do nothing
+            }
+        });
+
 
 
         // 해시태그 sheet용 버튼
@@ -133,6 +156,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                List<String> names = db.getAllNameByPicId(pic_id);
                 BottomSheetDialog bottomSheetDialog = BottomSheetDialog.getInstance();
                 bottomSheetDialog.getNames(names);
                 bottomSheetDialog.show(getSupportFragmentManager(),"bottomSheet");
@@ -142,25 +166,22 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
 
         final RelativeLayout backLayout = findViewById(R.id.photo_detail);
         //final RelativeLayout titleLayout = findViewById(R.id.title_layout);
-        final Toolbar titleLayout = findViewById(R.id.toolbar_photo);
-        setSupportActionBar(titleLayout);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        // 배경 클릭할 시 검은 바탕에 사진만 뜨기
-        backLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleDisplay(backLayout, fab);
-            }
-        });
-
-        // 툴바 레이아웃 클릭 시 아무일 없도록
-        titleLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // do nothing
-            }
-        });
+//        // 배경 클릭할 시 검은 바탕에 사진만 뜨기
+//        backLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                toggleDisplay(backLayout, fab);
+//            }
+//        });
+//
+//        // 툴바 레이아웃 클릭 시 아무일 없도록
+//        titleLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // do nothing
+//            }
+//        });
 
 
         // 뒤로가기 버튼
@@ -173,6 +194,10 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         });
 
     }
+
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -308,6 +333,42 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         //s.setSpan(new ForegroundColorSpan(Color.GRAY), titleEnd + 1, fullTextLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         return s;
+    }
+
+    private Spanned getToolbarTitle(Picture photo) {
+
+        // 제목 설정
+        String dateAll = String.valueOf(photo.getDate());
+        String year = dateAll.substring(0,4);
+
+        String month = dateAll.substring(4, 6);
+        Integer month_int = Integer.valueOf(month);
+        month = String.valueOf(month_int);
+
+        String date = dateAll.substring(6, 8);
+        Integer date_int = Integer.valueOf(month);
+        date = String.valueOf(date_int);
+
+        String titleFormat = year + "년 " + month + "월 " + date + "일";
+
+
+        // last modified time
+        File file = new File(photo.getPath());
+        long last_modified = file.lastModified();
+
+        // convert to Date format
+        Date date_time = new Date(last_modified);
+
+        // convert to SimpleDateFormat
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        String simple_date = formatter.format(date_time);
+
+        // convert to yyyymmdd format
+        //int date_= Integer.parseInt(simple_date.replace("-", ""));
+        String subTitleFormat = simple_date;
+        Spanned title_spanned = getFormattedLabelText(titleFormat, subTitleFormat);
+
+        return title_spanned;
     }
 }
 

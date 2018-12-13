@@ -96,7 +96,7 @@ public class RecognitionActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                text_view.setText(ii+" / "+path_list.size()+" 인식중...");
+                                text_view.setText(ii+" / "+path_list.size()+" 인식 중...");
                             }
                         });
 
