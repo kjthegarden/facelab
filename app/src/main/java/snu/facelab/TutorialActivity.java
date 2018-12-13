@@ -14,7 +14,7 @@ public class TutorialActivity extends AppCompatActivity {
     private ViewPager viewpager;
     private LinearLayout liner;
     private SlideAdapter myadapter;
-    private int viewNumber=4;
+    private int viewNumber=6;
 
     private TextView[] mdots;
     private Button next,back;
