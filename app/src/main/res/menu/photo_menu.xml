@@ -10,14 +10,17 @@
         app:showAsAction="always">
         <menu>
             <item
+                android:icon="@drawable/ic_today_primary_24dp"
                 android:id="@+id/edit_date"
                 android:title="EDIT DATE"/>
 
             <item
+                android:icon="@drawable/ic_accessibility_primary_24dp"
                 android:id="@+id/edit_name"
                 android:title="EDIT NAME" />
 
             <item
+                android:icon="@drawable/ic_delete_primary_24dp"
                 android:id="@+id/delete"
                 android:title="DELETE" />
         </menu>
