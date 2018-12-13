@@ -21,20 +21,21 @@ public class SlideAdapter extends PagerAdapter {
 
     //Array
     public int[] list_images={
-
-            R.drawable.jooyun,
-            R.drawable.yunsun,
-            R.drawable.jungwon,
-            R.drawable.jungwon_2
+            R.drawable.tutorial1,
+            R.drawable.tutorial2,
+            R.drawable.tutorial3,
+            R.drawable.tutorial4,
+            R.drawable.tutorial5,
+            R.drawable.tutorial6
     };
 
     public int[] list_color={
-
-            Color.rgb(193, 66, 44),
-            Color.rgb(193, 172, 44),
-            Color.rgb(193, 41, 249),
-            Color.rgb(68, 83, 242)
-
+            Color.rgb(255, 255, 255),
+            Color.rgb(255, 255, 255),
+            Color.rgb(255, 255, 255),
+            Color.rgb(255, 255, 255),
+            Color.rgb(255, 255, 255),
+            Color.rgb(255, 255, 255)
     };
 
     @Override
