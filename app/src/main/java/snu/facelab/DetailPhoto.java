@@ -2,8 +2,10 @@ package snu.facelab;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 
@@ -29,19 +32,12 @@ import snu.facelab.helper.DatabaseHelper;
 import snu.facelab.model.Picture;
 
 public class DetailPhoto extends android.support.v4.app.Fragment {
-    //implements DatePickerDialog.OnDateSetListener
     private ImageView iv;
-    private Bitmap image;
-    private String changeName;
-    private long pic_id;
-    private long name_id;
-    private boolean toggleFlag = false;
     private Person person;
     private Picture photo;
     private List<Picture> photo_list;
-    private List<Long> pic_id_list;
-    private int photo_size;
     private int curr_index;
+    private boolean toggleFlag;
 
 
     // DatabaseHelper 객체
@@ -51,6 +47,7 @@ public class DetailPhoto extends android.support.v4.app.Fragment {
         this.person = person;
         this.photo_list = photo_list;
         this.curr_index = curr_index;
+        //this.toggleFlag = toggleFlag;
     }
 
     @Override
@@ -59,10 +56,14 @@ public class DetailPhoto extends android.support.v4.app.Fragment {
 
     }
 
+    public void toggle(boolean ToggleFlag) {
+        this.toggleFlag = toggleFlag;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        RelativeLayout Layout= (RelativeLayout) inflater.inflate(R.layout.detail_slider,container,false);
+        final RelativeLayout Layout= (RelativeLayout) inflater.inflate(R.layout.detail_slider,container,false);
         Context context = container.getContext();
         db = new DatabaseHelper(context);
 
@@ -75,7 +76,39 @@ public class DetailPhoto extends android.support.v4.app.Fragment {
                 .load(imageUri)
                 .into(iv);
 
+
+        final RelativeLayout backLayout = Layout.findViewById(R.id.photo_detail);
+
+        if (toggleFlag) {
+            backLayout.setBackgroundColor(Color.parseColor("#000000"));
+        }
+        else {
+            backLayout.setBackgroundColor(getResources().getColor(R.color.photoBackground));
+        }
+
+        // 배경 클릭할 시 검은 바탕에 사진만 뜨기
+//        backLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //toggleDisplay(backLayout);
+//            }
+//        });
+
+
         return Layout;
+
+    }
+
+    public void toggleDisplay(RelativeLayout backLayout) {
+        toggleFlag = !toggleFlag;
+
+        if (toggleFlag) {
+            backLayout.setBackgroundColor(Color.parseColor("#000000"));
+        }
+        else {
+            backLayout.setBackgroundColor(getResources().getColor(R.color.photoBackground));
+
+        }
 
     }
 

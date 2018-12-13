@@ -2,6 +2,8 @@ package snu.facelab;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.gesture.Gesture;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -22,8 +24,11 @@ import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -46,6 +51,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import snu.facelab.helper.OnTouchClickListener;
 import snu.facelab.layout.BottomSheetDialog;
 import snu.facelab.model.Name;
 import snu.facelab.model.Picture;
@@ -69,7 +75,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
     // DatabaseHelper 객체
     DatabaseHelper db;
 
-    // Slider Aapter
+    // Slider
     DetailAdapter adapter;
     ViewPager viewPager;
 
@@ -84,7 +90,7 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         // Get Information
         Picture photo = (Picture) getIntent().getExtras().getSerializable(PHOTO);
         person = (Person) getIntent().getExtras().getSerializable(PERSON);
-        final List<Picture> photo_list = (List<Picture>) getIntent().getExtras().getSerializable(PHOTOLIST);
+        List<Picture> photo_list = (List<Picture>) getIntent().getExtras().getSerializable(PHOTOLIST);
 
         db = new DatabaseHelper(getApplicationContext());
 
@@ -135,10 +141,8 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
             public void onPageSelected(int position)
             {
                 // 정보 업데이트
-                Log.d("check", photo_list.toString());
-                Log.d("check", String.valueOf(position));
-                Picture new_photo = photo_list.get(position);
-                Log.d("check", String.valueOf(photo_list.get(position).getDate()));
+                List<Picture> photo_list_ = (List<Picture>) getIntent().getExtras().getSerializable(PHOTOLIST);
+                Picture new_photo = photo_list_.get(position);
                 title.setText(getToolbarTitle(new_photo));
                 pic_id = db.getPictureIdByPath(new_photo.getPath());
             }
@@ -164,24 +168,27 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         });
 
 
-        final RelativeLayout backLayout = findViewById(R.id.photo_detail);
-        //final RelativeLayout titleLayout = findViewById(R.id.title_layout);
 
-//        // 배경 클릭할 시 검은 바탕에 사진만 뜨기
-//        backLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                toggleDisplay(backLayout, fab);
-//            }
-//        });
-//
-//        // 툴바 레이아웃 클릭 시 아무일 없도록
-//        titleLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // do nothing
-//            }
-//        });
+        // 배경 클릭할 시 사진만 뜨기
+        final LayoutInflater factory = getLayoutInflater();
+
+        final View imageView = factory.inflate(R.layout.detail_slider, null);
+        final RelativeLayout backLayout = imageView.findViewById(R.id.photo_detail);
+
+        viewPager.setOnTouchListener(new OnTouchClickListener(new OnTouchClickListener.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleDisplay(backLayout, fab);
+            }
+        },5));
+
+        // 툴바 레이아웃 클릭 시 아무일 없도록
+        titleLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // do nothing
+            }
+        });
 
 
         // 뒤로가기 버튼
@@ -297,15 +304,16 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
 
     public void toggleDisplay(RelativeLayout backLayout, FloatingActionButton hashButton) {
         toggleFlag = !toggleFlag;
+        adapter.toggle(toggleFlag);
 
         if (toggleFlag) {
             getSupportActionBar().hide();
-            backLayout.setBackgroundColor(Color.parseColor("#000000"));
+            //viewPager.setBackgroundColor(Color.parseColor("#000000"));
             hashButton.hide();
         }
         else {
             getSupportActionBar().show();
-            backLayout.setBackgroundColor(getResources().getColor(R.color.photoBackground));
+            //viewPager.setBackgroundColor(getResources().getColor(R.color.photoBackground));
             hashButton.show();
 
         }
@@ -369,6 +377,13 @@ public class PersonPhotoDetailActivity extends AppCompatActivity implements Date
         Spanned title_spanned = getFormattedLabelText(titleFormat, subTitleFormat);
 
         return title_spanned;
+    }
+
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        super.onConfigurationChanged(newConfig);
+
+
     }
 }
 
