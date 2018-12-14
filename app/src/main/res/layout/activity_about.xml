@@ -3,40 +3,62 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:layout_gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/title"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/textColorPrimary"
             android:text="FACELAB"
-            android:textSize="20pt" />
+            android:textSize="70dp" />
 
         <TextView
             android:id="@+id/about_txt_group"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/textColorPrimary"
             android:text="2018 창의적통합설계 M조"
-            android:textSize="18dp"/>
+            android:textSize="15dp"/>
 
         <TextView
             android:id="@+id/about_txt_name"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/textColorPrimary"
             android:text="이주연 김정원 이윤선"
             android:textSize="18dp"/>
 
         <TextView
             android:id="@+id/about_txt_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="30sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="내용"
+            android:textStyle="bold"
+            android:text="2018.12.14.   Ver 1.0"
             android:textSize="14dp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/about_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50sp"
+            android:src="@drawable/ic_check_bright_24dp"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
