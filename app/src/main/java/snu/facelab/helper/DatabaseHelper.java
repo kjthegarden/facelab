@@ -142,10 +142,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c != null)
             c.moveToFirst();
 
-        Name name = new Name();
-        name.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        name.setName((c.getString(c.getColumnIndex(KEY_NAME))));
+        int count = c.getCount();
 
+        Name name = new Name();
+        // name found
+        if(count!=0){
+            name.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            name.setName((c.getString(c.getColumnIndex(KEY_NAME))));
+        }
         return name;
     }
 

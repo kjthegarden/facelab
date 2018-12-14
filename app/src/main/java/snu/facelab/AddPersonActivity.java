@@ -67,6 +67,8 @@ public class AddPersonActivity extends AppCompatActivity {
 
         fh = new FileHelper();
         total = 0;
+        // DBHelper 객체 생성
+        db = new DatabaseHelper(getApplicationContext());
 
         AppCompatButton btnImage = findViewById(R.id.btn_Start);
         btnImage.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +79,7 @@ public class AddPersonActivity extends AppCompatActivity {
                 name = txt_Folder_Name.getText().toString();
 
 
-                if (isNameAlreadyUsed(new FileHelper().getTrainingList(), name)) {
+                if (db.getNameWithString(name).getName()!=null) {
                     Toast.makeText(getApplicationContext(), "This name is already used. Please choose another one.", Toast.LENGTH_SHORT).show();
                 }
                 else if (name.matches("")) {
@@ -102,22 +104,6 @@ public class AddPersonActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private boolean isNameAlreadyUsed(File[] list, String name) {
-        boolean used = false;
-        if (list != null && list.length > 0) {
-            for (File person : list) {
-                // The last token is the name --> Folder name = Person name
-                String[] tokens = person.getAbsolutePath().split("/");
-                final String foldername = tokens[tokens.length - 1];
-                if (foldername.equals(name)) {
-                    used = true;
-                    break;
-                }
-            }
-        }
-        return used;
     }
 
     @Override
@@ -222,17 +208,6 @@ public class AddPersonActivity extends AppCompatActivity {
                                 fh.saveMatToImage(m, wholeFolderPath + "/");
                                 total++;
                             }
-                            /*
-
-                            for (int j = 0; j < faces.length; j++) {
-                                MatOperation.drawRectangleAndLabelOnPreview(mat, faces[j], String.valueOf(i), true);
-                            }
-
-                            for (int j = 0; j < faces.length; j++) {
-                                MatOperation.drawRectangleOnPreview(mat, faces[j], true);
-                            }
-                            */
-
                         }
                     }
                 }
