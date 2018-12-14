@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +27,9 @@ public class TutorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
 
+        // 전체화면
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         viewpager=(ViewPager)findViewById(R.id.viewpager);
         liner=(LinearLayout)findViewById(R.id.dots);
 
@@ -43,6 +47,7 @@ public class TutorialActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(mCurrentPage ==viewNumber-1){
                     final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }else{
                     viewpager.setCurrentItem(mCurrentPage+1);

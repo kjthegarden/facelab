@@ -7,6 +7,8 @@ public class Person implements Serializable { // 자바 빈 (java Bean)
 
     String name = "";
 
+    int id;
+
     // 생성자
     public Person(String mainImg, String name) {
         this.mainImg = mainImg;
@@ -23,7 +25,11 @@ public class Person implements Serializable { // 자바 빈 (java Bean)
         return mainImg;
     }
 
-//    public int [] getImgs() {
-//        return imgs;
-//    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
+    }
 }
